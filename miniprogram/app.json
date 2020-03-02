@@ -1,26 +1,31 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/userConsole/userConsole",
-    "pages/storageConsole/storageConsole",
-    "pages/databaseGuide/databaseGuide",
-    "pages/addFunction/addFunction",
-    "pages/deployFunctions/deployFunctions",
-    "pages/chooseLib/chooseLib",
-    "pages/openapi/openapi",
-    "pages/openapi/serverapi/serverapi",
-    "pages/openapi/callback/callback",
-    "pages/openapi/cloudid/cloudid",
-    "pages/im/im",
-    "pages/im/room/room",
-    "pages/gift/gift"
+    "pages/gift/gift",
+    "pages/user/user"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "云开发 QuickStart",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTitleText": "湾仔码头礼物交换",
     "navigationBarTextStyle": "black"
+  },
+  "usingComponents": {
+    "van-tab": "./miniprogram_npm/@vant/weapp/tab/index",
+    "van-tabs": "./miniprogram_npm/@vant/weapp/tabs/index",
+    "van-cell": "./miniprogram_npm/@vant/weapp/cell/index",
+    "van-cell-group": "./miniprogram_npm/@vant/weapp/cell-group/index",
+    "van-button": "./miniprogram_npm/@vant/weapp/button/index",
+    "van-dialog": "./miniprogram_npm/@vant/weapp/dialog/index",
+    "van-image": "./miniprogram_npm/@vant/weapp/image/index",
+    "van-skeleton": "./miniprogram_npm/@vant/weapp/skeleton/index",
+    "van-popup": "./miniprogram_npm/@vant/weapp/popup/index",
+    "van-panel": "./miniprogram_npm/@vant/weapp/panel/index",
+    "van-count-down": "./miniprogram_npm/@vant/weapp/count-down/index",
+    "van-tag": "./miniprogram_npm/@vant/weapp/tag/index",
+    "van-divider": "./miniprogram_npm/@vant/weapp/divider/index",
+    "van-toast": "./miniprogram_npm/@vant/weapp/toast/index"
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2"

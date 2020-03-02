@@ -1,2 +1,47 @@
 <!--miniprogram/pages/gift/gift.wxml-->
-<text>miniprogram/pages/gift/gift.wxml</text>
+<view class="title">
+  <van-toast id="van-toast" />
+  <view class="title-bar">
+    <text class="title-text">{{event.eventName}}</text>
+    <van-tag wx:if="{{status == '0'}}" color="#28a745" size="medium">进行中 | {{recordsCount}}人</van-tag>
+    <van-tag wx:elif="{{status == '1'}}" color="#6c757d" size="medium">未开始</van-tag>
+    <van-tag wx:elif="{{status == '2'}}" color="#6c757d" size="medium">已结束</van-tag>
+  </view>
+  <view style="margin-top: 10rpx;">
+    <text class="desc-text">{{event.description}}</text>
+  </view>
+  <van-divider />
+  <view wx:if="{{_in}}">
+    <view class="gift-line-content">
+      <text>收礼人信息</text>
+    </view>
+    <view class="gift-line-content">
+      <text>我是测试</text>
+      <text>10号</text>
+    </view>
+    <view class="gift-line-content">
+      <text>这是一串长地址</text>
+    </view>
+    <view class="gift-line-content">
+      <text>18818818188</text>
+    </view>
+
+    <van-divider />
+
+    <view class="gift-line-content">
+      <text>全局信息</text>
+    </view>
+    <view class="gift-line-content">
+      <text>1 -> 2 -> 3 -> 4 -> 1</text>
+    </view>
+  </view>
+</view>
+<view>
+<van-button color="{{status == '0' ? '#28a745' : '#6c757d'}}" custom-style="height: 150rpx; width: 100%" block square bind:click="{{status == '0' ? !_in ? 'onIns' : 'onDel' : ''}}">
+  <text wx:if="{{status == '0' && !_in}}">我要参加</text>
+  <text wx:elif="{{status == '0' && _in}}">我已参加，点击退出</text>
+  <text wx:elif="{{status == '1'}}">距离开始还有</text>
+  <text wx:elif="{{status == '2'}}">已结束</text>
+  <van-count-down wx:if="{{ time != 0 }}" time="{{ time }}" format="DD 天 HH 时 mm 分 ss 秒"/>
+</van-button>
+</view>

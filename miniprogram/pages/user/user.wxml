@@ -1,0 +1,15 @@
+<!--miniprogram/pages/user/user.wxml-->
+<view class="top-bar userinfo">
+    <van-image  round fit="cover" width="150rpx" height="150rpx" src="{{avatarUrl}}" />
+    <view class="userinfo-detail-wrapper">
+      <text class="userinfo-nickname">{{ nickName }}</text>
+      <text class="userinfo-address">{{ addressInfo }}</text>
+    </view>
+</view>
+
+<van-cell-group>
+  <van-cell title="更新信息" bind:click="updateUser"	is-link />
+</van-cell-group>
+<van-cell-group title=" ">
+  <van-cell title="关于" is-link bind:click="showAbout" />
+</van-cell-group>
