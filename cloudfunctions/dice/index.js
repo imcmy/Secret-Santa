@@ -41,11 +41,10 @@ const dice = async _eid => {
 // 云函数入口函数
 exports.main = async (event, context) => {
   var curTime = Date.now()
-  var events = await eventDB.get()
-  
+
+  var events = await eventDB.where({rolled: false}).get()
   events.data.map(eve => {
-    diffRoll = curTime - eve.rollTime
-    if (!eve.rolled && diffRoll >= 0) {
+    if (curTime - eve.rollTime >= 0) {
       dice(eve._id)
       eventDB.doc(eve._id).update({data: {rolled: true}})
     }
