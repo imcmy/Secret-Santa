@@ -25,7 +25,8 @@
     "van-count-down": "./miniprogram_npm/@vant/weapp/count-down/index",
     "van-tag": "./miniprogram_npm/@vant/weapp/tag/index",
     "van-divider": "./miniprogram_npm/@vant/weapp/divider/index",
-    "van-toast": "./miniprogram_npm/@vant/weapp/toast/index"
+    "van-toast": "./miniprogram_npm/@vant/weapp/toast/index",
+    "van-field": "./miniprogram_npm/@vant/weapp/field/index"
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2"

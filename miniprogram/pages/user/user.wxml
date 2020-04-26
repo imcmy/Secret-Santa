@@ -11,5 +11,16 @@
   <van-cell title="更新信息" bind:click="updateUser"	is-link />
 </van-cell-group>
 <van-cell-group title=" ">
+  <van-cell title="创建活动" is-link bind:click="showAbout" />
+  <van-cell title="我的活动" is-link bind:click="" />
+</van-cell-group>
+<van-cell-group title=" ">
   <van-cell title="关于" is-link bind:click="showAbout" />
 </van-cell-group>
+
+<!-- <van-popup show="false" position="bottom" custom-style="height: 95%" round>
+<van-cell-group>
+  <van-field label="活动名称" placeholder="请输入活动名称" required clearable />
+  <van-field label="活动描述" placeholder="请输入活动描述" required autosize clearable />
+</van-cell-group>
+</van-popup> -->

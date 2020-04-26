@@ -5,6 +5,7 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 })
 const db = cloud.database().collection('pair')
+const userDB = cloud.database().collection('user')
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -25,12 +26,23 @@ exports.main = async (event, context) => {
       var record = await db.where({
         _eid: event._eid,
         sid: openid
-      }).count()
+      }).get()
+
+      _in = record.data.length > 0
+      receiver = await cloud.callFunction({
+        name: 'userdbo',
+        data: {
+          "action": "getAddress",
+          "rid": (_in && record.data[0].rid) ? record.data[0].rid : ''
+        }
+      })
       
       return {
         event: eventRecord,
         recordsCount: recordsCount.total,
-        _in: record.total > 0
+        record: record,
+        _in: _in,
+        receiver: receiver
       }
     } else if (action === 'ins') {
       return await db.add({

@@ -7,7 +7,7 @@ cloud.init({
 const db = cloud.database().collection('event')
 
 const formatTime = date => {
-  var date = new Date(date + '-0800');
+  var date = new Date(date + '-0800')
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const day = date.getDate()
@@ -23,6 +23,12 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
+const aWeekLater = date => {
+  var date = new Date(date + '-0800')
+  date = date.setDate(date.getDate() + 7)
+  return new Date(date)
+}
+
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -34,6 +40,7 @@ exports.main = async (event, context) => {
           eventName: event.eventName,
           startTime: event.startTime,
           rollTime: event.rollTime,
+          endTime: aWeekLater(event.rollTime),
           description: event.description
         }
       })
@@ -43,6 +50,7 @@ exports.main = async (event, context) => {
           eventName: event.eventName,
           startTime: event.startTime,
           rollTime: event.rollTime,
+          endTime: aWeekLater(event.rollTime),
           description: event.description
         }
       })
@@ -54,8 +62,20 @@ exports.main = async (event, context) => {
 
       record.data.startTimeFormatted = formatTime(record.data.startTime)
       record.data.rollTimeFormatted = formatTime(record.data.rollTime)
+
       record.data.diffStart = curTime - record.data.startTime
       record.data.diffRoll = curTime - record.data.rollTime
+      record.data.diffEnd = curTime - record.data.endTime
+
+      if (record.data.diffStart < 0)
+        record.data.status = 1
+      else if (record.data.diffStart >= 0 && record.data.diffRoll < 0)
+        record.data.status = 0
+      else if (record.data.diffRoll >= 0) 
+        record.data.status = 2
+      else
+        record.data.status = -1
+      record.data._ended = record.data.diffEnd >= 0
       
       return record
     } else if (action === 'get') {

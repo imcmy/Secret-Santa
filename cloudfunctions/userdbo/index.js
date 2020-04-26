@@ -59,5 +59,23 @@ exports.main = async (event, context) => {
     } catch (e) {
       console.log(e)
     }
+  } else if (action === 'getAddress') {
+    try {
+      return await db.where({
+        _openid: event.rid
+      }).get({
+        success: res => {
+          return {
+            "nickName": res.data[0].nickName,
+            "fullAddr": res.data[0].fullAddr,
+            "telNumber": res.data[0].telNumber,
+            "postalCode": res.data[0].postalCode,
+            "recipient": res.data[0].recipient
+          }
+        }
+      })
+    } catch (e) {
+      console.log(e)
+    }
   }
 }

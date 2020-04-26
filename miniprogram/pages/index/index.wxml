@@ -18,7 +18,7 @@
         title="{{ eve.eventName }}"
         label="抽签于 {{eve.rollTimeFormatted }}"
         link-type="navigateTo"
-        url="/pages/gift/gift?eid={{eve._id}}&status=0"
+        url="/pages/gift/gift?eid={{eve._id}}"
         is-link
         center
       />
@@ -30,7 +30,7 @@
         title="{{ eve.eventName }}"
         label="开始于 {{ eve.startTimeFormatted }}"
         link-type="navigateTo"
-        url="/pages/gift/gift?eid={{eve._id}}&status=1"
+        url="/pages/gift/gift?eid={{eve._id}}"
         is-link
         center
       />
@@ -42,7 +42,7 @@
         title="{{ eve.eventName }}"
         label="结束于 {{ eve.rollTimeFormatted }}"
         link-type="navigateTo"
-        url="/pages/gift/gift?eid={{eve._id}}&status=2"
+        url="/pages/gift/gift?eid={{eve._id}}"
         is-link
         center
       />

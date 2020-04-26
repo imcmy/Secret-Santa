@@ -43,5 +43,17 @@ page {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 10rpx;
+  font-size: 28rpx;
+}
+
+.gift-line-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding-bottom: 20rpx;
+}
+
+.gift-global-inline {
+  display: inline;
 }

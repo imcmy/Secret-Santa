@@ -5,12 +5,7 @@ component_1.VantComponent({
     relation: {
         name: 'index-bar',
         type: 'ancestor',
-        linked: function (target) {
-            this.parent = target;
-        },
-        unlinked: function () {
-            this.parent = null;
-        }
+        current: 'index-anchor'
     },
     props: {
         useSlot: Boolean,
@@ -20,5 +15,19 @@ component_1.VantComponent({
         active: false,
         wrapperStyle: '',
         anchorStyle: ''
+    },
+    methods: {
+        scrollIntoView: function (scrollTop) {
+            var _this = this;
+            this.getBoundingClientRect().then(function (rect) {
+                wx.pageScrollTo({
+                    duration: 0,
+                    scrollTop: scrollTop + rect.top - _this.parent.data.stickyOffsetTop
+                });
+            });
+        },
+        getBoundingClientRect: function () {
+            return this.getRect('.van-index-anchor-wrapper');
+        }
     }
 });

@@ -10,10 +10,21 @@ Page({
     time: 0,
     color: '',
     recordsCount: 0,
+    record: {},
+    receiver: {},
     _in: false,
+    _rolled: false,
+    _ended: false,
+    nickName: ''
   },
 
   onLoad: function (options) {
+    if (app.globalData.userInfo) {
+      this.setData({
+        nickName: app.globalData.userInfo.nickName,
+      })
+    }
+
     var that = this
     wx.cloud.callFunction({
       name: 'gift',
@@ -22,20 +33,25 @@ Page({
         '_eid': options.eid
       },
       success: res => {
+
         that.setData({
           event: res.result.event.result.data,
-          status: options.status,
-          time: options.status == '0' ? utils.cutdown(res.result.event.result.data.diffRoll) : options.status == '1' ? utils.cutdown(res.result.event.result.data.diffStart) : 0,
+          status: res.result.event.result.data.status,
+          time: res.result.event.result.data.status == 0 ? utils.cutdown(res.result.event.result.data.diffRoll) : res.result.event.result.data.status == 1 ? utils.cutdown(res.result.event.result.data.diffStart) : 0,
+          record: res.result.record.data,
+          receiver: res.result.receiver.result.data,
           recordsCount: res.result.recordsCount,
           
           _in: res.result._in,
+          _rolled: res.result.event.result.data.rolled,
+          _ended: res.result.event.result.data._ended,
           _options: options
         })
 
         if (options.inh === 'ins') {
-          Toast('欢迎您的参与，请耐心等待抽签');
+          Toast('欢迎您的参与，请耐心等待抽签')
         } else if (options.inh === 'del') {
-          Toast('遗憾您的离开，欢迎再来');
+          Toast('遗憾您的离开，欢迎再来')
         }
       }
     })

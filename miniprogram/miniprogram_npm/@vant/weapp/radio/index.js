@@ -6,15 +6,11 @@ component_1.VantComponent({
     relation: {
         name: 'radio-group',
         type: 'ancestor',
-        linked: function (target) {
-            this.parent = target;
-        },
-        unlinked: function () {
-            this.parent = null;
-        }
+        current: 'radio',
     },
     classes: ['icon-class', 'label-class'],
     props: {
+        name: null,
         value: null,
         disabled: Boolean,
         useIconSlot: Boolean,

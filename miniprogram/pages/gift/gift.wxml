@@ -1,6 +1,7 @@
 <!--miniprogram/pages/gift/gift.wxml-->
 <view class="title">
   <van-toast id="van-toast" />
+  
   <view class="title-bar">
     <text class="title-text">{{event.eventName}}</text>
     <van-tag wx:if="{{status == '0'}}" color="#28a745" size="medium">进行中 | {{recordsCount}}人</van-tag>
@@ -10,29 +11,50 @@
   <view style="margin-top: 10rpx;">
     <text class="desc-text">{{event.description}}</text>
   </view>
+
   <van-divider />
-  <view wx:if="{{_in}}">
-    <view class="gift-line-content">
-      <text>收礼人信息</text>
+
+  <view wx:if="{{_in && _rolled}}">
+
+    <view class="gift-line-title">
+      <text>抽签结果</text>
     </view>
     <view class="gift-line-content">
-      <text>我是测试</text>
-      <text>10号</text>
-    </view>
-    <view class="gift-line-content">
-      <text>这是一串长地址</text>
-    </view>
-    <view class="gift-line-content">
-      <text>18818818188</text>
+      <view>
+        <text>{{ nickName + '\t'}}</text>
+        <van-tag plain type="primary" size="large">{{ record[0].myno }}号</van-tag>
+      </view>
+      <text> --> </text>
+      <view>
+        <text>{{ receiver[0].nickName + '\t'}}</text>
+        <van-tag plain type="primary" size="large">{{ record[0].itno }}号</van-tag>
+      </view>
     </view>
 
     <van-divider />
 
-    <view class="gift-line-content">
-      <text>全局信息</text>
+    <view class="gift-line-title">
+      <text>收礼人地址</text>
     </view>
     <view class="gift-line-content">
-      <text>1 -> 2 -> 3 -> 4 -> 1</text>
+      <text>{{ receiver[0].recipient }}</text>
+      <text>{{ receiver[0].telNumber }}</text>
+    </view>
+    <view class="gift-line-content" wx:if="{{!_ended}}">
+      <text>{{ receiver[0].fullAddr }}</text>
+    </view>
+    <view class="gift-line-content" wx:if="{{!_ended}}">
+      <text>{{ receiver[0].postalCode }}</text>
+    </view>
+
+    <van-divider />
+
+    <view class="gift-line-title">
+      <text>全局信息</text>
+    </view>
+    <view class="gift-global-inline" wx:for="{{ event.result }}" wx:key="globalResult" wx:for-item="eveR"  wx:for-index="idx">
+      <van-tag plain type="primary" size="medium" >{{ eveR }}号</van-tag>
+      <text wx:if="{{ idx != (event.result.length - 1) }}"> > </text>
     </view>
   </view>
 </view>

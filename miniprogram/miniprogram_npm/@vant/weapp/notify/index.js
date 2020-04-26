@@ -25,7 +25,11 @@ component_1.VantComponent({
         safeAreaInsetTop: {
             type: Boolean,
             value: false
-        }
+        },
+        top: null
+    },
+    data: {
+        show: false,
     },
     created: function () {
         var statusBarHeight = wx.getSystemInfoSync().statusBarHeight;

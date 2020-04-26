@@ -24,7 +24,7 @@
 	},
 	"appid": "wx6b3d19a4820493a7",
 	"projectname": "Gift",
-	"libVersion": "2.10.1",
+	"libVersion": "2.11.0",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
@@ -52,10 +52,17 @@
 			"current": -1,
 			"list": [
 				{
+					"id": 0,
+					"name": "user_page",
+					"pathName": "pages/user/user",
+					"query": "",
+					"scene": null
+				},
+				{
 					"id": -1,
-					"name": "db guide",
-					"pathName": "pages/databaseGuide/databaseGuide",
-					"query": ""
+					"name": "gift_page",
+					"pathName": "pages/gift/gift",
+					"scene": null
 				}
 			]
 		}

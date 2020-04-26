@@ -5,6 +5,7 @@ page {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  height: 100%;
 }
 
 .top-bar {
@@ -16,6 +17,7 @@ page {
   border-right: none;
   display: flex;
   transition: all 300ms ease;
+  box-sizing: border-box;
 }
 
 .userinfo {
