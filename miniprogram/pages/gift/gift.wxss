@@ -5,6 +5,7 @@ page {
   justify-content: space-between;
   height: 100%;
   --count-down-text-color: #FFFFFF;
+  font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif !important;
 }
 
 .title {
@@ -55,5 +56,10 @@ page {
 }
 
 .gift-global-inline {
-  display: inline;
+  display: inline-block;
+  padding-bottom: 10rpx;
+}
+
+.van-tag--medium {
+  --tag-medium-font-size: 24rpx;
 }

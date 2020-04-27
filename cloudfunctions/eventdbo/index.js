@@ -29,76 +29,99 @@ const aWeekLater = date => {
   return new Date(date)
 }
 
+const unPackQuery = obj => {
+  var queried = []
+  var data = obj.data ? obj.data : (obj.result ? obj.result : [])
+  if (Array.isArray(data))
+    data.forEach((value, index, _) => {
+      queried.push(value)
+    })
+  else
+    queried.push(data)
+  return queried
+}
+
+const calcEventStatus = (start, roll, end) => {
+  if (start <= roll && roll <= end) {
+    var current = Date.now()
+    if (start > current)
+      return [1, false]
+    else if (start <= current && current <= roll)
+      return [0, false]
+    else if (roll < current && current <= end)
+      return [2, false]
+    else if (end < current)
+      return [2, true]
+    else
+      return [-1, true] // Never
+  } else {
+    return [-1, true]
+  }
+}
+
 
 // 云函数入口函数
 exports.main = async (event, context) => {
   var action = event.action
   try {
-    if (action === 'ins') {
-      return await db.add({
-        data: {
-          eventName: event.eventName,
-          startTime: event.startTime,
-          rollTime: event.rollTime,
-          endTime: aWeekLater(event.rollTime),
-          description: event.description
+    switch (action) {
+      case 'insert':
+        return await db.add({
+          data: {
+            eventName: event.eventName,
+            startTime: event.startTime,
+            rollTime: event.rollTime,
+            endTime: aWeekLater(event.rollTime),
+            description: event.description
+          }
+        })
+      case 'update':
+        return await db.doc(event._id).update({
+          data: {
+            eventName: event.eventName,
+            startTime: event.startTime,
+            rollTime: event.rollTime,
+            endTime: aWeekLater(event.rollTime),
+            description: event.description
+          }
+        })
+      case 'query':
+        return unPackQuery(await db.doc(event._id).get())
+      case 'queryFormatted':
+        var record = unPackQuery(await db.doc(event._id).get())
+
+        record[0].startTimeFormatted = formatTime(record[0].startTime)
+        record[0].rollTimeFormatted = formatTime(record[0].rollTime)
+        
+        var curTime = Date.now()
+        record[0].diffStart = curTime - record[0].startTime
+        record[0].diffRoll = curTime - record[0].rollTime
+
+        var status = calcEventStatus(record[0].startTime, record[0].rollTime, record[0].endTime)
+        record[0].status = status[0]
+        record[0]._ended = status[1]
+
+        return record
+      case 'list':
+        var eventRecords = {
+          wait: [],
+          current: [],
+          end: []
         }
-      })
-    } else if (action === 'upd') {
-      return await db.doc(event._id).update({
-        data: {
-          eventName: event.eventName,
-          startTime: event.startTime,
-          rollTime: event.rollTime,
-          endTime: aWeekLater(event.rollTime),
-          description: event.description
-        }
-      })
-    } else if (action === 'doc') {
-      return await db.doc(event._id).get()
-    } else if (action === 'fdoc') {
-      var curTime = Date.now()
-      var record = await db.doc(event._id).get()
 
-      record.data.startTimeFormatted = formatTime(record.data.startTime)
-      record.data.rollTimeFormatted = formatTime(record.data.rollTime)
+        var records = unPackQuery(await db.get())
+        await records.forEach((item, index, _) => {
+          item.startTimeFormatted = formatTime(item.startTime)
+          item.rollTimeFormatted = formatTime(item.rollTime)
+          var status = calcEventStatus(item.startTime, item.rollTime, item.endTime)[0]
+          switch (status) {
+            case 0: eventRecords.current.push(item); break;
+            case 1: eventRecords.wait.push(item); break;
+            case 2: eventRecords.end.push(item); break;
+          }
+        })
 
-      record.data.diffStart = curTime - record.data.startTime
-      record.data.diffRoll = curTime - record.data.rollTime
-      record.data.diffEnd = curTime - record.data.endTime
-
-      if (record.data.diffStart < 0)
-        record.data.status = 1
-      else if (record.data.diffStart >= 0 && record.data.diffRoll < 0)
-        record.data.status = 0
-      else if (record.data.diffRoll >= 0) 
-        record.data.status = 2
-      else
-        record.data.status = -1
-      record.data._ended = record.data.diffEnd >= 0
-      
-      return record
-    } else if (action === 'get') {
-      var eventRecords = {
-        wait: [],
-        current: [],
-        end: []
-      }
-      var records = await db.get()
-      var curTime = Date.now()
-
-      await records.data.forEach((item, index, arr) => {
-        item.startTimeFormatted = formatTime(item.startTime)
-        item.rollTimeFormatted = formatTime(item.rollTime)
-        if (item.startTime > curTime)
-          eventRecords.wait.push(item)
-        else if (item.startTime <= curTime && curTime <= item.rollTime)
-          eventRecords.current.push(item)
-        else if (item.rollTime < curTime)
-          eventRecords.end.push(item)
-      })
-
-      return eventRecords
+        return eventRecords
     }
   } catch (e) {
     console.log(e)

@@ -11,6 +11,9 @@ Page({
     avatarUrl: '',
     nickName: '',
     addressInfo: '',
+
+    isEventsShow: false,
+    myEvents: []
   },
 
   /**
@@ -75,51 +78,75 @@ Page({
 
   },
 
+  showMyEvents: async function() {
+    await this.getMyEvents()
+    this.setData({ isEventsShow: true }) 
+  },
+
+  hideMyEvents: function () {
+    this.setData({ isEventsShow: false }) 
+  },
+
+  getMyEvents: async function() {
+    var myEvents = await wx.cloud.callFunction({
+      name: 'gift',
+      data: { action: 'searchIn' }
+    })
+    this.setData({
+      myEvents: myEvents.result
+    })
+  },
+
+  showCreateEvent: async function () {
+    wx.showModal({
+      content: '功能尚未实现',
+      showCancel: false
+    });
+  },
+
   updateUser: function () {
     var that = this
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo'] && res.authSetting['scope.address']) {
-          wx.getUserInfo({
-            success: userInfo => {
-              wx.chooseAddress({
-                success: addr => {
-                  wx.cloud.callFunction({
-                    name: 'userdbo',
-                    data: {
-                      action: 'upd',
-                      _id: app.globalData.userInfo._id,
-                      nickName: userInfo.userInfo.nickName,
-                      avatarUrl: userInfo.userInfo.avatarUrl,
-                      provinceName: addr.provinceName,
-                      cityName: addr.cityName,
-                      countyName: addr.countyName,
-                      detailInfo: addr.detailInfo,
-                      postalCode: addr.postalCode,
-                      telNumber: addr.telNumber,
-                      recipient: addr.userName,
-                    },
-                    success: res => {
-                      wx.showModal({
-                        content: '更新成功',
-                        showCancel: false,
-                        success: function (res) {
-                          wx.reLaunch({
-                            url: '../index/index',
-                          })
-                        }
-                      });
-                    }
-                  })
-                }
-              })
-            }
-          })
-        } else {
-          that.openConfirm()
-          return
-        }
+    wx.getSetting().then(res => {
+      if (res.authSetting['scope.userInfo'] && res.authSetting['scope.address']) {
+        wx.getUserInfo().then(userInfo => {
+          that.uploadAddress(userInfo)
+        })
+      } else {
+        that.openConfirm()
+        return
       }
+    })
+  },
+
+  uploadAddress: function (userInfo) {
+    var that = this
+    wx.chooseAddress().then(addr => {
+      wx.cloud.callFunction({
+        name: 'userdbo',
+        data: {
+          action: 'update',
+          _id: app.globalData.userInfo._id,
+          nickName: userInfo.userInfo.nickName,
+          avatarUrl: userInfo.userInfo.avatarUrl,
+          provinceName: addr.provinceName,
+          cityName: addr.cityName,
+          countyName: addr.countyName,
+          detailInfo: addr.detailInfo,
+          postalCode: addr.postalCode,
+          telNumber: addr.telNumber,
+          recipient: addr.userName,
+        }
+      }).then(res => {
+        wx.showModal({
+          content: '更新成功',
+          showCancel: false,
+        }).then(() => {
+          wx.reLaunch({url: '../index/index',})
+        })
+      })
+    }).catch(err => {
+      if (!err.errMsg.includes('cancel'))
+        that.openConfirm()
     })
   },
 
@@ -131,17 +158,11 @@ Page({
   },
 
   openConfirm: function () {
-    wx.showModal({
-      content: '检测到您没打开权限，是否去设置打开？',
-      confirmText: "确认",
-      cancelText: "取消",
-      success: function (res) {
-        if (res.confirm) {
-          wx.openSetting({
-            success: (res) => { }   //打开设置面板
-          })
-        }
-      }
+    Dialog.confirm({
+      message: '检测到您没打开地址权限，是否去设置打开？',
+      confirmButtonOpenType: 'openSetting'
+    }).catch(() => {
+      Dialog.close();
     });
   },
 })

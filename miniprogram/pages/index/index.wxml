@@ -7,7 +7,8 @@
     </view>
 </view>
 <view wx:else class="top-bar login">
-      <button open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">点击登录</button>
+      <!-- <button open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">点击登录</button> -->
+      <van-button type="default" custom-class="login-button" open-type="getUserInfo" bind:getuserinfo="onGetUserInfo">点击登录</van-button>
       <text class="hint userinfo-address">程序会收集您的：(1)用户名等基本信息；(2)地址等收货信息</text>
 </view>
 
@@ -49,3 +50,5 @@
     </van-cell-group>
   </van-tab>
 </van-tabs>
+
+<van-dialog id="van-dialog" />

@@ -1,6 +1,6 @@
 // miniprogram/pages/gift/gift.js
 const app = getApp()
-import Toast from '../../miniprogram_npm/@vant/weapp/toast/toast';
+import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify';
 var utils = require('../../utils/utils.js')
 
 Page({
@@ -29,29 +29,30 @@ Page({
     wx.cloud.callFunction({
       name: 'gift',
       data: {
-        'action': 'load',
+        'action': 'query',
         '_eid': options.eid
       },
       success: res => {
-
+        res = res.result
+        var event = res.event[0]
         that.setData({
-          event: res.result.event.result.data,
-          status: res.result.event.result.data.status,
-          time: res.result.event.result.data.status == 0 ? utils.cutdown(res.result.event.result.data.diffRoll) : res.result.event.result.data.status == 1 ? utils.cutdown(res.result.event.result.data.diffStart) : 0,
-          record: res.result.record.data,
-          receiver: res.result.receiver.result.data,
-          recordsCount: res.result.recordsCount,
+          event: event,
+          status: event.status,
+          time: event.status == 0 ? utils.cutdown(event.diffRoll) : event.status == 1 ? utils.cutdown(event.diffStart) : 0,
+          record: res.record,
+          receiver: res.receiver,
+          recordsCount: res.recordsCount,
           
-          _in: res.result._in,
-          _rolled: res.result.event.result.data.rolled,
-          _ended: res.result.event.result.data._ended,
+          _in: res._in,
+          _rolled: event.rolled,
+          _ended: event._ended,
           _options: options
         })
 
         if (options.inh === 'ins') {
-          Toast('欢迎您的参与，请耐心等待抽签')
+          Notify({ type: 'success', message: '欢迎参与，请耐心等待抽签' });
         } else if (options.inh === 'del') {
-          Toast('遗憾您的离开，欢迎再来')
+          Notify({ type: 'warning', message: '遗憾您的离开，欢迎再来' });
         }
       }
     })
@@ -68,7 +69,7 @@ Page({
           wx.cloud.callFunction({
             name: 'gift',
             data: {
-              'action': 'ins',
+              'action': 'insert',
               '_eid': that.data._options.eid
             },
             success: res => {
@@ -92,7 +93,7 @@ Page({
           wx.cloud.callFunction({
             name: 'gift',
             data: {
-              'action': 'del',
+              'action': 'delete',
               '_eid': that.data._options.eid
             },
             success: res => {

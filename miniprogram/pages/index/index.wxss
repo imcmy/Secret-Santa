@@ -6,6 +6,7 @@ page {
   flex-direction: column;
   justify-content: flex-start;
   height: 100%;
+  font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif !important;
 }
 
 .top-bar {
@@ -74,3 +75,11 @@ page {
   color: #999999;
 }
 
+.login-button {
+  color: #000 !important;
+  background-color: #f8f8f8 !important;
+  font-weight: 700 !important;
+  border-width: 0 !important;
+  width: 368rpx !important;
+  --button-default-height: 80rpx !important;
+}

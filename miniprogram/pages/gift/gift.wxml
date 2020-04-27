@@ -1,12 +1,12 @@
 <!--miniprogram/pages/gift/gift.wxml-->
 <view class="title">
-  <van-toast id="van-toast" />
+  <!-- <van-toast id="van-toast" /> -->
   
   <view class="title-bar">
     <text class="title-text">{{event.eventName}}</text>
     <van-tag wx:if="{{status == '0'}}" color="#28a745" size="medium">进行中 | {{recordsCount}}人</van-tag>
     <van-tag wx:elif="{{status == '1'}}" color="#6c757d" size="medium">未开始</van-tag>
-    <van-tag wx:elif="{{status == '2'}}" color="#6c757d" size="medium">已结束</van-tag>
+    <van-tag wx:elif="{{status == '2'}}" color="#6c757d" size="medium">已结束 | {{recordsCount}}人</van-tag>
   </view>
   <view style="margin-top: 10rpx;">
     <text class="desc-text">{{event.description}}</text>
@@ -22,12 +22,12 @@
     <view class="gift-line-content">
       <view>
         <text>{{ nickName + '\t'}}</text>
-        <van-tag plain type="primary" size="large">{{ record[0].myno }}号</van-tag>
+        <van-tag plain type="primary" size="medium">{{ record[0].myno }}号</van-tag>
       </view>
-      <text> --> </text>
+      <van-icon name="send-gift-o" size="48rpx" />
       <view>
         <text>{{ receiver[0].nickName + '\t'}}</text>
-        <van-tag plain type="primary" size="large">{{ record[0].itno }}号</van-tag>
+        <van-tag plain type="primary" size="medium">{{ record[0].itno }}号</van-tag>
       </view>
     </view>
 
@@ -52,13 +52,16 @@
     <view class="gift-line-title">
       <text>全局信息</text>
     </view>
-    <view class="gift-global-inline" wx:for="{{ event.result }}" wx:key="globalResult" wx:for-item="eveR"  wx:for-index="idx">
-      <van-tag plain type="primary" size="medium" >{{ eveR }}号</van-tag>
-      <text wx:if="{{ idx != (event.result.length - 1) }}"> > </text>
+    <view>
+      <view class="gift-global-inline" wx:for="{{ event.result }}" wx:key="globalResult" wx:for-item="eveR" wx:for-index="idx">
+        <van-tag plain type="primary" size="medium" >{{ eveR }}号</van-tag>
+        <van-icon wx:if="{{ idx != (event.result.length - 1) }}" size="24rpx" name="arrow" style="padding: 0 10rpx" />
+      </view>
     </view>
   </view>
 </view>
 <view>
+<van-notify id="van-notify" />
 <van-button color="{{status == '0' ? '#28a745' : '#6c757d'}}" custom-style="height: 150rpx; width: 100%" block square bind:click="{{status == '0' ? !_in ? 'onIns' : 'onDel' : ''}}">
   <text wx:if="{{status == '0' && !_in}}">我要参加</text>
   <text wx:elif="{{status == '0' && _in}}">我已参加，点击退出</text>

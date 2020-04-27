@@ -7,89 +7,77 @@ cloud.init({
 const db = cloud.database().collection('pair')
 const userDB = cloud.database().collection('user')
 
+const unPackQuery = obj => {
+  var queried = []
+  var data = obj.data ? obj.data : (obj.result ? obj.result : [])
+  if (Array.isArray(data))
+    data.forEach((value, index, _) => {
+      queried.push(value)
+    })
+  else
+    queried.push(data)
+  return queried
+}
+
+
 // 云函数入口函数
 exports.main = async (event, context) => {
   var action = event.action
   var openid = cloud.getWXContext().OPENID
+  
   try {
-    if (action === 'load') {
-      var curTime = Date.now()
-      var eventRecord = await cloud.callFunction({
-        name: 'eventdbo',
-        data: {
-          "action": "fdoc",
-          "_id": event._eid
-        }
-      })
+    switch (action) {
+      case 'query':
+        var eventRecord = unPackQuery(await cloud.callFunction({
+          name: 'eventdbo',
+          data: {
+            "action": "queryFormatted",
+            "_id": event._eid
+          }
+        }))
 
-      var recordsCount = await db.where({_eid: event._eid}).count()
-      var record = await db.where({
-        _eid: event._eid,
-        sid: openid
-      }).get()
-
-      _in = record.data.length > 0
-      receiver = await cloud.callFunction({
-        name: 'userdbo',
-        data: {
-          "action": "getAddress",
-          "rid": (_in && record.data[0].rid) ? record.data[0].rid : ''
-        }
-      })
-      
-      return {
-        event: eventRecord,
-        recordsCount: recordsCount.total,
-        record: record,
-        _in: _in,
-        receiver: receiver
-      }
-    } else if (action === 'ins') {
-      return await db.add({
-        data: {
+        var recordsCount = await db.where({ _eid: event._eid }).count()
+        var record = unPackQuery(await db.where({
           _eid: event._eid,
           sid: openid
+        }).get())
+
+        _in = record.length > 0
+        receiver = unPackQuery(await cloud.callFunction({
+          name: 'userdbo',
+          data: {
+            "action": "queryAddr",
+            "rid": (_in && record[0].rid) ? record[0].rid : ''
+          }
+        }))
+
+        return {
+          event: eventRecord,
+          recordsCount: recordsCount.total,
+          record: record,
+          _in: _in,
+          receiver: receiver
         }
-      })
-    } else if (action === 'del') {
-      return await db.where({
-        _eid: event._eid,
-        sid: openid
-      }).remove()
+      case 'insert':
+        return await db.add({ data: {_eid: event._eid, sid: openid} })
+      case 'delete':
+        return await db.where({ _eid: event._eid, sid: openid }).remove()
+      case 'searchIn':
+        var inRecords = []
+        var searches = unPackQuery(await db.where({ sid: openid }).get())
+        for (idx in searches) {
+          var unpack = unPackQuery(await cloud.callFunction({
+            name: 'eventdbo',
+            data: {
+              "action": "query",
+              "_id": searches[idx]._eid
+            }
+          }))
+          if (unpack[0])
+            inRecords.push(unpack[0])
+        }
+        return inRecords
     }
-
-    // else if (action === 'upd') {
-    //   return await db.doc(event._id).update({
-    //     data: {
-    //       eventName: event.eventName,
-    //       startTime: event.startTime,
-    //       rollTime: event.rollTime,
-    //     }
-    //   })
-    // } else if (action === 'loc') {
-    //   return await db.loc(event._id).get()
-    // } else if (action === 'get') {
-    //   var eventRecords = {
-    //     wait: [],
-    //     current: [],
-    //     end: []
-    //   }
-    //   var records = await db.get()
-    //   var curTime = Date.now()
-
-    //   await records.data.forEach((item, index, arr) => {
-    //     item.startTimeFormatted = formatTime(item.startTime)
-    //     item.rollTimeFormatted = formatTime(item.rollTime)
-    //     if (item.startTime > curTime)
-    //       eventRecords.wait.push(item)
-    //     else if (item.startTime <= curTime && curTime <= item.rollTime)
-    //       eventRecords.current.push(item)
-    //     else if (item.rollTime < curTime)
-    //       eventRecords.end.push(item)
-    //   })
-
-    //   return eventRecords
-    // }
   } catch (e) {
     console.log(e)
   }
