@@ -12,7 +12,7 @@ App({
     }
 
     this.globalData = {
-      version: 'DEV20200225'
+      version: '1.0.200427'
     }
   }
 })
