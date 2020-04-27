@@ -67,7 +67,7 @@ page {
   flex-direction: column;
   justify-content:space-between;
   padding-left: 30rpx;
-  padding-right: 120rpx;
+  padding-right: 60rpx;
 }
 
 .hint {
