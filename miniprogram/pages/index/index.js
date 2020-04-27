@@ -13,9 +13,7 @@ Page({
     event: {}
   },
 
-  onLoad: function() {
-    var that = this
-
+  onLoad: async function() {
     if (!wx.cloud) {
       wx.showModal({
         content: '请使用 2.2.3 或以上的基础库以使用云能力',
@@ -25,38 +23,31 @@ Page({
     }
 
     if (!app.globalData.openid) {
-      wx.cloud.callFunction({
+      var login = await wx.cloud.callFunction({
         name: 'login',
         data: {}
-      }).then(res => {
-        app.globalData.openid = res.result.openid
       })
+      app.globalData.openid = login.result.openid
     }
-
-    wx.getSetting().then(res => {
-      if (res.authSetting['scope.userInfo']) {
-        wx.getUserInfo().then(userInfo => {
-          wx.cloud.callFunction({
-            name: 'userdbo',
-            data: { action: 'query' }
-          }).then(res => {
-            var data = res.result
-            if (data.length !== 0) {
-              app.globalData.userInfo = data[0]
-              that.setData({
-                logged: true,
-                avatarUrl: data[0].avatarUrl,
-                nickName: data[0].nickName,
-                addressInfo: data[0].fullAddr
-              })
-              that.fetchEvents()
-            } else {
-              that.uploadAddress(userInfo)
-            }
-          })
+    
+    if (app.globalData.openid) {
+      var that = this
+      var res = await wx.cloud.callFunction({
+        name: 'userdbo',
+        data: { action: 'query' }
+      })
+      var data = res.result
+      if (data.length !== 0) {
+        app.globalData.userInfo = data[0]
+        that.setData({
+          logged: true,
+          avatarUrl: data[0].avatarUrl,
+          nickName: data[0].nickName,
+          addressInfo: data[0].fullAddr
         })
+        that.fetchEvents()
       }
-    })
+    }
   },
 
   uploadAddress: function(userInfo) {
@@ -75,8 +66,9 @@ Page({
           postalCode: addr.postalCode,
           telNumber: addr.telNumber,
           recipient: addr.userName,
-        }
-      }).then(res => {
+        },
+      }).then(() => {
+        // wx.reLaunch({ url: '../index/index', })
         that.onLoad()
       })
     }).catch(err => {
@@ -85,8 +77,15 @@ Page({
   },
 
   onGetUserInfo: function(e) {
+    var that = this
     if (e.detail.userInfo) {
-      this.onLoad()
+      wx.getSetting().then(res => {
+        if (res.authSetting['scope.userInfo']) {
+          wx.getUserInfo().then(userInfo => {
+            that.uploadAddress(userInfo)
+          })
+        }
+      })
     }
   },
 
