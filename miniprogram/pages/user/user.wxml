@@ -15,24 +15,114 @@
   <van-cell title="我的活动" is-link bind:click="showMyEvents" />
 </van-cell-group>
 <van-cell-group title=" ">
+  <van-cell title="更新日志" is-link bind:click="showUpdateLog" />
   <van-cell title="关于" is-link bind:click="showAbout" />
 </van-cell-group>
 
 <van-dialog id="van-dialog" />
+<van-notify id="van-notify" />
 
 <van-popup show="{{isEventsShow}}" position="bottom" custom-style="height: 85%" bind:close="hideMyEvents">
 <van-nav-bar
   title="我的活动"
-  bind:click-left="searchMyEvent"
-  bind:click-right="hideMyEvent"
+  right-text="确定"
+  bind:click-right="hideMyEvents"
   safe-area-inset-top="{{false}}" />
-  <van-index-bar>
-    <view>
-      <van-cell wx:for="{{ myEvents }}" wx:key="myEvent" wx:for-item="myEvent"
-        title="{{ myEvent.eventName }}"
+  <van-index-bar index-list="{{ myEvents.indexList }}" sticky="{{ false }}">
+    <view wx:for="{{ myEvents.result }}" wx:key="myEvent" wx:for-item="myEvent" wx:for-index="myEventIdx">
+      <van-index-anchor use-slot="{{ true }}" index="{{ myEventIdx + 1 }}">{{ myEvents.indexList[myEventIdx] }}</van-index-anchor>
+      <van-cell wx:for="{{ myEvent }}" wx:key="myEventItem" wx:for-item="myEventItem"
+        title="{{ myEventItem.eventName }}"
         is-link
         link-type="navigateTo"
-        url="/pages/gift/gift?eid={{myEvent._id}}"/>
+        url="/pages/gift/gift?eid={{myEventItem._id}}"/>
     </view>
   </van-index-bar>
+</van-popup>
+
+<van-popup show="{{isCreateShow}}" position="bottom" custom-style="height: 85%" bind:close="hideCreateEvent">
+<van-nav-bar
+  title="创建活动"
+  left-text="取消"
+  right-text="创建"
+  bind:click-left="hideCreateEvent"
+  bind:click-right="createEvent"
+  safe-area-inset-top="{{false}}" />
+  <van-cell-group>
+    <van-field
+      label="活动名称"
+      placeholder="请输入活动名称"
+      value="{{ newEvent.eventName }}"
+      border="{{ true }}"
+      required
+      clearable
+      bind:confirm="checkEventName"
+      error-message="{{ newEvent.eventNameError }}"
+      error-message-align="right"
+    />
+    <van-field
+      label="开始时间"
+      placeholder="请确认开始时间"
+      value="{{ newEvent.eventStartFormatted }}"
+      border="{{ true }}"
+      required
+      readonly
+      clickable
+      error-message="{{ newEvent.eventStartError }}"
+      error-message-align="right"
+      bindtap="showDatePickerStart"
+    />
+    <van-field
+      label="截止时间"
+      placeholder="请确认截止时间"
+      value="{{ newEvent.eventRollFormatted }}"
+      border="{{ true }}"
+      required
+      readonly
+      clickable
+      error-message="{{ newEvent.eventRollError }}"
+      error-message-align="right"
+      bindtap="showDatePickerRoll"
+    />
+    <van-field
+      label="活动描述"
+      placeholder="请输入活动描述"
+      value="{{ newEvent.eventDescription }}"
+      border="{{ true }}"
+      type="textarea"
+      autosize
+      clearable
+    />
+  </van-cell-group>
+</van-popup>
+
+<van-popup show="{{isDatePickerShow}}" position="bottom" bind:close="hideDatePicker">
+  <van-datetime-picker
+    type="datetime"
+    value="{{ newEvent.minDate }}"
+    min-date="{{ newEvent.minDate }}"
+    filter="{{ filter }}"
+    bind:cancel="hideDatePicker"
+    bind:confirm="confirmDatePicker"
+  />
+</van-popup>
+
+<van-popup show="{{isUpdateLogShow}}" position="bottom" custom-style="height: 85%" bind:close="hideUpdateLog">
+<van-nav-bar
+  title="更新日志"
+  right-text="确认"
+  bind:click-right="hideUpdateLog"
+  safe-area-inset-top="{{false}}" />
+  <view class="updateLog">
+    <text class="updateLog-title">Version 1.1</text>
+    <text class="updateLog-list">1. 新增创建活动</text>
+    <text class="updateLog-list">2. 新增更新日志</text>
+    <text class="updateLog-list">3. 样式更新</text>
+
+    <text class="updateLog-title">Version 1.0</text>
+    <text class="updateLog-list">1. 参加/取消参加交换活动</text>
+    <text class="updateLog-list">2. 查看已经参加过的活动</text>
+    <text class="updateLog-list">3. 允许随时修改信息</text>
+    <text class="updateLog-list">4. 7天后地址将不可见</text>
+  </view>
 </van-popup>

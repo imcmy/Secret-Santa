@@ -15,7 +15,7 @@ const formatTime = date => {
   const minute = date.getMinutes()
   const second = date.getSeconds()
 
-  return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute, second].map(formatNumber).join(':')
+  return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute].map(formatNumber).join(':')
 }
 
 const formatNumber = n => {
@@ -24,8 +24,8 @@ const formatNumber = n => {
 }
 
 const aWeekLater = date => {
-  var date = new Date(date + '-0800')
-  date = date.setDate(date.getDate() + 7)
+  var date = new Date(date)
+  date.setDate(date.getDate() + 7)
   return new Date(date)
 }
 
@@ -63,26 +63,30 @@ const calcEventStatus = (start, roll, end) => {
 // 云函数入口函数
 exports.main = async (event, context) => {
   var action = event.action
+  var openid = cloud.getWXContext().OPENID
   try {
     switch (action) {
       case 'insert':
         return await db.add({
           data: {
             eventName: event.eventName,
-            startTime: event.startTime,
-            rollTime: event.rollTime,
-            endTime: aWeekLater(event.rollTime),
-            description: event.description
+            startTime: new Date(event.startTime),
+            rollTime: new Date(event.rollTime),
+            endTime: aWeekLater(new Date(event.rollTime)),
+            description: event.description,
+            rolled: false,
+            creater: openid
           }
         })
       case 'update':
         return await db.doc(event._id).update({
           data: {
             eventName: event.eventName,
-            startTime: event.startTime,
-            rollTime: event.rollTime,
-            endTime: aWeekLater(event.rollTime),
-            description: event.description
+            startTime: new Date(event.startTime),
+            rollTime: new Date(event.rollTime),
+            endTime: aWeekLater(new Date(event.rollTime)),
+            description: event.description,
+            rolled: false
           }
         })
       case 'query':

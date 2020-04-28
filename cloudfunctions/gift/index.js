@@ -77,6 +77,21 @@ exports.main = async (event, context) => {
             inRecords.push(unpack[0])
         }
         return inRecords
+      case 'searchInv2':
+        var inRecords = [[],[]]
+        var searches = unPackQuery(await db.where({ sid: openid }).get())
+        for (idx in searches) {
+          var unpack = unPackQuery(await cloud.callFunction({
+            name: 'eventdbo',
+            data: {
+              "action": "query",
+              "_id": searches[idx]._eid
+            }
+          }))
+          if (unpack[0])
+            inRecords[unpack[0].rolled ? 1 : 0].push(unpack[0])
+        }
+        return inRecords
     }
   } catch (e) {
     console.log(e)

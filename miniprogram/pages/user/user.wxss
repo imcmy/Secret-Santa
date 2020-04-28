@@ -67,3 +67,18 @@ page {
   justify-content: center;
   padding: 70rpx 40rpx;
 }
+
+.updateLog {
+  display: flex;
+  flex-direction: column;
+  padding: 20rpx 32rpx
+}
+
+.updateLog-title {
+  font-weight: 600;
+  padding-top: 20rpx;
+}
+
+.updateLog-list {
+  padding-top: 10rpx;
+}
