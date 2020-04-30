@@ -1,6 +1,6 @@
 //index.js
 const app = getApp()
-var util = require('../../utils/utils.js')
+var utils = require('../../utils/utils.js')
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
 
 
@@ -113,6 +113,13 @@ Page({
       name: 'eventdbo',
       data: { 'action': 'list' }
     }).then(res => {
+      for (var key in res.result) {
+        res.result[key].forEach((item, _) => {
+          if (item.status == 0) item.timeFormatted = utils.unixToFormatted(item.rollTime)
+          else if (item.status == 1) item.timeFormatted = utils.unixToFormatted(item.startTime)
+          else if (item.status == 2 || item.status == 3) item.timeFormatted = utils.unixToFormatted(item.endTime)
+        })
+      }
       this.setData({ event: res.result })
       this.loading = false
     })

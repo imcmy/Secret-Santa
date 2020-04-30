@@ -5,17 +5,17 @@ var utils = require('../../utils/utils.js')
 
 Page({
   data: {
-    event: {},
-    status: '',
-    time: 0,
-    color: '',
-    recordsCount: 0,
+    _in: false,
+    nickName: '',
+
+    event: {
+      _event: {},
+      status: -1,
+      time: 0,
+    },
     record: {},
     receiver: {},
-    _in: false,
-    _rolled: false,
-    _ended: false,
-    nickName: ''
+    recordsCount: 0
   },
 
   onLoad: function (options) {
@@ -36,16 +36,15 @@ Page({
         res = res.result
         var event = res.event[0]
         that.setData({
-          event: event,
-          status: event.status,
-          time: event.status == 0 ? utils.cutdown(event.diffRoll) : event.status == 1 ? utils.cutdown(event.diffStart) : 0,
+          _in: res._in,
+
+          'event._event': event,
+          'event.status': event.status,
+          'event.time': event.status == 0 ? utils.cutdown(event.rollTime) : event.status == 1 ? utils.cutdown(event.startTime) : event.status == 2 ? utils.cutdown(event.endTime) : 0,
           record: res.record,
           receiver: res.receiver,
           recordsCount: res.recordsCount,
           
-          _in: res._in,
-          _rolled: event.rolled,
-          _ended: event._ended,
           _options: options
         })
 
@@ -61,7 +60,7 @@ Page({
   onIns: function () {
     var that = this
     wx.showModal({
-      content: '确定要参加' + that.data.event.eventName + '吗？',
+      content: '确定要参加' + that.data.event._event.eventName + '吗？',
       confirmText: "确定",
       cancelText: "继续考虑",
       success: function (res) {
@@ -85,7 +84,7 @@ Page({
   onDel: function () {
     var that = this
     wx.showModal({
-      content: '确定要离开' + that.data.event.eventName + '吗？',
+      content: '确定要离开' + that.data.event._event.eventName + '吗？',
       confirmText: "确定",
       cancelText: "继续考虑",
       success: function (res) {

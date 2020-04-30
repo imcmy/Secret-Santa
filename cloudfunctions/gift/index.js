@@ -7,6 +7,7 @@ cloud.init({
 const db = cloud.database().collection('pair')
 const userDB = cloud.database().collection('user')
 
+
 const unPackQuery = obj => {
   var queried = []
   var data = obj.data ? obj.data : (obj.result ? obj.result : [])
@@ -31,7 +32,7 @@ exports.main = async (event, context) => {
         var eventRecord = unPackQuery(await cloud.callFunction({
           name: 'eventdbo',
           data: {
-            "action": "queryFormatted",
+            "action": "query",
             "_id": event._eid
           }
         }))
@@ -52,18 +53,18 @@ exports.main = async (event, context) => {
         }))
 
         return {
+          _in: _in,
           event: eventRecord,
           recordsCount: recordsCount.total,
           record: record,
-          _in: _in,
           receiver: receiver
         }
       case 'insert':
-        return await db.add({ data: {_eid: event._eid, sid: openid} })
+        return await db.add({ data: {_eid: event._eid, sid: openid, time: new Date().getTime() } })
       case 'delete':
         return await db.where({ _eid: event._eid, sid: openid }).remove()
       case 'searchIn':
-        var inRecords = []
+        var inRecords = [[], [], []]
         var searches = unPackQuery(await db.where({ sid: openid }).get())
         for (idx in searches) {
           var unpack = unPackQuery(await cloud.callFunction({
@@ -73,23 +74,10 @@ exports.main = async (event, context) => {
               "_id": searches[idx]._eid
             }
           }))
-          if (unpack[0])
-            inRecords.push(unpack[0])
-        }
-        return inRecords
-      case 'searchInv2':
-        var inRecords = [[],[]]
-        var searches = unPackQuery(await db.where({ sid: openid }).get())
-        for (idx in searches) {
-          var unpack = unPackQuery(await cloud.callFunction({
-            name: 'eventdbo',
-            data: {
-              "action": "query",
-              "_id": searches[idx]._eid
-            }
-          }))
-          if (unpack[0])
-            inRecords[unpack[0].rolled ? 1 : 0].push(unpack[0])
+          if (unpack[0] && unpack[0].status != 1) {
+            var staRecord = {0: 0, 2: 1, 3: 2}
+            inRecords[staRecord[unpack[0].status]].push(unpack[0])
+          }
         }
         return inRecords
     }

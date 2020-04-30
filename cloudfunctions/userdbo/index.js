@@ -68,6 +68,13 @@ exports.main = async (event, context) => {
           "postalCode": unPack[0].postalCode,
           "recipient": unPack[0].recipient
         }
+      case 'queryList':
+        var list = []
+        for (var key in event.list) {
+          var user = unPackQuery(await db.where({ _openid: event.list[key] }).get())
+          list.push(user[0].nickName)
+        }
+        return list
     }
   } catch (e) {
     console.log(e)

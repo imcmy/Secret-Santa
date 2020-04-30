@@ -6,28 +6,6 @@ cloud.init({
 })
 const db = cloud.database().collection('event')
 
-const formatTime = date => {
-  var date = new Date(date + '-0800')
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-  const hour = date.getHours()
-  const minute = date.getMinutes()
-  const second = date.getSeconds()
-
-  return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute].map(formatNumber).join(':')
-}
-
-const formatNumber = n => {
-  n = n.toString()
-  return n[1] ? n : '0' + n
-}
-
-const aWeekLater = date => {
-  var date = new Date(date)
-  date.setDate(date.getDate() + 7)
-  return new Date(date)
-}
 
 const unPackQuery = obj => {
   var queried = []
@@ -43,19 +21,14 @@ const unPackQuery = obj => {
 
 const calcEventStatus = (start, roll, end) => {
   if (start <= roll && roll <= end) {
-    var current = Date.now()
-    if (start > current)
-      return [1, false]
-    else if (start <= current && current <= roll)
-      return [0, false]
-    else if (roll < current && current <= end)
-      return [2, false]
-    else if (end < current)
-      return [2, true]
-    else
-      return [-1, true] // Never
+    var current = new Date().getTime()
+    if (start > current) return 1
+    else if (start <= current && current <= roll) return 0
+    else if (roll < current && current <= end) return 2
+    else if (end < current) return 3
+    else return -1
   } else {
-    return [-1, true]
+    return -1
   }
 }
 
@@ -70,11 +43,12 @@ exports.main = async (event, context) => {
         return await db.add({
           data: {
             eventName: event.eventName,
-            startTime: new Date(event.startTime),
-            rollTime: new Date(event.rollTime),
-            endTime: aWeekLater(new Date(event.rollTime)),
+            startTime: event.startTime,
+            rollTime: event.rollTime,
+            endTime: event.endTime,
             description: event.description,
             rolled: false,
+            ended: false,
             creater: openid
           }
         })
@@ -82,46 +56,46 @@ exports.main = async (event, context) => {
         return await db.doc(event._id).update({
           data: {
             eventName: event.eventName,
-            startTime: new Date(event.startTime),
-            rollTime: new Date(event.rollTime),
-            endTime: aWeekLater(new Date(event.rollTime)),
+            startTime: event.startTime,
+            rollTime: event.rollTime,
+            endTime: event.endTime,
             description: event.description,
-            rolled: false
+            rolled: false,
+            ended: false,
           }
         })
       case 'query':
-        return unPackQuery(await db.doc(event._id).get())
-      case 'queryFormatted':
         var record = unPackQuery(await db.doc(event._id).get())
-
-        record[0].startTimeFormatted = formatTime(record[0].startTime)
-        record[0].rollTimeFormatted = formatTime(record[0].rollTime)
-        
-        var curTime = Date.now()
-        record[0].diffStart = curTime - record[0].startTime
-        record[0].diffRoll = curTime - record[0].rollTime
-
-        var status = calcEventStatus(record[0].startTime, record[0].rollTime, record[0].endTime)
-        record[0].status = status[0]
-        record[0]._ended = status[1]
-
+        record[0].status = calcEventStatus(record[0].startTime, record[0].rollTime, record[0].endTime)
+        if (!record[0].ended && record[0].status == 3) {
+          var list = unPackQuery(await cloud.callFunction({
+            name: 'userdbo',
+            data: {
+              "action": "queryList",
+              "list": record[0]._id_diced
+            }
+          }))
+          record[0]._name_diced = list
+          record[0].ended = true
+          await db.doc(event._id).update({ data: { _name_diced: list, ended: true } })
+        }
         return record
       case 'list':
         var eventRecords = {
           wait: [],
-          current: [],
+          register: [],
+          publish: [],
           end: []
         }
 
         var records = unPackQuery(await db.get())
         await records.forEach((item, index, _) => {
-          item.startTimeFormatted = formatTime(item.startTime)
-          item.rollTimeFormatted = formatTime(item.rollTime)
-          var status = calcEventStatus(item.startTime, item.rollTime, item.endTime)[0]
-          switch (status) {
-            case 0: eventRecords.current.push(item); break;
+          item.status = calcEventStatus(item.startTime, item.rollTime, item.endTime)
+          switch (item.status) {
+            case 0: eventRecords.register.push(item); break;
             case 1: eventRecords.wait.push(item); break;
-            case 2: eventRecords.end.push(item); break;
+            case 2: eventRecords.publish.push(item); break;
+            case 3: eventRecords.end.push(item); break;
           }
         })
 

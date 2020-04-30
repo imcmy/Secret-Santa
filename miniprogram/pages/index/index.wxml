@@ -1,23 +1,34 @@
 <!--index.wxml-->
 <view wx:if="{{logged}}" class="top-bar userinfo" bindtap="onTapUser">
-    <van-image  round fit="cover" width="150rpx" height="150rpx" src="{{avatarUrl}}" />
-    <view class="userinfo-detail-wrapper">
-      <text class="userinfo-nickname">{{ nickName }}</text>
-      <text class="userinfo-address">{{ addressInfo }}</text>
-    </view>
+  <van-image  round fit="cover" width="150rpx" height="150rpx" src="{{avatarUrl}}" />
+  <view class="userinfo-detail-wrapper">
+    <text class="userinfo-nickname">{{ nickName }}</text>
+    <text class="userinfo-address">{{ addressInfo }}</text>
+  </view>
 </view>
 <view wx:else class="top-bar login">
-      <!-- <button open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">点击登录</button> -->
-      <van-button type="default" custom-class="login-button" open-type="getUserInfo" bind:getuserinfo="onGetUserInfo">点击登录</van-button>
-      <text class="hint userinfo-address">程序会收集您的：(1)用户名等基本信息；(2)地址等收货信息</text>
+  <van-button type="default" custom-class="login-button" open-type="getUserInfo" bind:getuserinfo="onGetUserInfo">点击登录</van-button>
+  <text class="hint userinfo-address">程序会收集您的：(1)用户名等基本信息；(2)地址等收货信息</text>
 </view>
 
 <van-tabs animated>
-  <van-tab title="进行中" info="{{event.current.length}}">
-    <van-cell-group wx:for="{{ event.current }}" wx:key="curEve" wx:for-item="eve">
+  <van-tab title="已抽签" info="{{event.publish.length}}">
+    <van-cell-group wx:for="{{ event.publish }}" wx:key="pubEve" wx:for-item="eve">
       <van-cell
         title="{{ eve.eventName }}"
-        label="抽签于 {{eve.rollTimeFormatted }}"
+        label="结束于 {{ eve.timeFormatted }}"
+        link-type="navigateTo"
+        url="/pages/gift/gift?eid={{eve._id}}"
+        is-link
+        center
+      />
+    </van-cell-group>
+  </van-tab>
+  <van-tab title="报名中" info="{{event.register.length}}">
+    <van-cell-group wx:for="{{ event.register }}" wx:key="regEve" wx:for-item="eve">
+      <van-cell
+        title="{{ eve.eventName }}"
+        label="抽签于 {{eve.timeFormatted }}"
         link-type="navigateTo"
         url="/pages/gift/gift?eid={{eve._id}}"
         is-link
@@ -29,7 +40,7 @@
     <van-cell-group wx:for="{{ event.wait }}" wx:key="endEve" wx:for-item="eve">
       <van-cell
         title="{{ eve.eventName }}"
-        label="开始于 {{ eve.startTimeFormatted }}"
+        label="开始于 {{ eve.timeFormatted }}"
         link-type="navigateTo"
         url="/pages/gift/gift?eid={{eve._id}}"
         is-link
@@ -41,7 +52,7 @@
     <van-cell-group wx:for="{{ event.end }}" wx:key="endEve" wx:for-item="eve">
       <van-cell
         title="{{ eve.eventName }}"
-        label="结束于 {{ eve.rollTimeFormatted }}"
+        label="结束于 {{ eve.timeFormatted }}"
         link-type="navigateTo"
         url="/pages/gift/gift?eid={{eve._id}}"
         is-link

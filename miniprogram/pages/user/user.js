@@ -19,15 +19,18 @@ Page({
     isDatePickerShow: false,
     newEvent: {
       eventName: '',
-      eventStart: '',
+      eventStart: 0,
       eventStartFormatted: '',
-      eventRoll: '',
+      eventRoll: 0,
       eventRollFormatted: '',
+      eventEnd: 0,
+      eventEndFormatted: '',
       eventDescription: '',
 
       eventNameError: '',
       eventStartError: '',
       eventRollError: '',
+      eventEndError: '',
 
       dateFlag: -1,
       minDate: utils.nextOKTime(),
@@ -61,97 +64,47 @@ Page({
     }
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  },
-
   showMyEvents: async function() {
     await this.getMyEvents()
     this.setData({ isEventsShow: true }) 
   },
 
-  hideMyEvents: function () {
-    this.setData({ isEventsShow: false }) 
-  },
+  hideMyEvents: function () { this.setData({ isEventsShow: false }) },
 
   getMyEvents: async function() {
     var myEvents = await wx.cloud.callFunction({
       name: 'gift',
-      data: { action: 'searchInv2' }
+      data: { action: 'searchIn' }
     })
     var indexList = []
     var result = []
     if (myEvents.result[0].length > 0) {
-      indexList.push('进行中')
+      indexList.push('已报名')
       result.push(myEvents.result[0])
     }
     if (myEvents.result[1].length > 0) {
-      indexList.push('已结束')
+      indexList.push('已抽签')
       result.push(myEvents.result[1])
+    }
+    if (myEvents.result[2].length > 0) {
+      indexList.push('已结束')
+      result.push(myEvents.result[2])
     }
     this.setData({
       myEvents: { indexList: indexList, result: result }
     })
   },
 
-  showCreateEvent: async function () {
-    this.setData({ isCreateShow: true })
-  },
+  showCreateEvent: function () { this.setData({ isCreateShow: true }) },
 
-  hideCreateEvent: function () {
-    this.setData({ isCreateShow: false })
-  },
+  hideCreateEvent: function () { this.setData({ isCreateShow: false }) },
 
   createEvent: async function () {
     this.setData({
       'newEvent.eventNameError': '',
       'newEvent.eventStartError': '',
-      'newEvent.eventRollError': ''
+      'newEvent.eventRollError': '',
+      'newEvent.eventEndError': ''
     })
     var errorFlag = false
     var newEvent = this.data.newEvent
@@ -159,20 +112,28 @@ Page({
       this.setData({ 'newEvent.eventNameError': '请输入活动名称' })
       errorFlag = true
     }
-    if (newEvent.eventStart === '') {
+    if (newEvent.eventStart === 0) {
       this.setData({ 'newEvent.eventStartError': '请输入开始时间' })
       errorFlag = true
     }
-    if (newEvent.eventRoll === '') {
-      this.setData({ 'newEvent.eventRollError': '请输入截止时间' })
+    if (newEvent.eventRoll === 0) {
+      this.setData({ 'newEvent.eventRollError': '请输入抽签时间' })
       errorFlag = true
     } else if (newEvent.eventStart >= newEvent.eventRoll) {
-      this.setData({ 'newEvent.eventRollError': '截止时间不得早于开始时间' })
+      this.setData({ 'newEvent.eventRollError': '抽签时间不得早于开始时间' })
+      errorFlag = true
+    }
+    if (newEvent.eventEnd === 0) {
+      this.setData({ 'newEvent.eventEndError': '请输入结束时间' })
+      errorFlag = true
+    } else if (newEvent.eventRoll >= newEvent.eventEnd) {
+      this.setData({ 'newEvent.eventEndError': '结束时间不得早于抽签时间' })
       errorFlag = true
     }
     if (errorFlag || newEvent.uploadLock)
       return
     this.setData({ 'newEvent.uploadLock': true })
+    console.log(newEvent.eventDescription)
     var result = await wx.cloud.callFunction({
       name: 'eventdbo',
       data: {
@@ -180,6 +141,7 @@ Page({
         eventName: newEvent.eventName,
         startTime: newEvent.eventStart,
         rollTime: newEvent.eventRoll,
+        endTime: newEvent.eventEnd,
         description: newEvent.eventDescription,
       }
     })
@@ -189,10 +151,13 @@ Page({
 
   checkEventName: function (value) {
     this.setData({ 'newEvent.eventNameError': '' })
-    value = value.detail.trim()
-    if (value === '')
+    if (value.detail.trim() === '')
       this.setData({ 'newEvent.eventNameError': '请输入活动名称' })
-    this.setData({ 'newEvent.eventName': value })
+    this.setData({ 'newEvent.eventName': value.detail })
+  },
+
+  checkEventDesc: function (value) {
+    this.setData({ 'newEvent.eventDescription': value.detail })
   },
 
   showDatePickerStart: function () {
@@ -209,38 +174,46 @@ Page({
     })
   },
 
+  showDatePickerEnd: function () {
+    this.setData({
+      isDatePickerShow: true,
+      'newEvent.dateFlag': 2
+    })
+  },
+
   confirmDatePicker: function (value) {
     var dateTime = value.detail // UNIX TIME FORMAT
+    console.log(dateTime)
     if (this.data.newEvent.dateFlag === 0) {
       this.setData({
-        isDatePickerShow: false,
-        'newEvent.dateFlag': -1,
         'newEvent.eventStart': dateTime,
         'newEvent.eventStartFormatted': utils.unixToFormatted(dateTime),
         'newEvent.eventStartError': ''
       })
     } else if (this.data.newEvent.dateFlag === 1) {
       this.setData({
-        isDatePickerShow: false,
-        'newEvent.dateFlag': -1,
         'newEvent.eventRoll': dateTime,
         'newEvent.eventRollFormatted': utils.unixToFormatted(dateTime),
         'newEvent.eventRollError': ''
       })
+    } else if (this.data.newEvent.dateFlag === 2) {
+      this.setData({
+        'newEvent.eventEnd': dateTime,
+        'newEvent.eventEndFormatted': utils.unixToFormatted(dateTime),
+        'newEvent.eventEndError': ''
+      })
     }
+    this.setData({
+      isDatePickerShow: false,
+      'newEvent.dateFlag': -1,
+    })
   },
 
-  hideDatePicker: function () {
-    this.setData({ isDatePickerShow: false })
-  },
+  hideDatePicker: function () { this.setData({ isDatePickerShow: false }) },
 
-  showUpdateLog: function () {
-    this.setData({ isUpdateLogShow: true })
-  },
+  showUpdateLog: function () { this.setData({ isUpdateLogShow: true }) },
 
-  hideUpdateLog: function () {
-    this.setData({ isUpdateLogShow: false })
-  },
+  hideUpdateLog: function () { this.setData({ isUpdateLogShow: false }) },
 
   updateUser: function () {
     var that = this
@@ -302,5 +275,54 @@ Page({
     }).catch(() => {
       Dialog.close();
     });
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function () {
+
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function () {
+
+  },
+
+  /**
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom: function () {
+
+  },
+
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function () {
+
   },
 })

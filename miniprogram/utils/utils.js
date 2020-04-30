@@ -1,6 +1,6 @@
-const cutdown = cutdown => {
-  var posTime = cutdown > 0 ? cutdown : 0 - cutdown
-  return posTime
+const cutdown = time => {
+  var cutdown = new Date().getTime() - time
+  return cutdown > 0 ? cutdown : 0 - cutdown
 }
 
 const formatNumber = n => {
@@ -8,8 +8,8 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
-const unixToFormatted = dateTime => {
-  var date = new Date(dateTime)
+const unixToFormatted = timeStamp => {
+  var date = new Date(timeStamp)
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const day = date.getDate()
