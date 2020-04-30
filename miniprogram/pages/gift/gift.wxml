@@ -52,13 +52,26 @@
     </view>
 
     <view class="gift-line-title">
-      <text>全局信息</text>
+      <text>全局顺序</text>
     </view>
     <view>
       <view class="gift-global-inline" wx:for="{{ event._event.idx_diced }}" wx:key="globalResult" wx:for-item="eveR" wx:for-index="idx">
         <van-tag plain type="primary" size="medium" wx:if="{{!event._event.ended}}" >{{ eveR }}号</van-tag>
-        <van-tag plain type="primary" size="medium" wx:else >{{ event._event._name_diced[idx] + ' ' + eveR }}号</van-tag>
+        <van-tag plain type="primary" size="medium" wx:else >{{ event._event._names_diced[idx] + ' ' + eveR }}号</van-tag>
         <van-icon wx:if="{{ idx != (event._event.idx_diced.length - 1) }}" size="24rpx" name="arrow" style="padding: 0 10rpx" />
+      </view>
+    </view>
+
+    <view wx:if="{{!event._event.ended}}">
+
+      <van-divider />
+
+      <view class="gift-line-title">
+        <text>参与人员</text>
+      </view>
+      <view class="gift-line-inline" wx:for="{{ event._event.names }}" wx:key="globalNames" wx:for-item="name" wx:for-index="idx">
+        <text wx:if="{{ idx != (event._event.names.length - 1) }}">{{ name }}, </text>
+        <text wx:else>{{ name }}</text>
       </view>
     </view>
   </view>

@@ -49,6 +49,7 @@ exports.main = async (event, context) => {
             description: event.description,
             rolled: false,
             ended: false,
+            audited: false,
             creater: openid
           }
         })
@@ -62,22 +63,15 @@ exports.main = async (event, context) => {
             description: event.description,
             rolled: false,
             ended: false,
+            audited: false
           }
         })
       case 'query':
         var record = unPackQuery(await db.doc(event._id).get())
         record[0].status = calcEventStatus(record[0].startTime, record[0].rollTime, record[0].endTime)
         if (!record[0].ended && record[0].status == 3) {
-          var list = unPackQuery(await cloud.callFunction({
-            name: 'userdbo',
-            data: {
-              "action": "queryList",
-              "list": record[0]._id_diced
-            }
-          }))
-          record[0]._name_diced = list
           record[0].ended = true
-          await db.doc(event._id).update({ data: { _name_diced: list, ended: true } })
+          await db.doc(event._id).update({ data: { ended: true } })
         }
         return record
       case 'list':
@@ -88,7 +82,7 @@ exports.main = async (event, context) => {
           end: []
         }
 
-        var records = unPackQuery(await db.get())
+        var records = unPackQuery(await db.where({ audited: true }).get())
         await records.forEach((item, index, _) => {
           item.status = calcEventStatus(item.startTime, item.rollTime, item.endTime)
           switch (item.status) {

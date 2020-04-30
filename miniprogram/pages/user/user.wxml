@@ -132,6 +132,8 @@
     <text class="updateLog-list">2. 完善时间显示</text>
     <text class="updateLog-list">3. 自定义结束时间</text>
     <text class="updateLog-list">4. 在结束后显示带名字的结果</text>
+    <text class="updateLog-list">5. 显示参与人员</text>
+    <text class="updateLog-list">6. 增加用户权限字段及活动审核字段</text>
 
     <text class="updateLog-title">Version 1.1</text>
     <text class="updateLog-list">1. 新增创建活动</text>

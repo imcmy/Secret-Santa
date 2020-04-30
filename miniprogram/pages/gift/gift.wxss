@@ -4,6 +4,8 @@ page {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   --count-down-text-color: #FFFFFF;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif !important;
 }
@@ -44,6 +46,12 @@ page {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 10rpx;
+  font-size: 28rpx;
+}
+
+.gift-line-inline {
+  display: inline;
   padding-bottom: 10rpx;
   font-size: 28rpx;
 }

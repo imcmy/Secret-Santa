@@ -146,7 +146,7 @@ Page({
       }
     })
     this.setData({ isCreateShow: false, 'newEvent.uploadLock': false })
-    Notify({ type: 'success', message: '创建成功' });
+    Notify({ type: 'success', message: '创建成功，请通知My过审核' });
   },
 
   checkEventName: function (value) {

@@ -27,6 +27,8 @@ exports.main = async (event, context) => {
   try {
     switch (action) {
       case 'insert':
+        var userCheck = await db.where({ _openid: openid }).count()
+        if (userCheck > 0) return
         return await db.add({
           data: {
             _openid: openid,
@@ -39,7 +41,8 @@ exports.main = async (event, context) => {
             postalCode: event.postalCode,
             telNumber: event.telNumber,
             recipient: event.recipient,
-            fullAddr: event.provinceName + event.cityName + event.countyName + event.detailInfo
+            fullAddr: event.provinceName + event.cityName + event.countyName + event.detailInfo,
+            privilege: 0
           }
         })
       case 'update':
@@ -69,10 +72,11 @@ exports.main = async (event, context) => {
           "recipient": unPack[0].recipient
         }
       case 'queryList':
-        var list = []
+        var list = [[], []]
         for (var key in event.list) {
           var user = unPackQuery(await db.where({ _openid: event.list[key] }).get())
-          list.push(user[0].nickName)
+          list[0].push(user[0].nickName)
+          list[1].push(user[0].nickName + '(' + user[0].recipient + ')')
         }
         return list
     }
