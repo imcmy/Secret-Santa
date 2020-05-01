@@ -5,6 +5,7 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 })
 const db = cloud.database().collection('user')
+const _ = cloud.database().command
 
 
 const unPackQuery = obj => {
@@ -42,7 +43,8 @@ exports.main = async (event, context) => {
             telNumber: event.telNumber,
             recipient: event.recipient,
             fullAddr: event.provinceName + event.cityName + event.countyName + event.detailInfo,
-            privilege: 0
+            privilege: 0,
+            group: ['d38a536e5eab7330003713462983aea7']
           }
         })
       case 'update':
@@ -71,6 +73,39 @@ exports.main = async (event, context) => {
           "postalCode": unPack[0].postalCode,
           "recipient": unPack[0].recipient
         }
+      case 'queryGroups':
+        var unPack = unPackQuery(await db.where({ _openid: event._openid }).get())
+        return unPack[0].groups
+      case 'checkInGroup':
+        var unPack = unPackQuery(await db.where({ _openid: event._openid, groups: event._gid }).get())
+        return unPack.length > 0
+      case 'queryGroupsDetail':
+        var unPack = unPackQuery(await db.where({ _openid: openid }).get())
+        return unPackQuery(await cloud.callFunction({
+          name: 'groupdbo',
+          data: {
+            action: 'queryList',
+            list: unPack[0].groups
+          }
+        }))
+      case 'joinGroup':
+        var user = unPackQuery(await db.where({ _openid: openid }).get())
+        var groups = user[0].groups
+        var unPack = unPackQuery(await cloud.callFunction({
+          name: 'groupdbo',
+          data: {
+            action: 'queryKey',
+            key: event.key
+          }
+        }))
+        if (unPack.length == 0)
+          return -1
+        if (groups.indexOf(unPack[0]._id) == -1) {
+          groups.push(unPack[0]._id)
+          await db.where({ _openid: openid }).update({ data: { groups: groups } })
+          return 0
+        }
+        return 1
       case 'queryList':
         var list = [[], []]
         for (var key in event.list) {

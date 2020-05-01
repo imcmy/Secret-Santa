@@ -33,7 +33,8 @@
     "van-index-bar": "./miniprogram_npm/@vant/weapp/index-bar/index",
     "van-index-anchor": "./miniprogram_npm/@vant/weapp/index-anchor/index",
     "van-nav-bar": "./miniprogram_npm/@vant/weapp/nav-bar/index",
-    "van-datetime-picker": "./miniprogram_npm/@vant/weapp/datetime-picker/index"
+    "van-datetime-picker": "./miniprogram_npm/@vant/weapp/datetime-picker/index",
+    "van-loading": "./miniprogram_npm/@vant/weapp/loading/index"
   },
   "sitemapLocation": "sitemap.json"
 }

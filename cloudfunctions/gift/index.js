@@ -37,13 +37,21 @@ exports.main = async (event, context) => {
           }
         }))
 
-        var recordsCount = await db.where({ _eid: event._eid }).count()
+        var isInGroup = await cloud.callFunction({
+          name: 'userdbo',
+          data: {
+            "action": "checkInGroup",
+            "_openid": openid,
+            "_gid": eventRecord[0].group || ''
+          }
+        })
+
         var record = unPackQuery(await db.where({
           _eid: event._eid,
           sid: openid
         }).get())
-
         _in = record.length > 0
+
         receiver = unPackQuery(await cloud.callFunction({
           name: 'userdbo',
           data: {
@@ -55,14 +63,28 @@ exports.main = async (event, context) => {
         return {
           _in: _in,
           event: eventRecord,
-          recordsCount: recordsCount.total,
           record: record,
-          receiver: receiver
+          receiver: receiver,
+          isInGroup: isInGroup.result
         }
       case 'insert':
-        return await db.add({ data: {_eid: event._eid, sid: openid, time: new Date().getTime() } })
+        await db.add({ data: { _eid: event._eid, sid: openid, time: new Date().getTime() } })
+        return await cloud.callFunction({
+          name: 'eventdbo',
+          data: {
+            "action": "inc",
+            "_id": event._eid
+          }
+        })
       case 'delete':
-        return await db.where({ _eid: event._eid, sid: openid }).remove()
+        await db.where({ _eid: event._eid, sid: openid }).remove()
+        return await cloud.callFunction({
+          name: 'eventdbo',
+          data: {
+            "action": "minc",
+            "_id": event._eid
+          }
+        })
       case 'searchIn':
         var inRecords = [[], [], []]
         var searches = unPackQuery(await db.where({ sid: openid }).get())

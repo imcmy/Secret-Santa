@@ -48,6 +48,12 @@ Page({
     isEventsShow: false,
     myEvents: {},
 
+    isJoinGroupShow: false,
+    groupKey: '',
+    joinLock: false,
+    isGroupsShow: false,
+    myGroups: {},
+
     isUpdateLogShow: false
   },
 
@@ -95,7 +101,10 @@ Page({
     })
   },
 
-  showCreateEvent: function () { this.setData({ isCreateShow: true }) },
+  showCreateEvent: function () {
+    Notify({ type: 'warning', message: '功能维护中' });
+    // this.setData({ isCreateShow: true })
+  },
 
   hideCreateEvent: function () { this.setData({ isCreateShow: false }) },
 
@@ -133,7 +142,6 @@ Page({
     if (errorFlag || newEvent.uploadLock)
       return
     this.setData({ 'newEvent.uploadLock': true })
-    console.log(newEvent.eventDescription)
     var result = await wx.cloud.callFunction({
       name: 'eventdbo',
       data: {
@@ -183,7 +191,6 @@ Page({
 
   confirmDatePicker: function (value) {
     var dateTime = value.detail // UNIX TIME FORMAT
-    console.log(dateTime)
     if (this.data.newEvent.dateFlag === 0) {
       this.setData({
         'newEvent.eventStart': dateTime,
@@ -210,6 +217,41 @@ Page({
   },
 
   hideDatePicker: function () { this.setData({ isDatePickerShow: false }) },
+
+  getMyGroups: async function () {
+    var myGroups = await wx.cloud.callFunction({
+      name: 'userdbo',
+      data: { action: 'queryGroupsDetail' }
+    })
+    this.setData({ myGroups: myGroups.result })
+  },
+
+  showMyGroups: async function () {
+    await this.getMyGroups()
+    this.setData({ isGroupsShow: true })
+  },
+
+  hideMyGroups: function () { this.setData({ isGroupsShow: false }) },
+
+  showJoinGroup: function () { this.setData({ isJoinGroupShow: true }) },
+
+  hideJoinGroup: function () { this.setData({ isJoinGroupShow: false }) },
+
+  joinGroup: async function () {
+    var res = await wx.cloud.callFunction({
+      name: 'userdbo',
+      data: { action: 'joinGroup', key: this.data.groupKey }
+    })
+    if (res.result == -1) Notify({ type: 'danger', message: '密钥无效' });
+    else if (res.result == 0) {
+      Notify({ type: 'success', message: '加入成功' })
+      wx.reLaunch({ url: '../index/index', })
+    }
+    else if (res.result == 1) Notify({ type: 'success', message: '你已经在小组当中了' });
+    this.setData({ groupKey: '' })
+  },
+
+  checkGroupKey: function (value) { this.setData({ groupKey: value.detail }) },
 
   showUpdateLog: function () { this.setData({ isUpdateLogShow: true }) },
 

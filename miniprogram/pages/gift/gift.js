@@ -6,7 +6,9 @@ var utils = require('../../utils/utils.js')
 Page({
   data: {
     _in: false,
+    isInGroup: false,
     nickName: '',
+    loading: true,
 
     event: {
       _event: {},
@@ -37,15 +39,16 @@ Page({
         var event = res.event[0]
         that.setData({
           _in: res._in,
+          isInGroup: res.isInGroup,
 
           'event._event': event,
           'event.status': event.status,
           'event.time': event.status == 0 ? utils.cutdown(event.rollTime) : event.status == 1 ? utils.cutdown(event.startTime) : event.status == 2 ? utils.cutdown(event.endTime) : 0,
           record: res.record,
           receiver: res.receiver,
-          recordsCount: res.recordsCount,
           
-          _options: options
+          _options: options,
+          loading: false
         })
 
         if (options.inh === 'ins') {

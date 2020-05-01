@@ -15,6 +15,10 @@
   <van-cell title="我的活动" is-link bind:click="showMyEvents" />
 </van-cell-group>
 <van-cell-group title=" ">
+  <van-cell title="加入小组" is-link bind:click="showJoinGroup" />
+  <van-cell title="我的小组" is-link bind:click="showMyGroups" />
+</van-cell-group>
+<van-cell-group title=" ">
   <van-cell title="更新日志" is-link bind:click="showUpdateLog" />
   <van-cell title="关于" is-link bind:click="showAbout" />
 </van-cell-group>
@@ -120,6 +124,34 @@
   />
 </van-popup>
 
+<van-dialog
+  use-slot
+  title="加入小组"
+  show="{{ isJoinGroupShow }}"
+  show-cancel-button
+  bind:confirm="joinGroup"
+  bind:close="hideJoinGroup">
+  <van-field
+    value="{{ groupKey }}"
+    placeholder="请输入小组密钥"
+    border="{{ false }}"
+    bind:input="checkGroupKey"
+    input-align="center"
+  />
+</van-dialog>
+
+<van-popup show="{{isGroupsShow}}" position="bottom" custom-style="height: 85%" bind:close="hideMyGroups">
+<van-nav-bar
+  title="我的小组"
+  right-text="确定"
+  bind:click-right="hideMyGroups"
+  safe-area-inset-top="{{false}}" />
+  <van-cell wx:for="{{ myGroups }}" wx:key="myGroup" wx:for-item="myGroup"
+    title="{{ myGroup.groupName }}"
+    label="{{ myGroup.groupDescription }}"
+    icon="friends-o" />
+</van-popup>
+
 <van-popup show="{{isUpdateLogShow}}" position="bottom" custom-style="height: 85%" bind:close="hideUpdateLog">
 <van-nav-bar
   title="更新日志"
@@ -127,6 +159,13 @@
   bind:click-right="hideUpdateLog"
   safe-area-inset-top="{{false}}" />
   <view class="updateLog">
+    <text class="updateLog-title">Version 1.3</text>
+    <text class="updateLog-list">1. 增加小组功能</text>
+    <text class="updateLog-list">2. 允许加入/显示所在小组</text>
+    <text class="updateLog-list">3. 只显示所在小组的活动</text>
+    <text class="updateLog-list">4. 优化查询逻辑</text>
+    <text class="updateLog-list">5. 增加loading</text>
+    
     <text class="updateLog-title">Version 1.2</text>
     <text class="updateLog-list">1. 细化活动状态</text>
     <text class="updateLog-list">2. 完善时间显示</text>

@@ -5,6 +5,7 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 })
 const db = cloud.database().collection('event')
+const _ = cloud.database().command
 
 
 const unPackQuery = obj => {
@@ -50,7 +51,8 @@ exports.main = async (event, context) => {
             rolled: false,
             ended: false,
             audited: false,
-            creater: openid
+            creator: openid,
+            enrollment: 0
           }
         })
       case 'update':
@@ -75,6 +77,14 @@ exports.main = async (event, context) => {
         }
         return record
       case 'list':
+        var groups = unPackQuery(await cloud.callFunction({
+          name: 'userdbo',
+          data: {
+            action: 'queryGroups',
+            _openid: openid
+          }
+        }))
+
         var eventRecords = {
           wait: [],
           register: [],
@@ -82,7 +92,7 @@ exports.main = async (event, context) => {
           end: []
         }
 
-        var records = unPackQuery(await db.where({ audited: true }).get())
+        var records = unPackQuery(await db.where({ audited: true, group: _.in(groups) }).get())
         await records.forEach((item, index, _) => {
           item.status = calcEventStatus(item.startTime, item.rollTime, item.endTime)
           switch (item.status) {
@@ -94,6 +104,10 @@ exports.main = async (event, context) => {
         })
 
         return eventRecords
+      case 'inc':
+        return await db.where({ _id: event._id }).update({ data: { enrollment: _.inc(1) } })
+      case 'minc':
+        return await db.where({ _id: event._id }).update({ data: { enrollment: _.inc(-1) } })
     }
   } catch (e) {
     console.log(e)

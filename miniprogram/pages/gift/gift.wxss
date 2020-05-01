@@ -10,6 +10,23 @@ page {
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif !important;
 }
 
+.page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 .title {
   padding: var(--cell-vertical-padding,10px) var(--cell-horizontal-padding,16px);
 }
