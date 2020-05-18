@@ -8,10 +8,11 @@
 </view>
 
 <van-cell-group>
-  <van-cell title="更新信息" bind:click="updateUser"	is-link />
+  <van-cell title="更新信息" bind:click="updateUser" is-link />
+  <van-cell title="管理地址" is-link url="/pages/address/address" />
 </van-cell-group>
 <van-cell-group title=" ">
-  <van-cell title="创建活动" is-link bind:click="showCreateEvent" />
+  <!-- <van-cell title="创建活动" is-link bind:click="showCreateEvent" /> -->
   <van-cell title="我的活动" is-link bind:click="showMyEvents" />
 </van-cell-group>
 <van-cell-group title=" ">

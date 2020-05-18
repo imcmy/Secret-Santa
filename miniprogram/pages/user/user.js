@@ -57,9 +57,6 @@ Page({
     isUpdateLogShow: false
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
     if (app.globalData.userInfo) {
       this.setData({
@@ -220,7 +217,7 @@ Page({
 
   getMyGroups: async function () {
     var myGroups = await wx.cloud.callFunction({
-      name: 'userdbo',
+      name: 'userdbo_v2',
       data: { action: 'queryGroupsDetail' }
     })
     this.setData({ myGroups: myGroups.result })
@@ -239,7 +236,7 @@ Page({
 
   joinGroup: async function () {
     var res = await wx.cloud.callFunction({
-      name: 'userdbo',
+      name: 'userdbo_v2',
       data: { action: 'joinGroup', key: this.data.groupKey }
     })
     if (res.result == -1) Notify({ type: 'danger', message: '密钥无效' });
@@ -260,111 +257,65 @@ Page({
   updateUser: function () {
     var that = this
     wx.getSetting().then(res => {
-      if (res.authSetting['scope.userInfo'] && res.authSetting['scope.address']) {
-        wx.getUserInfo().then(userInfo => {
-          that.uploadAddress(userInfo)
-        })
+      if (res.authSetting['scope.userInfo'] === undefined) {
+        that.openConfirm(true)
+      } else if (res.authSetting['scope.userInfo']) {
+        that.uploadUserInfo()
       } else {
-        that.openConfirm()
-        return
+        that.openConfirm(false)
       }
     })
   },
 
-  uploadAddress: function (userInfo) {
-    var that = this
-    wx.chooseAddress().then(addr => {
+  uploadUserInfo: function () {
+    wx.getUserInfo().then(userInfo => {
       wx.cloud.callFunction({
-        name: 'userdbo',
+        name: 'userdbo_v2',
         data: {
           action: 'update',
           _id: app.globalData.userInfo._id,
           nickName: userInfo.userInfo.nickName,
           avatarUrl: userInfo.userInfo.avatarUrl,
-          provinceName: addr.provinceName,
-          cityName: addr.cityName,
-          countyName: addr.countyName,
-          detailInfo: addr.detailInfo,
-          postalCode: addr.postalCode,
-          telNumber: addr.telNumber,
-          recipient: addr.userName,
         }
       }).then(res => {
-        wx.showModal({
-          content: '更新成功',
-          showCancel: false,
+        Dialog.alert({
+          message: '更新成功',
         }).then(() => {
-          wx.reLaunch({url: '../index/index',})
-        })
+          wx.reLaunch({ url: '../index/index', })
+        });
       })
-    }).catch(err => {
-      if (!err.errMsg.includes('cancel'))
-        that.openConfirm()
     })
   },
 
   showAbout: function () {
-    wx.showModal({
-      content: '感恩有你们',
-      showCancel: false
-    });
+    Dialog.alert({
+      title: '关于',
+      message: '感恩有你们',
+    })
   },
 
-  openConfirm: function () {
+  openConfirm: function (isFirst) {
     Dialog.confirm({
-      message: '检测到您没打开地址权限，是否去设置打开？',
-      confirmButtonOpenType: 'openSetting'
+      message: '检测到您没打开用户信息权限，是否去设置打开？',
+      confirmButtonOpenType: isFirst ? 'getUserInfo' : 'openSetting'
     }).catch(() => {
       Dialog.close();
     });
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
   onReady: function () {
 
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow: function () {
 
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
   onHide: function () {
 
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
   onUnload: function () {
 
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  },
+  }
 })

@@ -16,7 +16,7 @@ Page({
   onLoad: async function() {
     if (!wx.cloud) {
       wx.showModal({
-        content: '请使用 2.2.3 或以上的基础库以使用云能力',
+        content: '请使用 2.7.1 或以上的基础库以使用云能力',
         showCancel: false,
       })
       return
@@ -29,61 +29,61 @@ Page({
       })
       app.globalData.openid = login.result.openid
     }
-    
+
     if (app.globalData.openid) {
-      var that = this
-      var res = await wx.cloud.callFunction({
-        name: 'userdbo',
+      var userQuery = await wx.cloud.callFunction({
+        name: 'userdbo_v2',
         data: { action: 'query' }
       })
-      var data = res.result
-      if (data.length !== 0) {
-        app.globalData.userInfo = data[0]
-        that.setData({
+      var userData = userQuery.result
+      if (userData.length === 0) return
+
+      var addressQuery = await wx.cloud.callFunction({
+        name: 'addressdbo',
+        data: { action: 'queryIndexPage' }
+      })
+      var addressData = addressQuery.result
+      if (addressData.length == 0) {
+        Dialog.alert({
+          message: '您还没有设置收货地址，点击前去设置'
+        }).then(() => {
+          wx.navigateTo({ url: '../address/address' })
+        });
+      } else {
+        app.globalData.userInfo = userData[0]
+        this.setData({
           logged: true,
-          avatarUrl: data[0].avatarUrl,
-          nickName: data[0].nickName,
-          addressInfo: data[0].fullAddr
+          avatarUrl: userData[0].avatarUrl,
+          nickName: userData[0].nickName,
+          addressInfo: addressData[0].fullAddr
         })
-        that.fetchEvents()
+        this.fetchEvents()
       }
     }
-  },
-
-  uploadAddress: function(userInfo) {
-    var that = this
-    wx.chooseAddress().then(addr => {
-      wx.cloud.callFunction({
-        name: 'userdbo',
-        data: {
-          action: 'insert',
-          nickName: userInfo.userInfo.nickName,
-          avatarUrl: userInfo.userInfo.avatarUrl,
-          provinceName: addr.provinceName,
-          cityName: addr.cityName,
-          countyName: addr.countyName,
-          detailInfo: addr.detailInfo,
-          postalCode: addr.postalCode,
-          telNumber: addr.telNumber,
-          recipient: addr.userName,
-        },
-      }).then(() => {
-        // wx.reLaunch({ url: '../index/index', })
-        that.onLoad()
-      })
-    }).catch(err => {
-      that.openConfirm()
-    })
   },
 
   onGetUserInfo: function(e) {
     var that = this
     if (e.detail.userInfo) {
-      wx.getSetting().then(res => {
-        if (res.authSetting['scope.userInfo']) {
-          wx.getUserInfo().then(userInfo => {
-            that.uploadAddress(userInfo)
-          })
+      wx.getSetting({
+        success: res => {
+          if (res.authSetting['scope.userInfo']) {
+            wx.getUserInfo({
+              success: userInfo => {
+                wx.cloud.callFunction({
+                  name: 'userdbo_v2',
+                  data: {
+                    action: 'insert',
+                    nickName: userInfo.userInfo.nickName,
+                    avatarUrl: userInfo.userInfo.avatarUrl
+                  },
+                  success: () => {
+                    that.onLoad()
+                  }
+                })
+              }
+            })
+          }
         }
       })
     }
