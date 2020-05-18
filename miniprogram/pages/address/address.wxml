@@ -1,0 +1,107 @@
+<!--miniprogram/pages/address/address.wxml-->
+<view class="loading" wx:if="{{ loading }}">
+  <van-loading size="64rpx" vertical>加载中...</van-loading>
+</view>
+<view class="page" wx:else>
+  <view class="list-wrapper">
+  <scroll-view class="list" scroll-y>
+    <van-swipe-cell right-width="{{ 120 }}" wx:for="{{ addresses }}" wx:key="address" wx:for-item="address">
+      <van-cell-group >
+        <van-cell
+          id="{{ address._id }}"
+          title="{{ address.recipient }}"
+          label="{{ address.fullAddr }}"
+          border="{{ true }}"
+          clickable
+          bind:click="clickAddress"
+          center>
+          <van-icon slot="icon" name="success" class="{{ address.current ? 'selected-addr' : 'unselected-addr' }}" />
+        </van-cell>
+      </van-cell-group>
+      <view slot="right" class="slot">
+        <van-button id="m-{{ address._id }}" type="primary" block square custom-class="slot-button" bind:click="changeAddress">修改</van-button>
+        <van-button id="d-{{ address._id }}" type="danger" block square custom-class="slot-button" bind:click="removeAddress">删除</van-button>
+      </view>
+    </van-swipe-cell>
+    
+  </scroll-view>
+  </view>
+  <view class="bottom-button">
+    <van-dialog id="van-dialog" />
+    <van-row gutter="20">
+      <van-col span="12"><van-button custom-style="width: 100%" icon="wechat" type="primary" block square bind:click="importWechatAddr">微信导入</van-button></van-col>
+      <van-col span="12"><van-button custom-style="width: 100%" icon="setting" type="primary" plain block square>手动新增</van-button></van-col>
+    </van-row>
+  </view>
+</view>
+
+<van-popup show="{{isPanelShow}}" position="bottom" custom-style="height: 85%" bind:close="hidePanel">
+<van-nav-bar
+  title="地址信息"
+  left-text="取消"
+  right-text="确认"
+  bind:click-left="hidePanel"
+  bind:click-right="checkAddress"
+  safe-area-inset-top="{{false}}" />
+  <van-cell-group>
+    <van-field
+      label="活动名称"
+      placeholder="请输入活动名称"
+      value="{{ newEvent.eventName }}"
+      border="{{ true }}"
+      required
+      clearable
+      bind:input="checkEventName"
+      error-message="{{ newEvent.eventNameError }}"
+      error-message-align="right"
+    />
+    <van-field
+      label="开始时间"
+      placeholder="请确认开始时间"
+      value="{{ newEvent.eventStartFormatted }}"
+      border="{{ true }}"
+      required
+      readonly
+      clickable
+      error-message="{{ newEvent.eventStartError }}"
+      error-message-align="right"
+      bindtap="showDatePickerStart"
+    />
+    <van-field
+      label="抽签时间"
+      placeholder="请确认抽签时间"
+      value="{{ newEvent.eventRollFormatted }}"
+      border="{{ true }}"
+      required
+      readonly
+      clickable
+      error-message="{{ newEvent.eventRollError }}"
+      error-message-align="right"
+      bindtap="showDatePickerRoll"
+    />
+    <van-field
+      label="结束时间"
+      placeholder="请确认结束时间"
+      value="{{ newEvent.eventEndFormatted }}"
+      border="{{ true }}"
+      required
+      readonly
+      clickable
+      error-message="{{ newEvent.eventEndError }}"
+      error-message-align="right"
+      bindtap="showDatePickerEnd"
+    />
+    <van-field
+      label="活动描述"
+      placeholder="请输入活动描述"
+      value="{{ newEvent.eventDescription }}"
+      border="{{ true }}"
+      type="textarea"
+      autosize="{{ { minHeight: 50 } }}"
+      clearable
+      bind:input="checkEventDesc"
+    />
+  </van-cell-group>
+</van-popup>
+
+<van-notify id="van-notify" />

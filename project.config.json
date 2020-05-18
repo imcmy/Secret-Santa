@@ -63,6 +63,14 @@
 					"id": -1,
 					"name": "gift_page",
 					"pathName": "pages/gift/gift",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 2,
+					"name": "address_page",
+					"pathName": "pages/address/address",
+					"query": "",
 					"scene": null
 				}
 			]
