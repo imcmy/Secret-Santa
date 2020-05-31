@@ -40,14 +40,14 @@
           <text>收礼人地址</text>
         </view>
         <view class="gift-line-content">
-          <text>{{ receiver[0].recipient }}</text>
-          <text>{{ receiver[0].telNumber }}</text>
+          <text selectable>{{ receiver[0].recipient }}</text>
+          <text selectable>{{ receiver[0].telNumber }}</text>
         </view>
         <view class="gift-line-content">
-          <text>{{ receiver[0].fullAddr }}</text>
+          <text selectable>{{ receiver[0].fullAddr }}</text>
         </view>
         <view class="gift-line-content">
-          <text>{{ receiver[0].postalCode }}</text>
+          <text selectable>{{ receiver[0].postalCode }}</text>
         </view>
 
         <van-divider />
