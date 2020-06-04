@@ -38,7 +38,7 @@ exports.main = async (event, context) => {
         }))
 
         var isInGroup = await cloud.callFunction({
-          name: 'userdbo',
+          name: 'userdbo_v2',
           data: {
             "action": "checkInGroup",
             "_openid": openid,
@@ -53,10 +53,10 @@ exports.main = async (event, context) => {
         _in = record.length > 0
 
         receiver = unPackQuery(await cloud.callFunction({
-          name: 'userdbo',
+          name: 'addressdbo',
           data: {
-            "action": "queryAddr",
-            "rid": (_in && record[0].rid) ? record[0].rid : ''
+            action: "queryCurrent",
+            _openid: (_in && record[0].rid) ? record[0].rid : ''
           }
         }))
 

@@ -78,7 +78,7 @@ exports.main = async (event, context) => {
         return record
       case 'list':
         var groups = unPackQuery(await cloud.callFunction({
-          name: 'userdbo',
+          name: 'userdbo_v2',
           data: {
             action: 'queryGroups',
             _openid: openid

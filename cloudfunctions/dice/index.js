@@ -38,22 +38,22 @@ const dice = async _eid => {
   shuffle(records)
   var idx_diced = records.map(r => { return r.myno })
   idx_diced.push(idx_diced[0])
-  var _names = unPackQuery(await cloud.callFunction({
-    name: 'userdbo',
+  var names = unPackQuery(await cloud.callFunction({
+    name: 'userdbo_v2',
     data: {
       "action": "queryList",
       "list": records.map(r => { return r.sid })
     }
   }))
-  _names[0].push(_names[0][0])
-  var names = Array.from(_names[1])
-  shuffle(names)
+  names.push(names[0])
+  var names_shuffled = Array.from(names)
+  shuffle(names_shuffled)
   
   eventDB.doc(_eid).update({
     data: {
       idx_diced: idx_diced,
-      _names_diced: _names[0],
-      names: names
+      _names_diced: names,
+      names: names_shuffled
     }
   })
   for (var i = 0, len = records.length; i < len; i++) {

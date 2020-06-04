@@ -57,6 +57,8 @@ exports.main = async (event, context) => {
         return await db.doc(event._id).update({ data: { current: true } })
       case 'query':
         return unPackQuery(await db.doc(event._id).get())
+      case 'queryCurrent':
+        return unPackQuery(await db.where({ _openid: event._openid, current: true }).get())
       case 'queryIndexPage':
         return unPackQuery(await db.where({ _openid: openid, current: true }).get())
       case 'queryAddr':

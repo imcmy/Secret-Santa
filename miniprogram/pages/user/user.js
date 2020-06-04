@@ -58,6 +58,9 @@ Page({
   },
 
   onLoad: function (options) {
+  },
+  
+  onShow: function (options) {
     if (app.globalData.userInfo) {
       this.setData({
         avatarUrl: app.globalData.userInfo.avatarUrl,
@@ -268,6 +271,7 @@ Page({
   },
 
   uploadUserInfo: function () {
+    var that = this
     wx.getUserInfo().then(userInfo => {
       wx.cloud.callFunction({
         name: 'userdbo_v2',
@@ -281,7 +285,7 @@ Page({
         Dialog.alert({
           message: '更新成功',
         }).then(() => {
-          wx.reLaunch({ url: '../index/index', })
+          this.onShow()
         });
       })
     })
@@ -301,21 +305,5 @@ Page({
     }).catch(() => {
       Dialog.close();
     });
-  },
-
-  onReady: function () {
-
-  },
-
-  onShow: function () {
-
-  },
-
-  onHide: function () {
-
-  },
-
-  onUnload: function () {
-
   }
 })

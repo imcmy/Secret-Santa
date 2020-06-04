@@ -59,15 +59,6 @@ exports.main = async (event, context) => {
         })
       case 'query':
         return unPackQuery(await db.where({ _openid: openid }).get())
-      case 'queryAddr':
-        var unPack = unPackQuery(await db.where({ _openid: event.rid }).get())
-        return {
-          "nickName": unPack[0].nickName,
-          "fullAddr": unPack[0].fullAddr,
-          "telNumber": unPack[0].telNumber,
-          "postalCode": unPack[0].postalCode,
-          "recipient": unPack[0].recipient
-        }
       case 'queryGroups':
         var unPack = unPackQuery(await db.where({ _openid: event._openid }).get())
         return unPack[0].groups
@@ -102,11 +93,17 @@ exports.main = async (event, context) => {
         }
         return 1
       case 'queryList':
-        var list = [[], []]
+        var list = []
         for (var key in event.list) {
           var user = unPackQuery(await db.where({ _openid: event.list[key] }).get())
-          list[0].push(user[0].nickName)
-          list[1].push(user[0].nickName + '(' + user[0].recipient + ')')
+          var addr = unPackQuery(await cloud.callFunction({
+            name: 'addressdbo',
+            data: {
+              action: 'queryCurrent',
+              _openid: event.list[key]
+            }
+          }))
+          list.push(user[0].nickName + ' (' + addr[0].recipient + ')')
         }
         return list
     }

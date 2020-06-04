@@ -29,7 +29,7 @@
           </view>
           <van-icon name="send-gift-o" size="48rpx" />
           <view>
-            <text>{{ receiver[0].nickName + '\t'}}</text>
+            <text>{{ receiver[0].recipient + '\t'}}</text>
             <van-tag plain type="primary" size="medium">{{ record[0].itno }}号</van-tag>
           </view>
         </view>

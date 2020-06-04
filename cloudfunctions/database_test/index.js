@@ -28,14 +28,11 @@ exports.main = async (event, context) => {
     var inserted = await addressDb.add({
       data: {
         _openid: unPack[i]._openid,
-        provinceName: unPack[i].provinceName,
-        cityName: unPack[i].cityName,
-        countyName: unPack[i].countyName,
-        detailInfo: unPack[i].detailInfo,
         postalCode: unPack[i].postalCode,
         telNumber: unPack[i].telNumber,
         recipient: unPack[i].recipient,
         fullAddr: unPack[i].provinceName + unPack[i].cityName + unPack[i].countyName + unPack[i].detailInfo,
+        current: true
       }
     })
     var addresses = []

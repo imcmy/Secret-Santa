@@ -121,25 +121,23 @@ Page({
     var that = this
     var addressId = e.currentTarget.id
 
-    var addresses = this.data.addresses
-    for (var i=0; i<addresses.length; i++) {
-      if (addresses[i].current && addresses[i]._id === addressId) return
-      addresses[i].current = false
-    }
-    for (var i=0; i<addresses.length; i++) {
-      if (addresses[i]._id === addressId) {
-        addresses[i].current = true
-        break
-      }
-    }
-
     await wx.cloud.callFunction({
       name: 'addressdbo',
       data: { action: 'toCurrent', _id: addressId },
       success: res => {
-        that.setData({
-          addresses: addresses
-        })
+        var addresses = that.data.addresses
+        for (var i = 0; i < addresses.length; i++) {
+          if (addresses[i].current && addresses[i]._id === addressId) return
+          addresses[i].current = false
+        }
+        for (var i = 0; i < addresses.length; i++) {
+          if (addresses[i]._id === addressId) {
+            addresses[i].current = true
+            app.globalData.userInfo.fullAddr = addresses[i].fullAddr
+            break
+          }
+        }
+        that.setData({ addresses: addresses })
       },
       fail: res => {
         Notify({ type: 'error', message: '修改主地址失败' });

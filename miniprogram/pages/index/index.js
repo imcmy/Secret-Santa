@@ -50,7 +50,10 @@ Page({
           wx.navigateTo({ url: '../address/address' })
         });
       } else {
-        app.globalData.userInfo = userData[0]
+        app.globalData.userInfo = {}
+        app.globalData.userInfo.avatarUrl = userData[0].avatarUrl
+        app.globalData.userInfo.nickName = userData[0].nickName
+        app.globalData.userInfo.fullAddr = addressData[0].fullAddr
         this.setData({
           logged: true,
           avatarUrl: userData[0].avatarUrl,
@@ -59,6 +62,16 @@ Page({
         })
         this.fetchEvents()
       }
+    }
+  },
+
+  onShow: function (e) {
+    if (app.globalData.userInfo) {
+      this.setData({
+        avatarUrl: app.globalData.userInfo.avatarUrl,
+        nickName: app.globalData.userInfo.nickName,
+        addressInfo: app.globalData.userInfo.fullAddr
+      })
     }
   },
 
