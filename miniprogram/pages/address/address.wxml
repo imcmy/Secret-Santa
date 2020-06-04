@@ -9,8 +9,8 @@
       <van-cell-group >
         <van-cell
           id="{{ address._id }}"
-          title="{{ address.recipient }}"
-          label="{{ address.fullAddr }}"
+          title="{{ address.recipient }} {{ address.telNumber }}"
+          label="{{ address.fullAddr }} {{ address.postalCode }}"
           border="{{ true }}"
           clickable
           bind:click="clickAddress"
@@ -29,8 +29,8 @@
   <view class="bottom-button">
     <van-dialog id="van-dialog" />
     <van-row gutter="20">
-      <van-col span="12"><van-button custom-style="width: 100%" icon="wechat" type="primary" block square bind:click="importWechatAddr">微信导入</van-button></van-col>
-      <van-col span="12"><van-button custom-style="width: 100%" icon="setting" type="primary" plain block square>手动新增</van-button></van-col>
+      <van-col span="12"><van-button custom-style="width: 100%" icon="wechat" type="primary" block square bind:click="onImportWechatAddr">微信导入</van-button></van-col>
+      <van-col span="12"><van-button custom-style="width: 100%" icon="setting" type="primary" plain block square bind:click="onImportManualAddr">手动新增</van-button></van-col>
     </van-row>
   </view>
 </view>
@@ -45,61 +45,46 @@
   safe-area-inset-top="{{false}}" />
   <van-cell-group>
     <van-field
-      label="活动名称"
-      placeholder="请输入活动名称"
-      value="{{ newEvent.eventName }}"
+      label="联系人"
+      placeholder="名字"
+      value="{{ targetAddress.recipient }}"
       border="{{ true }}"
       required
       clearable
-      bind:input="checkEventName"
-      error-message="{{ newEvent.eventNameError }}"
-      error-message-align="right"
+      error-message="{{ targetAddress.recipientErr }}"
+      bind:input="inputAddrRecipient"
     />
     <van-field
-      label="开始时间"
-      placeholder="请确认开始时间"
-      value="{{ newEvent.eventStartFormatted }}"
+      label="手机号码"
+      placeholder="收货手机号"
+      value="{{ targetAddress.telNumber }}"
       border="{{ true }}"
       required
-      readonly
-      clickable
-      error-message="{{ newEvent.eventStartError }}"
-      error-message-align="right"
-      bindtap="showDatePickerStart"
+      clearable
+      error-message="{{ targetAddress.telErr }}"
+      bind:input="inputAddrNumber"
     />
     <van-field
-      label="抽签时间"
-      placeholder="请确认抽签时间"
-      value="{{ newEvent.eventRollFormatted }}"
+      label="详细地址"
+      placeholder="请输入规范地址"
+      value="{{ targetAddress.fullAddr }}"
       border="{{ true }}"
       required
-      readonly
-      clickable
-      error-message="{{ newEvent.eventRollError }}"
-      error-message-align="right"
-      bindtap="showDatePickerRoll"
-    />
-    <van-field
-      label="结束时间"
-      placeholder="请确认结束时间"
-      value="{{ newEvent.eventEndFormatted }}"
-      border="{{ true }}"
-      required
-      readonly
-      clickable
-      error-message="{{ newEvent.eventEndError }}"
-      error-message-align="right"
-      bindtap="showDatePickerEnd"
-    />
-    <van-field
-      label="活动描述"
-      placeholder="请输入活动描述"
-      value="{{ newEvent.eventDescription }}"
-      border="{{ true }}"
+      clearable
       type="textarea"
       autosize="{{ { minHeight: 50 } }}"
+      error-message="{{ targetAddress.addrErr }}"
+      bind:input="inputAddrFull"
+    />
+    <van-field
+      label="邮政编码"
+      placeholder="邮政编码"
+      value="{{ targetAddress.postalCode }}"
+      border="{{ true }}"
+      required
       clearable
-      bind:input="checkEventDesc"
+      error-message="{{ targetAddress.codeErr }}"
+      bind:input="inputAddrCode"
     />
   </van-cell-group>
 </van-popup>

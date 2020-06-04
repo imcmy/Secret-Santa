@@ -10,7 +10,18 @@ Page({
     addresses: [],
 
     isPanelShow: false,
-    targetAddress: {},
+    targetAddress: {
+      _id: '',
+      recipient: '',
+      telNumber: '',
+      fullAddr: '',
+      postalCode: '',
+
+      recipientErr: '',
+      telErr: '',
+      addrErr: '',
+      codeErr: ''
+    },
 
     uploadingLock: false,
     removeLock: false
@@ -32,9 +43,46 @@ Page({
     })
   },
 
+  clearTargetAddr: function () {
+    this.setData({
+      'targetAddress._id': '',
+      'targetAddress.recipient': '',
+      'targetAddress.telNumber': '',
+      'targetAddress.fullAddr': '',
+      'targetAddress.postalCode': '',
+      'targetAddress.recipientErr': '',
+      'targetAddress.telErr': '',
+      'targetAddress.addrErr': '',
+      'targetAddress.codeErr': ''
+    })
+  },
+
+  clearAddrErr: function () {
+    this.setData({
+      'targetAddress.recipientErr': '',
+      'targetAddress.telErr': '',
+      'targetAddress.addrErr': '',
+      'targetAddress.codeErr': ''
+    })
+  },
+
   changeAddress: async function(e) {
+    this.clearTargetAddr()
+
     var addressId = e.currentTarget.id.substring(2)
-    this.showPanel({})
+    var addressList = this.data.addresses
+    for (var i = addressList.length - 1; i >= 0; i--) {
+      if (addressList[i]._id === addressId) {
+        this.setData({
+          'targetAddress._id': addressId,
+          'targetAddress.recipient': addressList[i].recipient,
+          'targetAddress.telNumber': addressList[i].telNumber,
+          'targetAddress.fullAddr': addressList[i].fullAddr,
+          'targetAddress.postalCode': addressList[i].postalCode,
+          isPanelShow: true
+        })
+      }
+    }
   },
 
   removeAddress: async function(e) {
@@ -99,7 +147,8 @@ Page({
     })
   },
 
-  showPanel: function (targetAddr) {
+  onImportManualAddr: function () {
+    this.clearTargetAddr()
     this.setData({ isPanelShow: true })
   },
 
@@ -113,44 +162,95 @@ Page({
     
     var that = this
     var current = this.data.addresses.length == 0 
-    wx.chooseAddress().then(addr => {
-      wx.cloud.callFunction({
-        name: 'addressdbo',
-        data: {
-          action: 'insert',
-          provinceName: addr.provinceName,
-          cityName: addr.cityName,
-          countyName: addr.countyName,
-          detailInfo: addr.detailInfo,
-          postalCode: addr.postalCode,
-          telNumber: addr.telNumber,
-          recipient: addr.userName,
-          current: current
-        },
-      }).then(() => {
-        that.data.uploadingLock = false
-        that.onLoad()
-      })
-    }).catch(e => {
+    wx.cloud.callFunction({
+      name: 'addressdbo',
+      data: {
+        action: that.data.targetAddress._id == '' ? 'insert' : 'update',
+        _id: that.data.targetAddress._id,
+        postalCode: that.data.targetAddress.postalCode,
+        telNumber: that.data.targetAddress.telNumber,
+        recipient: that.data.targetAddress.recipient,
+        fullAddr: that.data.targetAddress.fullAddr,
+        current: current
+      },
+    }).then(() => {
       that.data.uploadingLock = false
-      console.log(e)
     })
   },
 
-  importWechatAddr: function() {
+  onImportWechatAddr: function() {
     var that = this
     wx.getSetting().then(res => {
       if (res.authSetting['scope.address'] === undefined) {
         wx.chooseAddress({
-          success: () => { that.uploadAddress() },
+          success: () => { that.importWechatAddr() },
           fail: () => { that.openConfirm() }
         })
       } else if (res.authSetting['scope.address']) {
-        that.uploadAddress()
+        that.importWechatAddr()
       } else {
         that.openConfirm()
       }
     })
+  },
+
+  importWechatAddr: function () {
+    var that = this
+    wx.chooseAddress({
+      success: addr => {
+        that.data.targetAddress.recipient = addr.userName
+        that.data.targetAddress.telNumber = addr.telNumber
+        that.data.targetAddress.fullAddr = addr.provinceName + addr.cityName + addr.countyName + addr.detailInfo
+        that.data.targetAddress.postalCode = addr.postalCode
+        that.uploadAddress()
+        that.onLoad()
+      }
+    })
+  },
+
+  inputAddrRecipient: function (value) {
+    this.data.targetAddress.recipient = value.detail
+  },
+
+  inputAddrNumber: function (value) {
+    this.data.targetAddress.telNumber = value.detail
+  },
+
+  inputAddrFull: function (value) {
+    this.data.targetAddress.fullAddr = value.detail
+  },
+
+  inputAddrCode: function (value) {
+    this.data.targetAddress.postalCode = value.detail
+  },
+
+  checkAddress: async function () {
+    this.clearAddrErr()
+
+    var errorFlag = false
+    var targetAddr = this.data.targetAddress
+    if (targetAddr.recipient.trim() === '') {
+      this.setData({ 'targetAddress.recipientErr': '请输入联系人' })
+      errorFlag = true
+    }
+    if (targetAddr.telNumber.trim() === '') {
+      this.setData({ 'targetAddress.telErr': '请输入手机号码' })
+      errorFlag = true
+    }
+    if (targetAddr.fullAddr.trim() === '') {
+      this.setData({ 'targetAddress.addrErr': '请输入详细地址' })
+      errorFlag = true
+    }
+    if (targetAddr.postalCode.trim() === '') {
+      this.setData({ 'targetAddress.codeErr': '请输入邮政编码' })
+      errorFlag = true
+    }
+    
+    if (errorFlag) return
+    this.uploadAddress()
+    this.setData({ isPanelShow: false })
+    this.clearTargetAddr()
+    this.onLoad()
   },
 
   openConfirm: function () {
@@ -160,21 +260,5 @@ Page({
     }).catch(() => {
       Dialog.close();
     });
-  },
-
-  onReady: function () {
-
-  },
-
-  onShow: function () {
-
-  },
-
-  onHide: function () {
-
-  },
-
-  onUnload: function () {
-
   }
 })

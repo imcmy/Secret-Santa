@@ -31,15 +31,20 @@ exports.main = async (event, context) => {
         return await db.add({
           data: {
             _openid: openid,
-            provinceName: event.provinceName,
-            cityName: event.cityName,
-            countyName: event.countyName,
-            detailInfo: event.detailInfo,
             postalCode: event.postalCode,
             telNumber: event.telNumber,
             recipient: event.recipient,
-            fullAddr: event.provinceName + event.cityName + event.countyName + event.detailInfo,
+            fullAddr: event.fullAddr,
             current: event.current
+          }
+        })
+      case 'update':
+        return await db.doc(event._id).update({
+          data: {
+            postalCode: event.postalCode,
+            telNumber: event.telNumber,
+            recipient: event.recipient,
+            fullAddr: event.fullAddr
           }
         })
       case 'remove':
