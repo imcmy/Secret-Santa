@@ -11,7 +11,6 @@
           id="{{ address._id }}"
           title="{{ address.recipient }} {{ address.telNumber }}"
           label="{{ address.fullAddr }} {{ address.postalCode }}"
-          border="{{ true }}"
           clickable
           bind:click="clickAddress"
           center>

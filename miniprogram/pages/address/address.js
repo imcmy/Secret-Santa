@@ -32,6 +32,7 @@ Page({
   },
 
   fetchAddresses: async function() {
+    this.fetchLoading = true
     var that = this
     await wx.cloud.callFunction({
       name: 'addressdbo',
@@ -41,6 +42,7 @@ Page({
         that.setData({ addresses: res, loading: false })
       }
     })
+    this.fetchLoading = false
   },
 
   clearTargetAddr: function () {
@@ -257,5 +259,13 @@ Page({
     }).catch(() => {
       Dialog.close();
     });
-  }
+  },
+
+  onPullDownRefresh() {
+    if (!this.fetchLoading) {
+      this.fetchAddresses().then(() => {
+        wx.stopPullDownRefresh()
+      })
+    }
+  },
 })

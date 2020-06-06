@@ -6,6 +6,8 @@ var utils = require('../../utils/utils.js')
 
 Page({
   data: {
+    _options: {},
+
     _in: false,
     isInGroup: false,
     nickName: '',
@@ -27,13 +29,18 @@ Page({
         nickName: app.globalData.userInfo.nickName,
       })
     }
+    this.data._options = options
+    this.fetchGift()
+  },
 
+  fetchGift: async function () {
+    this.fetchLoading = true
     var that = this
     wx.cloud.callFunction({
       name: 'gift',
       data: {
         'action': 'query',
-        '_eid': options.eid
+        '_eid': that.data._options.eid
       },
       success: res => {
         res = res.result
@@ -41,24 +48,23 @@ Page({
         that.setData({
           _in: res._in,
           isInGroup: res.isInGroup,
+          loading: false,
 
           'event._event': event,
           'event.status': event.status,
           'event.time': event.status == 0 ? utils.cutdown(event.rollTime) : event.status == 1 ? utils.cutdown(event.startTime) : event.status == 2 ? utils.cutdown(event.endTime) : 0,
           record: res.record,
-          receiver: res.receiver,
-          
-          _options: options,
-          loading: false
+          receiver: res.receiver
         })
 
-        if (options.inh === 'ins') {
+        if (that.data._options.inh === 'ins') {
           Notify({ type: 'success', message: '欢迎参与，请耐心等待抽签' });
-        } else if (options.inh === 'del') {
+        } else if (that.data._options.inh === 'del') {
           Notify({ type: 'warning', message: '遗憾您的离开，欢迎再来' });
         }
       }
     })
+    this.fetchLoading = false
   },
 
   onIns: function () {
@@ -110,7 +116,12 @@ Page({
   },
 
   onPullDownRefresh: function () {
-
+    if (!this.fetchLoading) {
+      this.data._options.inh = ''
+      this.fetchGift().then(() => {
+        wx.stopPullDownRefresh()
+      })
+    }
   },
   
   onShareAppMessage: function () {
