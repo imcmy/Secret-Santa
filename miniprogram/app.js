@@ -12,7 +12,7 @@ App({
     }
 
     this.globalData = {
-      version: '1.3.2000501'
+      version: '1.4.200606'
     }
   }
 })
