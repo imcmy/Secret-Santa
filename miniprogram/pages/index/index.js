@@ -15,10 +15,11 @@ Page({
 
   onLoad: async function() {
     if (!wx.cloud) {
-      wx.showModal({
-        content: '请使用 2.7.1 或以上的基础库以使用云能力',
-        showCancel: false,
-      })
+      Dialog.alert({
+        message: '请使用 2.7.1 或以上的基础库以使用云能力'
+      }).then(() => {
+        Dialog.close()
+      });
       return
     }
 

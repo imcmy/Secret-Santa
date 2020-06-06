@@ -101,10 +101,7 @@ Page({
     })
   },
 
-  showCreateEvent: function () {
-    Notify({ type: 'warning', message: '功能维护中' });
-    // this.setData({ isCreateShow: true })
-  },
+  showCreateEvent: function () { this.setData({ isCreateShow: true }) },
 
   hideCreateEvent: function () { this.setData({ isCreateShow: false }) },
 
@@ -294,7 +291,7 @@ Page({
   showAbout: function () {
     Dialog.alert({
       title: '关于',
-      message: '感恩有你们',
+      message: '感恩有你们，版本' + app.globalData.version,
     })
   },
 

@@ -72,7 +72,7 @@
       required
       clearable
       type="textarea"
-      autosize="{{ { minHeight: 50 } }}"
+      autosize
       error-message="{{ targetAddress.addrErr }}"
       bind:input="inputAddrFull"
     />

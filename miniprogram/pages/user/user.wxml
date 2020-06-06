@@ -12,8 +12,8 @@
   <van-cell title="管理地址" is-link url="/pages/address/address" />
 </van-cell-group>
 <van-cell-group title=" ">
-  <!-- <van-cell title="创建活动" is-link bind:click="showCreateEvent" /> -->
   <van-cell title="我的活动" is-link bind:click="showMyEvents" />
+  <van-cell title="创建活动" is-link bind:click="showCreateEvent" />
 </van-cell-group>
 <van-cell-group title=" ">
   <van-cell title="加入小组" is-link bind:click="showJoinGroup" />
@@ -107,8 +107,8 @@
       value="{{ newEvent.eventDescription }}"
       border="{{ true }}"
       type="textarea"
-      autosize="{{ { minHeight: 50 } }}"
       clearable
+      autosize
       bind:input="checkEventDesc"
     />
   </van-cell-group>

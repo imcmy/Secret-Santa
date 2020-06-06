@@ -1,6 +1,7 @@
 // miniprogram/pages/gift/gift.js
 const app = getApp()
-import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify';
+import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
+import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
 var utils = require('../../utils/utils.js')
 
 Page({
@@ -62,51 +63,50 @@ Page({
 
   onIns: function () {
     var that = this
-    wx.showModal({
-      content: '确定要参加' + that.data.event._event.eventName + '吗？',
-      confirmText: "确定",
-      cancelText: "继续考虑",
-      success: function (res) {
-        if (res.confirm) {
-          wx.cloud.callFunction({
-            name: 'gift',
-            data: {
-              'action': 'insert',
-              '_eid': that.data._options.eid
-            },
-            success: res => {
-              that.data._options['inh'] = 'ins'
-              that.onLoad(that.data._options)
-            }
-          })
+    Dialog.confirm({
+      title: '参加活动',
+      message: '确定要参加' + that.data.event._event.eventName + '吗？',
+      confirmButtonText: "确定",
+      cancelButtonText: "继续考虑",
+    }).then(async () => {
+      await wx.cloud.callFunction({
+        name: 'gift',
+        data: {
+          'action': 'insert',
+          '_eid': that.data._options.eid
+        },
+        success: res => {
+          that.data._options['inh'] = 'ins'
+          that.onLoad(that.data._options)
         }
-      }
+      })
+    }).catch(() => {
+      Dialog.close();
     });
   },
 
   onDel: function () {
     var that = this
-    wx.showModal({
-      content: '确定要离开' + that.data.event._event.eventName + '吗？',
-      confirmText: "确定",
-      cancelText: "继续考虑",
-      success: function (res) {
-        if (res.confirm) {
-          wx.cloud.callFunction({
-            name: 'gift',
-            data: {
-              'action': 'delete',
-              '_eid': that.data._options.eid
-            },
-            success: res => {
-              that.data._options['inh'] = 'del'
-              that.onLoad(that.data._options)
-            }
-          })
+    Dialog.confirm({
+      title: '离开活动',
+      message: '确定要离开' + that.data.event._event.eventName + '吗？',
+      confirmButtonText: "确定",
+      cancelButtonText: "继续考虑",
+    }).then(async () => {
+      await wx.cloud.callFunction({
+        name: 'gift',
+        data: {
+          'action': 'delete',
+          '_eid': that.data._options.eid
+        },
+        success: res => {
+          that.data._options['inh'] = 'del'
+          that.onLoad(that.data._options)
         }
-      }
+      })
+    }).catch(() => {
+      Dialog.close();
     });
-    
   },
 
   onPullDownRefresh: function () {

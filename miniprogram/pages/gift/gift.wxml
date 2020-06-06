@@ -88,6 +88,7 @@
   </view>
   <view>
   <van-notify id="van-notify" />
+  <van-dialog id="van-dialog" />
   <van-button color="{{(event.status == '0' || event.status == '2') ? '#28a745' : '#6c757d'}}" custom-style="height: 150rpx; width: 100%" block square bind:click="{{event.status == '0' ? !_in ? 'onIns' : 'onDel' : ''}}">
     <text wx:if="{{ !isInGroup }}">无权限</text>
     <text wx:elif="{{event.status == '0' && !_in}}">我要参加</text>
