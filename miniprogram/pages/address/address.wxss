@@ -32,7 +32,7 @@ page {
   /* flex-direction: row; */
   /* align-items: space-between; */
   /* justify-content: space-between; */
-  padding: 20rpx;
+  padding: 30rpx;
 }
 
 .list-wrapper {

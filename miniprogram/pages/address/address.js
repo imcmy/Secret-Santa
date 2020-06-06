@@ -100,11 +100,9 @@ Page({
           name: 'addressdbo',
           data: { action: 'remove', _id: addressId },
           success: res => {
-            that.data.removeLock = false
             that.onLoad()
           },
           fail: res => {
-            that.data.removeLock = false
             Notify({ type: 'error', message: '删除失败' });
           }
         })
@@ -112,9 +110,10 @@ Page({
         Dialog.close();
       });
     } else {
-      that.data.removeLock = false
       Notify({ type: 'warning', message: '无法删除唯一地址记录' });
     }
+    
+    that.data.removeLock = false
   },
 
   clickAddress: async function (e) {
