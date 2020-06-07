@@ -40,7 +40,7 @@ exports.main = async (event, context) => {
     switch (action) {
       case 'insert':
         var userCheck = await db.where({ _openid: openid }).count()
-        if (userCheck > 0) return
+        if (userCheck.total > 0) return
         return await db.add({
           data: {
             _openid: openid,

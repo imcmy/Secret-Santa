@@ -77,14 +77,15 @@ Page({
   },
 
   onGetUserInfo: function(e) {
-    var that = this
-    if (e.detail.userInfo) {
+    if (e.detail.userInfo && !this.regLoading) {
+      var that = this
+      this.regLoading = true
       wx.getSetting({
         success: res => {
           if (res.authSetting['scope.userInfo']) {
             wx.getUserInfo({
-              success: userInfo => {
-                wx.cloud.callFunction({
+              success: async userInfo => {
+                await wx.cloud.callFunction({
                   name: 'userdbo_v2',
                   data: {
                     action: 'insert',
@@ -92,6 +93,7 @@ Page({
                     avatarUrl: userInfo.userInfo.avatarUrl
                   },
                   success: () => {
+                    this.regLoading = false
                     that.onLoad()
                   }
                 })
@@ -100,6 +102,7 @@ Page({
           }
         }
       })
+      this.regLoading = false
     }
   },
 
