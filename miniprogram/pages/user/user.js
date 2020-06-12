@@ -68,7 +68,7 @@ Page({
     }
   },
 
-  showCreateEvent: async function () { this.setData({ isCreateShow: true }) },
+  showCreateEvent: function () { this.setData({ minDate: utils.nextOKTime(), isCreateShow: true }) },
 
   hideCreateEvent: function () { this.setData({ isCreateShow: false }) },
 
@@ -158,7 +158,7 @@ Page({
   },
 
   confirmDatePicker: function (value) {
-    var dateTime = value.detail // UNIX TIME FORMAT
+    var dateTime = utils.secondsNo(value.detail) // UNIX TIME FORMAT
     if (this.data.newEvent.dateFlag === 0) {
       this.setData({
         'newEvent.eventStart': dateTime,

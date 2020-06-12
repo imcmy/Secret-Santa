@@ -8,6 +8,12 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
+const secondsNo = timeStamp => {
+  var date = new Date(timeStamp)
+  date.setSeconds(0, 0)
+  return date.getTime()
+}
+
 const unixToFormatted = timeStamp => {
   var date = new Date(timeStamp)
   const year = date.getFullYear()
@@ -34,5 +40,6 @@ const nextOKTime = () => {
 module.exports = {
   cutdown: cutdown,
   unixToFormatted: unixToFormatted,
+  secondsNo: secondsNo,
   nextOKTime: nextOKTime
 }
