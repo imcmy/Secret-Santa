@@ -47,6 +47,16 @@
       error-message-align="right"
     />
     <van-field
+      label="所属小组"
+      placeholder="请选择所属小组"
+      value="{{ newEvent.eventGroup }}"
+      border="{{ true }}"
+      required
+      readonly
+      clickable
+      bindtap="showGroupPicker"
+    />
+    <van-field
       label="开始时间"
       placeholder="请确认开始时间"
       value="{{ newEvent.eventStartFormatted }}"
@@ -104,6 +114,14 @@
     bind:cancel="hideDatePicker"
     bind:confirm="confirmDatePicker"
   />
+</van-popup>
+
+<van-popup show="{{isGroupPickerShow}}" position="bottom" bind:close="hideGroupPicker">
+  <van-picker
+    columns="{{ myGroupsColumns }}"
+    show-toolbar="{{ true }}"
+    bind:cancel="hideGroupPicker"
+    bind:confirm="confirmGroupPicker" />
 </van-popup>
 
 <van-dialog

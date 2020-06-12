@@ -47,7 +47,7 @@ exports.main = async (event, context) => {
             nickName: event.nickName,
             avatarUrl: event.avatarUrl,
             privilege: 0,
-            groups: ['d38a536e5eab7330003713462983aea7']
+            groups: ['DEFAULTGROUPID']
           }
         })
       case 'update':

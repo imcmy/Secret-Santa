@@ -44,6 +44,7 @@ exports.main = async (event, context) => {
         return await db.add({
           data: {
             eventName: event.eventName,
+            group: event.eventGroup,
             startTime: event.startTime,
             rollTime: event.rollTime,
             endTime: event.endTime,

@@ -19,6 +19,8 @@ Page({
     isDatePickerShow: false,
     newEvent: {
       eventName: '',
+      eventGroup: '',
+      eventGroupID: '',
       eventStart: 0,
       eventStartFormatted: '',
       eventRoll: 0,
@@ -38,18 +40,17 @@ Page({
       uploadLock: false
     },
     filter(type, options) {
-      if (type === 'minute') {
-        return options.filter(option => option % 30 === 0)
-      }
-
-      return options;
+      return type === 'minute' ? options.filter(option => option % 30 === 0) : options;
     },
+
+    isGroupPickerShow: false,
 
     isJoinGroupShow: false,
     groupKey: '',
     joinLock: false,
     isGroupsShow: false,
     myGroups: {},
+    myGroupsColumns: [],
 
     isUpdateLogShow: false
   },
@@ -67,7 +68,7 @@ Page({
     }
   },
 
-  showCreateEvent: function () { this.setData({ isCreateShow: true }) },
+  showCreateEvent: async function () { this.setData({ isCreateShow: true }) },
 
   hideCreateEvent: function () { this.setData({ isCreateShow: false }) },
 
@@ -102,14 +103,18 @@ Page({
       this.setData({ 'newEvent.eventEndError': '结束时间不得早于抽签时间' })
       errorFlag = true
     }
+    if (newEvent.eventGroupID === '') {
+      errorFlag = true
+    }
     if (errorFlag || newEvent.uploadLock)
       return
     this.setData({ 'newEvent.uploadLock': true })
-    var result = await wx.cloud.callFunction({
+    await wx.cloud.callFunction({
       name: 'eventdbo',
       data: {
         action: 'insert',
         eventName: newEvent.eventName,
+        eventGroup: newEvent.eventGroupID,
         startTime: newEvent.eventStart,
         rollTime: newEvent.eventRoll,
         endTime: newEvent.eventEnd,
@@ -117,7 +122,7 @@ Page({
       }
     })
     this.setData({ isCreateShow: false, 'newEvent.uploadLock': false })
-    Notify({ type: 'success', message: '创建成功，请通知My过审核' });
+    Notify({ type: 'success', message: '创建成功，请通知小组管理员过审核' });
   },
 
   checkEventName: function (value) {
@@ -181,16 +186,44 @@ Page({
 
   hideDatePicker: function () { this.setData({ isDatePickerShow: false }) },
 
-  getMyGroups: async function () {
+  getGroupsAndColumns: async function () {
     var myGroups = await wx.cloud.callFunction({
       name: 'userdbo_v2',
       data: { action: 'queryGroupsDetail' }
     })
-    this.setData({ myGroups: myGroups.result })
+    var groupNames = myGroups.result.map((value, idx, _) => { return value.groupName })
+    this.setData({
+      myGroups: myGroups.result,
+      myGroupsColumns: groupNames
+    })
   },
 
+  showGroupPicker: function () {
+    this.getGroupsAndColumns()
+    this.setData({ isGroupPickerShow: true })
+  },
+
+  confirmGroupPicker: function (event) {
+    var that = this
+    const { picker, value, index } = event.detail;
+    this.data.myGroups.every((val, idx, _) => {
+      if (val.groupName === value) {
+        that.setData({
+          'newEvent.eventGroup': val.groupName,
+          'newEvent.eventGroupID': val._id,
+          'isGroupPickerShow': false
+        })
+        return false
+      }
+      return true
+    })
+
+  },
+
+  hideGroupPicker: function () { this.setData({ isGroupPickerShow: false }) },
+
   showMyGroups: async function () {
-    await this.getMyGroups()
+    this.getGroupsAndColumns()
     this.setData({ isGroupsShow: true })
   },
 
