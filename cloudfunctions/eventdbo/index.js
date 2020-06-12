@@ -104,6 +104,39 @@ exports.main = async (event, context) => {
         })
 
         return eventRecords
+      case 'listv2':
+        var groups = unPackQuery(await cloud.callFunction({
+          name: 'userdbo_v2',
+          data: { action: 'queryGroups', _openid: openid }
+        }))
+
+        var eventRecords = {
+          notStarted: [],
+          ableToApply: [],
+          applied: [],
+          publish: [],
+          end: []
+        }
+
+        var records = unPackQuery(await db.where({ audited: true, group: _.in(groups) }).get())
+        var searches = unPackQuery(await cloud.callFunction({
+          name: 'gift',
+          data: { action: 'searchInv2', _openid: openid }
+        }))
+        var participanted = searches.map((value, idx, _) => { return value._eid })
+        records.forEach((item, index, _) => {
+          isIn = participanted.includes(item._id)
+          item.status = calcEventStatus(item.startTime, item.rollTime, item.endTime)
+          switch (item.status) {
+            case 0:
+              isIn ? eventRecords.applied.push(item) : eventRecords.ableToApply.push(item) ; break;
+            case 1: eventRecords.notStarted.push(item); break;
+            case 2: isIn && eventRecords.publish.push(item); break;
+            case 3: isIn && eventRecords.end.push(item); break;
+          }
+        })
+
+        return eventRecords
       case 'inc':
         return await db.where({ _id: event._id }).update({ data: { enrollment: _.inc(1) } })
       case 'minc':

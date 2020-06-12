@@ -12,9 +12,40 @@
 </view>
 
 <van-tabs animated>
-  <van-tab title="已抽签" info="{{event.publish.length}}">
-    <van-cell-group wx:for="{{ event.publish }}" wx:key="pubEve" wx:for-item="eve">
+  <van-tab title="我的活动" info="{{ myEventLength }}">
+    <van-cell-group wx:if="{{ event.applied.length > 0 }}" title="已报名">
       <van-cell
+        wx:for="{{ event.applied }}"
+        wx:key="appliedEve"
+        wx:for-item="eve"
+        title="{{ eve.eventName }}"
+        label="抽签于 {{ eve.timeFormatted }}"
+        link-type="navigateTo"
+        url="/pages/gift/gift?eid={{eve._id}}"
+        is-link
+        center
+      />
+    </van-cell-group>
+
+    <van-cell-group wx:if="{{ event.publish.length > 0 }}" title="已抽签">
+      <van-cell
+        wx:for="{{ event.publish }}"
+        wx:key="publishedEve"
+        wx:for-item="eve"
+        title="{{ eve.eventName }}"
+        label="结束于 {{ eve.timeFormatted }}"
+        link-type="navigateTo"
+        url="/pages/gift/gift?eid={{eve._id}}"
+        is-link
+        center
+      />
+    </van-cell-group>
+
+    <van-cell-group wx:if="{{ event.end.length > 0 }}" title="已结束">
+      <van-cell
+        wx:for="{{ event.end }}"
+        wx:key="endEve"
+        wx:for-item="eve"
         title="{{ eve.eventName }}"
         label="结束于 {{ eve.timeFormatted }}"
         link-type="navigateTo"
@@ -24,8 +55,9 @@
       />
     </van-cell-group>
   </van-tab>
-  <van-tab title="报名中" info="{{event.register.length}}">
-    <van-cell-group wx:for="{{ event.register }}" wx:key="regEve" wx:for-item="eve">
+
+  <van-tab title="报名中" info="{{ event.ableToApply.length }}">
+    <van-cell-group wx:for="{{ event.ableToApply }}" wx:key="regEve" wx:for-item="eve">
       <van-cell
         title="{{ eve.eventName }}"
         label="抽签于 {{eve.timeFormatted }}"
@@ -36,23 +68,12 @@
       />
     </van-cell-group>
   </van-tab>
+
   <van-tab title="未开始">
-    <van-cell-group wx:for="{{ event.wait }}" wx:key="endEve" wx:for-item="eve">
+    <van-cell-group wx:for="{{ event.notStarted }}" wx:key="endEve" wx:for-item="eve">
       <van-cell
         title="{{ eve.eventName }}"
         label="开始于 {{ eve.timeFormatted }}"
-        link-type="navigateTo"
-        url="/pages/gift/gift?eid={{eve._id}}"
-        is-link
-        center
-      />
-    </van-cell-group>
-  </van-tab>
-  <van-tab title="已结束">
-    <van-cell-group wx:for="{{ event.end }}" wx:key="endEve" wx:for-item="eve">
-      <van-cell
-        title="{{ eve.eventName }}"
-        label="结束于 {{ eve.timeFormatted }}"
         link-type="navigateTo"
         url="/pages/gift/gift?eid={{eve._id}}"
         is-link

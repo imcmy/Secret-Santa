@@ -6,23 +6,15 @@ import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
 
 Page({
   data: {
+    event: {},
+    myEventLength: 0,
     avatarUrl: '',
     nickName: '',
     addressInfo: '',
     logged: false,
-    event: {}
   },
 
   onLoad: async function() {
-    if (!wx.cloud) {
-      Dialog.alert({
-        message: '请使用 2.7.1 或以上的基础库以使用云能力'
-      }).then(() => {
-        Dialog.close()
-      });
-      return
-    }
-
     if (!app.globalData.openid) {
       var login = await wx.cloud.callFunction({
         name: 'login',
@@ -74,6 +66,7 @@ Page({
         addressInfo: app.globalData.userInfo.fullAddr
       })
     }
+    this.fetchEvents()
   },
 
   onGetUserInfo: function(e) {
@@ -123,23 +116,26 @@ Page({
 
   onShareAppMessage: function() {},
 
-  fetchEvents: function() {
+  fetchEvents: async function() {
     this.loading = true
 
-    return wx.cloud.callFunction({
+    var events = await wx.cloud.callFunction({
       name: 'eventdbo',
-      data: { 'action': 'list' }
-    }).then(res => {
-      for (var key in res.result) {
-        res.result[key].forEach((item, _) => {
-          if (item.status == 0) item.timeFormatted = utils.unixToFormatted(item.rollTime)
-          else if (item.status == 1) item.timeFormatted = utils.unixToFormatted(item.startTime)
-          else if (item.status == 2 || item.status == 3) item.timeFormatted = utils.unixToFormatted(item.endTime)
-        })
-      }
-      this.setData({ event: res.result })
-      this.loading = false
+      data: { 'action': 'listv2' }
     })
+
+    for (var key in events.result) {
+      events.result[key].forEach((item, _) => {
+        if (item.status == 0) item.timeFormatted = utils.unixToFormatted(item.rollTime)
+        else if (item.status == 1) item.timeFormatted = utils.unixToFormatted(item.startTime)
+        else if (item.status == 2 || item.status == 3) item.timeFormatted = utils.unixToFormatted(item.endTime)
+      })
+    }
+
+    this.setData({
+      event: events.result,
+      myEventLength: events.result.applied.length + events.result.publish.length })
+    this.loading = false
   },
 
   onPullDownRefresh() {

@@ -12,12 +12,11 @@
   <van-cell title="管理地址" is-link url="/pages/address/address" />
 </van-cell-group>
 <van-cell-group title=" ">
-  <van-cell title="我的活动" is-link bind:click="showMyEvents" />
   <van-cell title="创建活动" is-link bind:click="showCreateEvent" />
 </van-cell-group>
 <van-cell-group title=" ">
-  <van-cell title="加入小组" is-link bind:click="showJoinGroup" />
   <van-cell title="我的小组" is-link bind:click="showMyGroups" />
+  <van-cell title="加入小组" is-link bind:click="showJoinGroup" />
 </van-cell-group>
 <van-cell-group title=" ">
   <van-cell title="更新日志" is-link bind:click="showUpdateLog" />
@@ -26,24 +25,6 @@
 
 <van-dialog id="van-dialog" />
 <van-notify id="van-notify" />
-
-<van-popup show="{{isEventsShow}}" position="bottom" custom-style="height: 85%" bind:close="hideMyEvents">
-<van-nav-bar
-  title="我的活动"
-  right-text="确定"
-  bind:click-right="hideMyEvents"
-  safe-area-inset-top="{{false}}" />
-  <van-index-bar index-list="{{ myEvents.indexList }}" sticky="{{ false }}">
-    <view wx:for="{{ myEvents.result }}" wx:key="myEvent" wx:for-item="myEvent" wx:for-index="myEventIdx">
-      <van-index-anchor use-slot="{{ true }}" index="{{ myEventIdx + 1 }}">{{ myEvents.indexList[myEventIdx] }}</van-index-anchor>
-      <van-cell wx:for="{{ myEvent }}" wx:key="myEventItem" wx:for-item="myEventItem"
-        title="{{ myEventItem.eventName }}"
-        is-link
-        link-type="navigateTo"
-        url="/pages/gift/gift?eid={{myEventItem._id}}"/>
-    </view>
-  </van-index-bar>
-</van-popup>
 
 <van-popup show="{{isCreateShow}}" position="bottom" custom-style="height: 85%" bind:close="hideCreateEvent">
 <van-nav-bar

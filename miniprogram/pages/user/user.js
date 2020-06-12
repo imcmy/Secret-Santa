@@ -45,9 +45,6 @@ Page({
       return options;
     },
 
-    isEventsShow: false,
-    myEvents: {},
-
     isJoinGroupShow: false,
     groupKey: '',
     joinLock: false,
@@ -68,37 +65,6 @@ Page({
         addressInfo: app.globalData.userInfo.fullAddr
       })
     }
-  },
-
-  showMyEvents: async function() {
-    await this.getMyEvents()
-    this.setData({ isEventsShow: true }) 
-  },
-
-  hideMyEvents: function () { this.setData({ isEventsShow: false }) },
-
-  getMyEvents: async function() {
-    var myEvents = await wx.cloud.callFunction({
-      name: 'gift',
-      data: { action: 'searchIn' }
-    })
-    var indexList = []
-    var result = []
-    if (myEvents.result[0].length > 0) {
-      indexList.push('已报名')
-      result.push(myEvents.result[0])
-    }
-    if (myEvents.result[1].length > 0) {
-      indexList.push('已抽签')
-      result.push(myEvents.result[1])
-    }
-    if (myEvents.result[2].length > 0) {
-      indexList.push('已结束')
-      result.push(myEvents.result[2])
-    }
-    this.setData({
-      myEvents: { indexList: indexList, result: result }
-    })
   },
 
   showCreateEvent: function () { this.setData({ isCreateShow: true }) },

@@ -102,6 +102,8 @@ exports.main = async (event, context) => {
           }
         }
         return inRecords
+      case 'searchInv2':
+        return unPackQuery(await db.where({ sid: event._openid }).get());
     }
   } catch (e) {
     console.log(e)
