@@ -159,6 +159,12 @@
   bind:click-right="hideUpdateLog"
   safe-area-inset-top="{{false}}" />
   <view class="updateLog">
+    <text class="updateLog-title">Version 1.5</text>
+    <text class="updateLog-list">1. 修改主页面，整合我的活动</text>
+    <text class="updateLog-list">2. 新增创建活动所属小组字段</text>
+    <text class="updateLog-list">3. 重新启用新增活动</text>
+    <text class="updateLog-list">4. 修复样式及bug</text>
+
     <text class="updateLog-title">Version 1.4</text>
     <text class="updateLog-list">1. 增加多地址管理</text>
     <text class="updateLog-list">2. 支持导入微信地址及手动填写地址（支持境外地址）</text>
