@@ -12,6 +12,8 @@ Page({
     nickName: '',
     addressInfo: '',
     logged: false,
+    isLoginDisabled: true,
+    isTermAgreed: false
   },
 
   onLoad: async function() {
@@ -53,7 +55,6 @@ Page({
           nickName: userData[0].nickName,
           addressInfo: addressData[0].fullAddr
         })
-        this.fetchEvents()
       }
     }
   },
@@ -77,8 +78,8 @@ Page({
         success: res => {
           if (res.authSetting['scope.userInfo']) {
             wx.getUserInfo({
-              success: async userInfo => {
-                await wx.cloud.callFunction({
+              success: userInfo => {
+                wx.cloud.callFunction({
                   name: 'userdbo_v2',
                   data: {
                     action: 'insert',
@@ -114,6 +115,29 @@ Page({
     })
   },
 
+  onTapTerm: function () {
+    var that = this
+    Dialog.confirm({
+      title: '信息收集详情及用途',
+      message: '程序会收集您的：\n(1)用户名、头像等基本信息；\n(2)收货地址。\n\n地址信息仅用于接收匿名礼物所用。\n注销后所有信息均不保留。',
+      messageAlign: 'left',
+      confirmButtonText: '同意',
+      cancelButtonText: '不同意'
+    }).then(() => {
+      this.setData({
+        isLoginDisabled: false,
+        isTermAgreed: true
+      })
+      Dialog.close();
+    }).catch(() => {
+      this.setData({
+        isLoginDisabled: true,
+        isTermAgreed: false
+      })
+      Dialog.close();
+    });
+  },
+
   onShareAppMessage: function() {},
 
   fetchEvents: async function() {
@@ -138,7 +162,7 @@ Page({
     this.loading = false
   },
 
-  onPullDownRefresh() {
+  onPullDownRefresh: function() {
     if (!this.loading) {
       this.fetchEvents().then(() => {
         wx.stopPullDownRefresh()

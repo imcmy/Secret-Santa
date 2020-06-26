@@ -7,8 +7,9 @@
   </view>
 </view>
 <view wx:else class="top-bar login">
-  <van-button type="default" custom-class="login-button" open-type="getUserInfo" bind:getuserinfo="onGetUserInfo">点击登录</van-button>
-  <text class="hint userinfo-address">程序会收集您的：(1)用户名等基本信息；(2)地址等收货信息</text>
+  <van-button type="default" custom-class="login-button" open-type="getUserInfo" bind:getuserinfo="onGetUserInfo" disabled="{{ isLoginDisabled }}">点击登录</van-button>
+  <text class="hint userinfo-address"></text>
+  <van-checkbox value="{{ isTermAgreed }}" shape="square" icon-size="30rpx" bind:change="onTapTerm"><text class="hint userinfo-address">我同意程序收集并使用相关信息</text></van-checkbox>
 </view>
 
 <van-tabs animated>

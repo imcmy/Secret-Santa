@@ -294,6 +294,14 @@ Page({
     })
   },
 
+  showTerm: function () {
+    Dialog.alert({
+      title: '信息收集详情及用途',
+      message: '程序会收集您的：\n(1)用户名、头像等基本信息；\n(2)收货地址。\n\n地址信息仅用于接收匿名礼物所用。\n注销后所有信息均不保留。',
+      messageAlign: 'left'
+    });
+  },
+
   openConfirm: function (isFirst) {
     Dialog.confirm({
       message: '检测到您没打开用户信息权限，是否去设置打开？',

@@ -39,7 +39,8 @@
     "van-row": "./miniprogram_npm/@vant/weapp/row/index",
     "van-col": "./miniprogram_npm/@vant/weapp/col/index",
     "van-swipe-cell": "./miniprogram_npm/@vant/weapp/swipe-cell/index",
-    "van-picker": "./miniprogram_npm/@vant/weapp/picker/index"
+    "van-picker": "./miniprogram_npm/@vant/weapp/picker/index",
+    "van-checkbox": "./miniprogram_npm/@vant/weapp/checkbox/index"
   },
   "sitemapLocation": "sitemap.json"
 }

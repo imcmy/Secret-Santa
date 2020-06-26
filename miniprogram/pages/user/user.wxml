@@ -20,6 +20,7 @@
 </van-cell-group>
 <van-cell-group title=" ">
   <van-cell title="更新日志" is-link bind:click="showUpdateLog" />
+  <van-cell title="信息收集协议" is-link bind:click="showTerm" />
   <van-cell title="关于" is-link bind:click="showAbout" />
 </van-cell-group>
 
