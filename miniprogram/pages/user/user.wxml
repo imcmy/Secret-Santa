@@ -1,6 +1,6 @@
 <!--miniprogram/pages/user/user.wxml-->
 <view class="top-bar userinfo">
-    <van-image  round fit="cover" width="150rpx" height="150rpx" src="{{avatarUrl}}" />
+    <van-image round fit="cover" width="150rpx" height="150rpx" src="{{avatarUrl}}" />
     <view class="userinfo-detail-wrapper">
       <text class="userinfo-nickname">{{ nickName }}</text>
       <text class="userinfo-address">{{ addressInfo }}</text>
@@ -19,9 +19,11 @@
   <van-cell title="加入小组" is-link bind:click="showJoinGroup" />
 </van-cell-group>
 <van-cell-group title=" ">
-  <van-cell title="更新日志" is-link bind:click="showUpdateLog" />
-  <van-cell title="信息收集协议" is-link bind:click="showTerm" />
-  <van-cell title="关于" is-link bind:click="showAbout" />
+  <van-cell title="信息收集用途" is-link bind:click="showTerm" />
+  <van-cell title="关于" is-link bind:click="showUpdateLog" />
+</van-cell-group>
+<van-cell-group title=" ">
+  <van-cell title-class="red-title" title="注销用户" is-link bind:click="unReg" />
 </van-cell-group>
 
 <van-dialog id="van-dialog" />
@@ -155,11 +157,13 @@
 
 <van-popup show="{{isUpdateLogShow}}" position="bottom" custom-style="height: 85%" bind:close="hideUpdateLog">
 <van-nav-bar
-  title="更新日志"
+  title="关于"
   right-text="确认"
   bind:click-right="hideUpdateLog"
   safe-area-inset-top="{{false}}" />
   <view class="updateLog">
+    <text>感恩有你们</text>
+
     <text class="updateLog-title">Version 1.5</text>
     <text class="updateLog-list">1. 修改主页面，整合我的活动</text>
     <text class="updateLog-list">2. 新增创建活动所属小组字段</text>
