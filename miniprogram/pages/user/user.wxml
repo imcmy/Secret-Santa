@@ -1,206 +1,132 @@
 <!--miniprogram/pages/user/user.wxml-->
-<view class="top-bar userinfo">
-    <van-image round fit="cover" width="150rpx" height="150rpx" src="{{avatarUrl}}" />
-    <view class="userinfo-detail-wrapper">
-      <text class="userinfo-nickname">{{ nickName }}</text>
-      <text class="userinfo-address">{{ addressInfo }}</text>
+<view data-weui-theme="{{theme}}">
+    <view class="weui-flex">
+        <view class="top-bar userinfo {{themeBg}}-bg">
+            <view class="userinfo-avatar">
+                <image mode="heightFix" src="{{avatarUrl}}" />
+            </view>
+            <view class="userinfo-detail-wrapper">
+                <text class="userinfo-nickname">{{ nickName }}</text>
+                <text class="userinfo-address">{{ addressInfo }}</text>
+            </view>
+        </view>
     </view>
+
+    <mp-cells>
+        <mp-cell title="用户信息" url="/pages/user_detail/user_detail" link hover>
+        </mp-cell>
+        <mp-cell title="个性化设置" bindtap="onCustomize" link="{{true}}">
+        </mp-cell>
+    </mp-cells>
+    <mp-cells>
+        <mp-cell title="我的小组" bindtap="onMyGroups" link="{{true}}">
+        </mp-cell>
+        <!-- <mp-cell title="创建活动" bindtap="onCreateEvent" link="{{true}}">
+        </mp-cell> -->
+    </mp-cells>
+
+    <mp-cells>
+        <mp-cell title="我要注销" url="/pages/un_reg/un_reg" link hover>
+        </mp-cell>
+    </mp-cells>
+
+    <mp-cells>
+        <mp-cell title="用户服务协议及隐私政策" url="/pages/agreement/aggrement" link hover>
+        </mp-cell>
+        <mp-cell title="关于" url="/pages/about/about" link hover>
+        </mp-cell>
+    </mp-cells>
 </view>
 
-<van-cell-group>
-  <van-cell title="更新信息" bind:click="updateUser" is-link />
-  <van-cell title="管理地址" is-link url="/pages/address/address" />
-</van-cell-group>
-<van-cell-group title=" ">
-  <van-cell title="创建活动" is-link bind:click="showCreateEvent" />
-</van-cell-group>
-<van-cell-group title=" ">
-  <van-cell title="我的小组" is-link bind:click="showMyGroups" />
-  <van-cell title="加入小组" is-link bind:click="showJoinGroup" />
-</van-cell-group>
-<van-cell-group title=" ">
-  <van-cell title="信息收集用途" is-link bind:click="showTerm" />
-  <van-cell title="关于" is-link bind:click="showUpdateLog" />
-</van-cell-group>
-<van-cell-group title=" ">
-  <van-cell title-class="red-title" title="注销用户" is-link bind:click="unReg" />
-</van-cell-group>
+<mp-half-screen-dialog title="我的小组" show="{{groups.show}}" closabled="{{false}}" buttons="{{groups.dialogButtons}}" bindbuttontap="tapJoinGroup" bindclose="closeJoinGroup" data-weui-theme="{{theme}}">
+    <view slot="desc">
+        <view wx:if="{{groups.loaded}}" class="list-wrapper">
+            <scroll-view class="list" scroll-y>
+                <view wx:for="{{groups.lists}}" wx:key="group" wx:for-item="group">
+                    <mp-cells>
+                        <mp-cell>
+                            <view class="cell-title">{{group.groupName}}</view>
+                            <view>{{group.groupDescription}}</view>
+                            <view slot="icon" class="addr-cell">
+                                <mp-icon icon="group-detail" color="{{theme==='light'?'black':'white'}}"></mp-icon>
+                            </view>
+                        </mp-cell>
+                    </mp-cells>
+                </view>
+            </scroll-view>
+        </view>
+        <view wx:else>
+            <mp-loading type="dot-gray"></mp-loading>
+        </view>
+    </view>
+</mp-half-screen-dialog>
 
-<van-dialog id="van-dialog" />
-<van-notify id="van-notify" />
+<mp-half-screen-dialog title="个性化设置" show="{{prefs.show}}" closabled="{{false}}" bindclose="closeCustomize" data-weui-theme="{{theme}}" class="no-dialog-ft">
+    <view slot="desc">
+        <mp-form>
+            <mp-cells>
+                <mp-cell title="浅色背景">
+                    <radio-group bindchange="onBgChange">
+                        <label class="weui-cell weui-check__label">
+                            <view class="weui-cell__hd">
+                                <radio value="red" checked="{{prefs.themeRed}}" />
+                            </view>
+                            <view class="weui-cell__bd">
+                                <image style="height: 80rpx;" mode="aspectFill" src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-c1b28ba0-3d60-440e-b797-c927294b93f2/382c86a3-214c-4f09-ac5a-4a56959bd9e4.png"></image>
+                            </view>
+                        </label>
+                        <label class="weui-cell weui-check__label">
+                            <view class="weui-cell__hd">
+                                <radio value="green" checked="{{prefs.themeGreen}}" />
+                            </view>
+                            <view class="weui-cell__bd">
+                                <image style="height: 80rpx;" mode="aspectFill" src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-c1b28ba0-3d60-440e-b797-c927294b93f2/758a3128-df2a-4a6d-91c6-f31a11416807.png"></image>
+                            </view>
+                        </label>
+                    </radio-group>
+                </mp-cell>
+                <view class="weui-cell weui-cell_switch">
+                    <view class="weui-cell__bd" style="text-decoration: line-through;">深色模式</view>
+                    <view class="weui-cell__ft">
+                        <switch disabled checked="{{prefs.darkModeSwitch}}" bindchange="onDarkModeSwitch" />
+                    </view>
+                </view>
+                <view class="weui-cell weui-cell_switch">
+                    <view class="weui-cell__bd" style="text-decoration: line-through;">深色模式跟随系统</view>
+                    <view class="weui-cell__ft">
+                        <switch disabled checked="{{prefs.darkFollowSysSwitch}}" bindchange="onDarkFollowSysSwitch" />
+                    </view>
+                </view>
+            </mp-cells>
+        </mp-form>
+    </view>
+</mp-half-screen-dialog>
 
-<van-popup show="{{isCreateShow}}" position="bottom" custom-style="height: 85%" bind:close="hideCreateEvent">
-<van-nav-bar
-  title="创建活动"
-  left-text="取消"
-  right-text="创建"
-  bind:click-left="hideCreateEvent"
-  bind:click-right="createEvent"
-  safe-area-inset-top="{{false}}" />
-  <van-cell-group>
-    <van-field
-      label="活动名称"
-      placeholder="请输入活动名称"
-      value="{{ newEvent.eventName }}"
-      border="{{ true }}"
-      required
-      clearable
-      bind:input="checkEventName"
-      error-message="{{ newEvent.eventNameError }}"
-      error-message-align="right"
-    />
-    <van-field
-      label="所属小组"
-      placeholder="请选择所属小组"
-      value="{{ newEvent.eventGroup }}"
-      border="{{ true }}"
-      required
-      readonly
-      clickable
-      bindtap="showGroupPicker"
-    />
-    <van-field
-      label="开始时间"
-      placeholder="请确认开始时间"
-      value="{{ newEvent.eventStartFormatted }}"
-      border="{{ true }}"
-      required
-      readonly
-      clickable
-      error-message="{{ newEvent.eventStartError }}"
-      error-message-align="right"
-      bindtap="showDatePickerStart"
-    />
-    <van-field
-      label="抽签时间"
-      placeholder="请确认抽签时间"
-      value="{{ newEvent.eventRollFormatted }}"
-      border="{{ true }}"
-      required
-      readonly
-      clickable
-      error-message="{{ newEvent.eventRollError }}"
-      error-message-align="right"
-      bindtap="showDatePickerRoll"
-    />
-    <van-field
-      label="结束时间"
-      placeholder="请确认结束时间"
-      value="{{ newEvent.eventEndFormatted }}"
-      border="{{ true }}"
-      required
-      readonly
-      clickable
-      error-message="{{ newEvent.eventEndError }}"
-      error-message-align="right"
-      bindtap="showDatePickerEnd"
-    />
-    <van-field
-      label="活动描述"
-      placeholder="请输入活动描述"
-      value="{{ newEvent.eventDescription }}"
-      border="{{ true }}"
-      type="textarea"
-      clearable
-      autosize
-      bind:input="checkEventDesc"
-    />
-  </van-cell-group>
-</van-popup>
-
-<van-popup show="{{isDatePickerShow}}" position="bottom" bind:close="hideDatePicker">
-  <van-datetime-picker
-    type="datetime"
-    value="{{ newEvent.minDate }}"
-    min-date="{{ newEvent.minDate }}"
-    filter="{{ filter }}"
-    bind:cancel="hideDatePicker"
-    bind:confirm="confirmDatePicker"
-  />
-</van-popup>
-
-<van-popup show="{{isGroupPickerShow}}" position="bottom" bind:close="hideGroupPicker">
-  <van-picker
-    columns="{{ myGroupsColumns }}"
-    show-toolbar="{{ true }}"
-    bind:cancel="hideGroupPicker"
-    bind:confirm="confirmGroupPicker" />
-</van-popup>
-
-<van-dialog
-  use-slot
-  title="加入小组"
-  show="{{ isJoinGroupShow }}"
-  show-cancel-button
-  bind:confirm="joinGroup"
-  bind:close="hideJoinGroup">
-  <van-field
-    value="{{ groupKey }}"
-    placeholder="请输入小组密钥"
-    border="{{ false }}"
-    bind:input="checkGroupKey"
-    input-align="center"
-  />
-</van-dialog>
-
-<van-popup show="{{isGroupsShow}}" position="bottom" custom-style="height: 85%" bind:close="hideMyGroups">
-<van-nav-bar
-  title="我的小组"
-  right-text="确定"
-  bind:click-right="hideMyGroups"
-  safe-area-inset-top="{{false}}" />
-  <van-cell wx:for="{{ myGroups }}" wx:key="myGroup" wx:for-item="myGroup"
-    title="{{ myGroup.groupName }}"
-    label="{{ myGroup.groupDescription }}"
-    icon="friends-o" />
-</van-popup>
-
-<van-popup show="{{isUpdateLogShow}}" position="bottom" custom-style="height: 85%" bind:close="hideUpdateLog">
-<van-nav-bar
-  title="关于"
-  right-text="确认"
-  bind:click-right="hideUpdateLog"
-  safe-area-inset-top="{{false}}" />
-  <view class="updateLog">
-    <text>感恩有你们</text>
-
-    <text class="updateLog-title">Version 1.5</text>
-    <text class="updateLog-list">1. 修改主页面，整合我的活动</text>
-    <text class="updateLog-list">2. 新增创建活动所属小组字段</text>
-    <text class="updateLog-list">3. 重新启用新增活动</text>
-    <text class="updateLog-list">4. 修复样式及bug</text>
-
-    <text class="updateLog-title">Version 1.4</text>
-    <text class="updateLog-list">1. 增加多地址管理</text>
-    <text class="updateLog-list">2. 支持导入微信地址及手动填写地址（支持境外地址）</text>
-    <text class="updateLog-list">3. 优化地址修改方式</text>
-    <text class="updateLog-list">4. 优化刷新方式</text>
-
-    <text class="updateLog-title">Version 1.3</text>
-    <text class="updateLog-list">1. 增加小组功能</text>
-    <text class="updateLog-list">2. 允许加入/显示所在小组</text>
-    <text class="updateLog-list">3. 只显示所在小组的活动</text>
-    <text class="updateLog-list">4. 优化查询逻辑</text>
-    <text class="updateLog-list">5. 增加loading</text>
-    
-    <text class="updateLog-title">Version 1.2</text>
-    <text class="updateLog-list">1. 细化活动状态</text>
-    <text class="updateLog-list">2. 完善时间显示</text>
-    <text class="updateLog-list">3. 自定义结束时间</text>
-    <text class="updateLog-list">4. 在结束后显示带名字的结果</text>
-    <text class="updateLog-list">5. 显示参与人员</text>
-    <text class="updateLog-list">6. 增加用户权限字段及活动审核字段</text>
-
-    <text class="updateLog-title">Version 1.1</text>
-    <text class="updateLog-list">1. 新增创建活动</text>
-    <text class="updateLog-list">2. 新增更新日志</text>
-    <text class="updateLog-list">3. 新增下拉刷新</text>
-    <text class="updateLog-list">4. 样式更新</text>
-
-    <text class="updateLog-title">Version 1.0</text>
-    <text class="updateLog-list">1. 参加/取消参加交换活动</text>
-    <text class="updateLog-list">2. 查看已经参加过的活动</text>
-    <text class="updateLog-list">3. 允许随时修改信息</text>
-    <text class="updateLog-list">4. 7天后地址将不可见</text>
-  </view>
-</van-popup>
+<!-- <mp-half-screen-dialog title="创建活动" show="{{newEvent.show}}" closabled="{{false}}" buttons="{{newEvent.dialogButtons}}" bindbuttontap="tapCreateEvent">
+    <view slot="desc">
+        <mp-form id="form" rules="{{newEvent.rules}}" models="{{newEvent.formData}}">
+            <mp-cells>
+                <mp-cell title="活动名称" show-error prop="eventName">
+                    <input data-field="eventName" value="{{newEvent.formData.eventName}}" type="text" class="weui-input" placeholder="活动名称" bindinput="checkEventName" />
+                </mp-cell>
+                <mp-cell title="所属小组" show-error prop="eventGroup">
+                    <picker bindchange="bindPickerChange" value="{{0}}" range="{{groups.nameLists}}">
+                        <view class="picker">{{groups.nameLists[0]}}</view>
+                    </picker>
+                </mp-cell>
+                <mp-cell title="开始时间" show-error prop="eventStartFormatted">
+                    <input data-field="eventStartFormatted" value="{{newEvent.formData.eventStartFormatted}}" type="text" class="weui-input" placeholder="请确认开始时间" bindinput="" />
+                </mp-cell>
+                <mp-cell title="抽签时间" show-error prop="eventRollFormatted">
+                    <input data-field="eventRollFormatted" value="{{newEvent.formData.eventRollFormatted}}" type="text" class="weui-input" placeholder="请确认抽签时间" bindinput="" />
+                </mp-cell>
+                <mp-cell title="结束时间" show-error prop="eventEndFormatted">
+                    <input data-field="eventEndFormatted" value="{{newEvent.formData.eventEndFormatted}}" type="text" class="weui-input" placeholder="请确认结束时间" bindinput="" />
+                </mp-cell>
+                <mp-cell title="活动描述" show-error prop="eventDescription">
+                    <textarea data-field="eventDescription" value="{{newEvent.formData.eventDescription}}" placeholder="请输入活动描述" auto-height="true" disable-default-padding="true" bindinput="checkEventDesc"></textarea>
+                </mp-cell>
+            </mp-cells>
+        </mp-form>
+    </view>
+</mp-half-screen-dialog> -->

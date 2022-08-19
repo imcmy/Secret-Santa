@@ -1,0 +1,13 @@
+/* pages/about/about.wxss */
+.weui-article__h3 {
+    font-size: 32rpx;
+}
+
+.weui-article__p {
+    font-size: 30rpx;
+    margin: 0
+}
+
+.weui-padding {
+    padding-bottom: .9em;
+}

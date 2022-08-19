@@ -34,7 +34,6 @@ function removeArray (arr) {
 // 云函数入口函数
 exports.main = async (event, context) => {
   var openid = cloud.getWXContext().OPENID
-  
   var action = event.action
   try {
     switch (action) {
@@ -96,6 +95,9 @@ exports.main = async (event, context) => {
         var list = []
         for (var key in event.list) {
           var user = unPackQuery(await db.where({ _openid: event.list[key] }).get())
+          if (user.length == 0) {
+            continue;
+          }
           var addr = unPackQuery(await cloud.callFunction({
             name: 'addressdbo',
             data: {

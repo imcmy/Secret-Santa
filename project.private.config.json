@@ -1,0 +1,37 @@
+{
+    "projectname": "Gift",
+    "setting": {
+        "compileHotReLoad": true
+    },
+    "editorSetting": {
+        "tabIndent": "insertSpaces",
+        "tabSize": 4
+    },
+    "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
+    "libVersion": "2.25.2",
+    "condition": {
+        "miniprogram": {
+            "list": [
+                {
+                    "name": "user_detail_page",
+                    "pathName": "pages/user_detail/user_detail",
+                    "query": "",
+                    "launchMode": "default",
+                    "scene": null
+                },
+                {
+                    "name": "gift_page",
+                    "pathName": "pages/gift/gift",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "name": "user_page",
+                    "pathName": "pages/user/user",
+                    "query": "",
+                    "scene": null
+                }
+            ]
+        }
+    }
+}

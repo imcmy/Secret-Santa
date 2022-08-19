@@ -1,46 +1,63 @@
 {
-  "pages": [
-    "pages/index/index",
-    "pages/gift/gift",
-    "pages/user/user",
-    "pages/address/address"
-  ],
-  "window": {
-    "backgroundColor": "#F6F6F6",
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#FFFFFF",
-    "navigationBarTitleText": "湾仔码头礼物交换",
-    "navigationBarTextStyle": "black"
-  },
-  "usingComponents": {
-    "van-tab": "./miniprogram_npm/@vant/weapp/tab/index",
-    "van-tabs": "./miniprogram_npm/@vant/weapp/tabs/index",
-    "van-cell": "./miniprogram_npm/@vant/weapp/cell/index",
-    "van-cell-group": "./miniprogram_npm/@vant/weapp/cell-group/index",
-    "van-button": "./miniprogram_npm/@vant/weapp/button/index",
-    "van-dialog": "./miniprogram_npm/@vant/weapp/dialog/index",
-    "van-image": "./miniprogram_npm/@vant/weapp/image/index",
-    "van-skeleton": "./miniprogram_npm/@vant/weapp/skeleton/index",
-    "van-popup": "./miniprogram_npm/@vant/weapp/popup/index",
-    "van-panel": "./miniprogram_npm/@vant/weapp/panel/index",
-    "van-count-down": "./miniprogram_npm/@vant/weapp/count-down/index",
-    "van-tag": "./miniprogram_npm/@vant/weapp/tag/index",
-    "van-divider": "./miniprogram_npm/@vant/weapp/divider/index",
-    "van-toast": "./miniprogram_npm/@vant/weapp/toast/index",
-    "van-field": "./miniprogram_npm/@vant/weapp/field/index",
-    "van-action-sheet": "./miniprogram_npm/@vant/weapp/action-sheet/index",
-    "van-icon": "./miniprogram_npm/@vant/weapp/icon/index",
-    "van-notify": "./miniprogram_npm/@vant/weapp/notify/index",
-    "van-index-bar": "./miniprogram_npm/@vant/weapp/index-bar/index",
-    "van-index-anchor": "./miniprogram_npm/@vant/weapp/index-anchor/index",
-    "van-nav-bar": "./miniprogram_npm/@vant/weapp/nav-bar/index",
-    "van-datetime-picker": "./miniprogram_npm/@vant/weapp/datetime-picker/index",
-    "van-loading": "./miniprogram_npm/@vant/weapp/loading/index",
-    "van-row": "./miniprogram_npm/@vant/weapp/row/index",
-    "van-col": "./miniprogram_npm/@vant/weapp/col/index",
-    "van-swipe-cell": "./miniprogram_npm/@vant/weapp/swipe-cell/index",
-    "van-picker": "./miniprogram_npm/@vant/weapp/picker/index",
-    "van-checkbox": "./miniprogram_npm/@vant/weapp/checkbox/index"
-  },
-  "sitemapLocation": "sitemap.json"
+    "pages": [
+        "pages/launch/launch",
+        "pages/index/index",
+        "pages/gift/gift",
+        "pages/user/user",
+        "pages/user_detail/user_detail",
+        "pages/critical_error/critical_error",
+        "pages/agreement/aggrement",
+        "pages/about/about",
+        "pages/un_reg/un_reg"
+    ],
+    "entryPagePath": "pages/launch/launch",
+    "themeLocation": "theme.json",
+    "window": {
+        "backgroundColor": "@bgColor",
+        "backgroundTextStyle": "@bgTextStyle",
+        "navigationBarBackgroundColor": "@nbBackgroundColor",
+        "navigationBarTitleText": "湾仔码头礼物交换",
+        "navigationBarTextStyle": "@nbTextStyle"
+    },
+    "tabBar": {
+        "color": "@tbColor",
+        "selectedColor": "#2BA245",
+        "backgroundColor": "@bgColor",
+        "borderStyle": "@nbTextStyle",
+        "position": "top",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "活动"
+            },
+            {
+                "pagePath": "pages/user/user",
+                "text": "我"
+            }
+        ]
+    },
+    "style": "v2",
+    "darkmode": true,
+    "useExtendedLib": {
+        "weui": true
+    },
+    "requiredPrivateInfos": [
+        "chooseAddress"
+    ],
+    "usingComponents": {
+        "mp-cells": "weui-miniprogram/cells/cells",
+        "mp-cell": "weui-miniprogram/cell/cell",
+        "mp-loading": "weui-miniprogram/loading/loading",
+        "mp-toptips": "weui-miniprogram/toptips/toptips",
+        "mp-icon": "weui-miniprogram/icon/icon",
+        "mp-dialog": "weui-miniprogram/dialog/dialog",
+        "mp-half-screen-dialog": "weui-miniprogram/half-screen-dialog/half-screen-dialog",
+        "mp-slideview": "weui-miniprogram/slideview/slideview",
+        "mp-form": "weui-miniprogram/form/form",
+        "mp-checkbox-group": "weui-miniprogram/checkbox-group/checkbox-group",
+        "mp-checkbox": "weui-miniprogram/checkbox/checkbox",
+        "mp-msg": "weui-miniprogram/msg/msg",
+        "mp-badge": "weui-miniprogram/badge/badge"
+    },
+    "sitemapLocation": "sitemap.json"
 }

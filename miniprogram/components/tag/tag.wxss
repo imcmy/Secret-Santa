@@ -1,0 +1,21 @@
+.tag {
+    align-items: center;
+    border-radius: 8rpx;
+    color: #fff;
+    display: inline-flex;
+    font-size: 24rpx;
+    line-height: 32rpx;
+    padding: 4rpx 12rpx;
+    position: relative;
+}
+
+.plain-tag {
+    align-items: center;
+    border-radius: 8rpx;
+    color: #000;
+    display: inline-flex;
+    font-size: 24rpx;
+    line-height: 32rpx;
+    padding: 4rpx 12rpx;
+    position: relative;
+}

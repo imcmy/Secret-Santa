@@ -6,7 +6,6 @@ page {
   height: 100%;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  --count-down-text-color: #FFFFFF;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif !important;
 }
 
@@ -27,30 +26,10 @@ page {
   height: 100%;
 }
 
-.title {
-  padding: var(--cell-vertical-padding,10px) var(--cell-horizontal-padding,16px);
-}
-
-.title-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.title-text {
-  font-size: 40rpx;
-}
-
-.desc-text {
-  color: var(--cell-label-color,#969799);
-  font-size: 28rpx;
-  line-height: var(--cell-label-line-height,36rpx);
-}
-
 .panel-content {
   display: flex;
   justify-content: space-between;
-  padding: var(--cell-vertical-padding, 20rpx) var(--cell-horizontal-padding, 32rpx);
+  padding: 20rpx 32rpx;
 }
 
 .gift-content {
@@ -85,6 +64,25 @@ page {
   padding-bottom: 10rpx;
 }
 
-.van-tag--medium {
-  --tag-medium-font-size: 24rpx;
+.weui-panel__hd {
+    padding: 32rpx 32rpx 16rpx;
+}
+
+.weui-media-box__title_flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 0;
+}
+
+.weui-media-box {
+    padding: 16rpx 32rpx 0;
+}
+
+.weui-panel::after {
+    border-bottom: 0;
+}
+
+.no-lh {
+    line-height: 0;
 }

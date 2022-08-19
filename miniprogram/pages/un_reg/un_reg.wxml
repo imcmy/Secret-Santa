@@ -1,0 +1,14 @@
+<!--pages/un_reg/un_reg.wxml-->
+<view class="page" data-weui-theme="{{theme}}">
+    <mp-msg type="warn" title="我要注销">
+        <view slot="desc">摘录自《用户服务协议及隐私政策》</view>
+        <view slot="extend" style="text-align: left;">
+            <view>3.2 在申请注销后，所收集的信息均不保留（除活动结束后的活动结果中保留的当次昵称和收件人）。</view>
+            <view >3.3 <text style="color: red;">用户申请注销时不应处于参与任何活动的状态中。</text>如果参与的活动尚未进行抽签，请在退出活动后申请注销；如果参与的活动已进行抽签，请等待活动结束后申请注销。</view>
+        </view>
+        <view slot="handle">
+            <button class="weui-btn" type="warn" bindtap="unReg">确认注销</button>
+            <button class="weui-btn" type="default" bindtap="back">返回</button>
+        </view>
+    </mp-msg>
+</view>

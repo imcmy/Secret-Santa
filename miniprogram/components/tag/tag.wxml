@@ -1,0 +1,6 @@
+<view wx:if="{{plain}}" style="border: 2rpx solid {{color}}; color: {{color}}" class="plain-tag">
+    <slot></slot>
+</view>
+<view wx:else style="background-color: {{color}}" class="tag">
+    <slot></slot>
+</view>

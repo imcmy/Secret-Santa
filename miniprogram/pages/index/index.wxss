@@ -1,86 +1,183 @@
 /**index.wxss**/
 
 page {
-  background: #f6f6f6;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  height: 100%;
-  font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif !important;
+    background: #f6f6f6;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+    font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif !important;
 }
 
 .top-bar {
-  margin-bottom: 40rpx;
-  height: 200rpx;
-  width: 100%;
-  background: #fff;
-  border-left: none;
-  border-right: none;
-  display: flex;
-  transition: all 300ms ease;
-  box-sizing: border-box;
+    margin-bottom: 40rpx;
+    height: 200rpx;
+    width: 100%;
+    background-size: cover;
+    border-left: none;
+    border-right: none;
+    display: flex;
+    transition: all 300ms ease;
+    box-sizing: border-box;
 }
 
 .userinfo {
-  flex-direction: row;
-  align-items: center;
-  padding-left: 60rpx;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around
 }
 
 .login {
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .userinfo-avatar {
-  width: 100rpx;
-  height: 100rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-  background-size: cover;
-  background-color: white;
+    width: 140rpx;
+    height: 140rpx;
+    border-radius: 16rpx;
+    background-size: cover;
 }
 
 .userinfo-avatar[size] {
-  width: 100rpx;
+    width: 140rpx;
 }
 
-
 .userinfo-avatar:after {
-  border: none;
+    border: none;
+}
+
+.userinfo-avatar > image {
+    width: 100%;
+    height: 100%;
+    border-radius: 16rpx;
 }
 
 .userinfo-nickname {
-  font-size: 32rpx;
-  text-align: left;
+    font-size: 34rpx;
+    font-weight: 700;
+    text-align: right;
 }
 
 .userinfo-address {
-  font-size: 24rpx;
-  text-align: left;
-  padding-top: 10rpx;
+    font-size: 28rpx;
+    font-weight: 500;
+    text-align: left;
 }
 
 .userinfo-detail-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content:space-between;
-  padding-left: 30rpx;
-  padding-right: 60rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.hint {
-  padding-top: 20rpx;
-  color: #999999;
-  text-decoration: underline;
-}
 
 .login-button {
-  color: #000 !important;
-  background-color: #f8f8f8 !important;
-  font-weight: 700 !important;
-  border-width: 0 !important;
-  width: 368rpx !important;
-  --button-default-height: 80rpx !important;
+    font-weight: 700 !important;
+}
+
+.scroll-wrapper {
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    background: #FFF;
+    height: 88rpx;
+    box-sizing: border-box;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    color: transparent;
+}
+
+.navigate-item {
+    display: inline-block;
+    text-align: center;
+    height: 88rpx;
+    line-height: 88rpx;
+}
+
+.names {
+    font-size: 30rpx;
+    color: #666;
+}
+
+.names.active {
+    font-weight: bold;
+    font-size: 30rpx;
+    color: #000;
+}
+
+.currtline {
+    margin: -8rpx auto 0 auto;
+    width: 100rpx;
+    height: 8rpx;
+    border-radius: 4rpx;
+}
+
+.currtline.active {
+    background: #47CD88;
+    transition: all .3s;
+}
+
+swiper {
+    min-height: calc(100vh - 100rpx);
+}
+
+.swiper-item {
+    display: flex;
+    width: 100%;
+    text-align: center;
+    padding: 32rpx 0;
+}
+
+scroll-view {
+    height: calc(100vh - 100rpx);
+}
+
+.weui-cell {
+    padding: 18rpx 16px;
+}
+
+.cell-title {
+    font-size: 28rpx;
+    padding-bottom: 12rpx;
+    color: #000;
+}
+
+.weui-cells__title {
+    font-size: 28rpx;
+    margin-top: 28rpx;
+    margin-bottom: 16rpx;
+}
+
+.weui-cell__bd {
+    color: #969799;
+    font-size: 26rpx;
+}
+
+@media (prefers-color-scheme: dark) {
+    page {
+        background: #121212;
+    }
+
+    .scroll-wrapper {
+        background: #121212;
+    }
+
+    .names {
+        color: #969799;
+    }
+
+    .names.active {
+        color: #D9D9D9;
+    }
+
+    .cell-title {
+        color: #cccccc;
+    }
 }

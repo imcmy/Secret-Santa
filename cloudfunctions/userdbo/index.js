@@ -20,59 +20,45 @@ const unPackQuery = obj => {
   return queried
 }
 
+function removeArray (arr) {
+  var what, a = arguments, L = a.length, ax;
+  while (L > 1 && arr.length) {
+    what = a[--L];
+    while ((ax = arr.indexOf(what)) !== -1) {
+      arr.splice(ax, 1);
+    }
+  }
+  return arr;
+}
+
 // 云函数入口函数
 exports.main = async (event, context) => {
   var openid = cloud.getWXContext().OPENID
-  
   var action = event.action
   try {
     switch (action) {
       case 'insert':
         var userCheck = await db.where({ _openid: openid }).count()
-        if (userCheck > 0) return
+        if (userCheck.total > 0) return
         return await db.add({
           data: {
             _openid: openid,
             nickName: event.nickName,
             avatarUrl: event.avatarUrl,
-            provinceName: event.provinceName,
-            cityName: event.cityName,
-            countyName: event.countyName,
-            detailInfo: event.detailInfo,
-            postalCode: event.postalCode,
-            telNumber: event.telNumber,
-            recipient: event.recipient,
-            fullAddr: event.provinceName + event.cityName + event.countyName + event.detailInfo,
             privilege: 0,
-            groups: ['d38a536e5eab7330003713462983aea7']
+            groups: ['DEFAULTGROUPID']
           }
         })
       case 'update':
+        console.log(event)
         return await db.doc(event._id).update({
           data: {
             nickName: event.nickName,
             avatarUrl: event.avatarUrl,
-            provinceName: event.provinceName,
-            cityName: event.cityName,
-            countyName: event.countyName,
-            detailInfo: event.detailInfo,
-            postalCode: event.postalCode,
-            telNumber: event.telNumber,
-            recipient: event.recipient,
-            fullAddr: event.provinceName + event.cityName + event.countyName + event.detailInfo
           }
         })
       case 'query':
         return unPackQuery(await db.where({ _openid: openid }).get())
-      case 'queryAddr':
-        var unPack = unPackQuery(await db.where({ _openid: event.rid }).get())
-        return {
-          "nickName": unPack[0].nickName,
-          "fullAddr": unPack[0].fullAddr,
-          "telNumber": unPack[0].telNumber,
-          "postalCode": unPack[0].postalCode,
-          "recipient": unPack[0].recipient
-        }
       case 'queryGroups':
         var unPack = unPackQuery(await db.where({ _openid: event._openid }).get())
         return unPack[0].groups
@@ -107,11 +93,21 @@ exports.main = async (event, context) => {
         }
         return 1
       case 'queryList':
-        var list = [[], []]
+        var list = []
         for (var key in event.list) {
           var user = unPackQuery(await db.where({ _openid: event.list[key] }).get())
-          list[0].push(user[0].nickName)
-          list[1].push(user[0].nickName + '(' + user[0].recipient + ')')
+          console.log(event.list[key], user)
+          if (user.length == 0) {
+            continue;
+          }
+          var addr = unPackQuery(await cloud.callFunction({
+            name: 'addressdbo',
+            data: {
+              action: 'queryCurrent',
+              _openid: event.list[key]
+            }
+          }))
+          list.push(user[0].nickName + ' (' + addr[0].recipient + ')')
         }
         return list
     }

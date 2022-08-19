@@ -1,0 +1,106 @@
+/* pages/user_detail/user_detail.wxss */
+.weui-form__title {
+    font-size: 44rpx;
+}
+
+.weui-form__text-area {
+    padding: 0;
+}
+
+.weui-form__control-area {
+    margin: 48rpx 0;
+}
+
+.weui-label {
+    font-size: 32rpx;
+}
+
+.weui-input {
+    font-size: 32rpx;
+}
+
+.weui-agree__checkbox{
+    position: absolute;
+    left: -9999px;
+}
+
+.weui-agree__checkbox-icon{
+    position: relative;
+    top: 4rpx;
+    display: inline-block;
+    border: 2rpx solid #D1D1D1;
+    background-color: #FFFFFF;
+    border-radius: 6rpx;
+    width: 22rpx;
+    height: 22rpx;
+}
+
+.weui-agree__checkbox-icon-check{
+    position: absolute;
+    top: 1px;
+    left: 1px;
+}
+
+.avatar-wrapper {
+    padding: 0;
+    width: 160rpx !important;
+    border-radius: 16rpx;
+    margin-bottom: 48rpx;
+}
+
+.avatar {
+    display: block;
+    width: 160rpx;
+    height: 160rpx;
+}
+
+textarea {
+    width: 100%;
+    min-height: 32rpx;
+    font-size: 32rpx;
+    line-height: 32rpx;
+}
+
+.list-wrapper {
+    flex-grow: 1;
+    position: relative;
+}
+
+.list-wrapper .cell-title {
+    font-size: 28rpx;
+    padding-bottom: 12rpx;
+    color: #000;
+}
+
+.list-wrapper .addr-cell {
+    padding-right: 20rpx;
+}
+
+.list-wrapper .weui-cells {
+    margin-top: 0;
+}
+
+.list-wrapper .weui-cell {
+    padding: 18rpx 16px;
+}
+
+.list-wrapper .weui-cells__title {
+    font-size: 28rpx;
+    margin-top: 28rpx;
+    margin-bottom: 12rpx;
+}
+
+.list-wrapper .weui-cell__bd {
+    color: #969799;
+    font-size: 26rpx;
+}
+
+@media (prefers-color-scheme: dark) {
+    .list-wrapper .cell-title {
+        color: #cccccc;
+    }
+
+    .list-wrapper .weui-cell__bd {
+        color: #969799;
+    }
+}

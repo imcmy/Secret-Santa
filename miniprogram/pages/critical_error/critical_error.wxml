@@ -1,0 +1,13 @@
+<view class="page" data-weui-theme="{{theme}}">
+    <mp-msg type="cancel" title="严重错误">
+        <view slot="desc">小程序无法获取openid数据</view>
+        <view slot="extend">
+            <view>1. 请确认网络环境良好并重试</view>
+            <view>2. 若网络环境良好，请报告错误</view>
+        </view>
+        <view slot="handle">
+            <button class="weui-btn" type="primary" bindtap="retry">重试</button>
+            <button class="weui-btn" type="default" bindtap="reportError">报告错误</button>
+        </view>
+    </mp-msg>
+</view>

@@ -1,0 +1,20 @@
+{
+    "light": {
+        "bgColor": "#F6F6F6",
+        "bgTextStyle": "light",
+        "nbBackgroundColor": "#FFFFFF",
+        "nbTextStyle": "black",
+        "tbColor": "#000000",
+        "giftPath": "images/gift-light.png",
+        "mePath": "images/me-light.png"
+    },
+    "dark": {
+        "bgColor": "#000000",
+        "bgTextStyle": "dark",
+        "nbBackgroundColor": "#000000",
+        "nbTextStyle": "white",
+        "tbColor": "#FFFFFF",
+        "giftPath": "images/gift-dark.png",
+        "mePath": "images/me-dark.png"
+    }
+}

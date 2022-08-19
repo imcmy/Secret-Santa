@@ -1,0 +1,81 @@
+<!--pages/user_detail/user_detail.wxml-->
+<mp-form-page title="用户信息" data-weui-theme="{{theme}}">
+    <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <image class="avatar" src="{{avatarUrl}}"></image>
+    </button>
+    <mp-form>
+        <mp-cells>
+            <mp-cell title="昵称">
+                <input value="{{nickName}}" type="nickname" class="weui-input" placeholder="请输入昵称" bindinput="bindNicknameChange" />
+            </mp-cell>
+            <mp-cell title="联系方式" link="{{true}}" bindtap="showAddressDialog">
+                <textarea value="{{address}}" placeholder="请添加联系方式" auto-height="true" disable-default-padding="true" disabled="true"></textarea>
+            </mp-cell>
+        </mp-cells>
+    </mp-form>
+    <checkbox-group slot="tips" bindchange="bindAgreeChange" wx:if="{{isReg}}">
+        <label class="weui-agree" for="weuiAgree">
+            <view class="weui-agree__text">
+                <checkbox class="weui-agree__checkbox" id="weuiAgree" value="agree" checked="{{isAgree}}" />
+                <view class="weui-agree__checkbox-icon">
+                    <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{isAgree}}"></icon>
+                </view>
+                我同意<navigator url="../agreement/aggrement" class="weui-agree__link"><b>用户服务协议及隐私政策</b></navigator>
+            </view>
+        </label>
+    </checkbox-group>
+    <view slot="button">
+        <button class="weui-btn" type="primary" bindtap="bindSubmit">{{isReg ? '注册' : '更新'}}</button>
+        <button class="weui-btn" type="default" bindtap="bindCancel">取消</button>
+    </view>
+</mp-form-page>
+
+<mp-half-screen-dialog title="联系方式" show="{{addresses.show}}" closabled="{{false}}" mask="{{addresses.maskClosable}}" buttons="{{addresses.dialogButtons}}" bindbuttontap="addrTap"  data-weui-theme="{{theme}}">
+    <view slot="desc">
+        <view wx:if="{{addresses.loaded}}" class="list-wrapper">
+            <scroll-view class="list" scroll-y>
+                <view wx:for="{{addresses.lists}}" wx:key="address" wx:for-item="address">
+                    <mp-slideview buttons="{{address.slideButtons}}" bindbuttontap="operateAddress">
+                        <mp-cells>
+                            <mp-cell id="{{address._id}}" bindtap="clickAddress">
+                                <view>
+                                    <view class="cell-title">{{address.recipient}} {{address.telNumber}}</view>
+                                    <view>{{address.fullAddr}} {{address.postalCode}}</view>
+                                </view>
+                                <view slot="icon" class="addr-cell">
+                                    <mp-icon icon="done" color="{{ address.current ? 'green' : 'white' }}"></mp-icon>
+                                </view>
+                            </mp-cell>
+                        </mp-cells>
+                    </mp-slideview>
+                </view>
+            </scroll-view>
+        </view>
+        <view wx:else>
+            <mp-loading type="dot-gray"></mp-loading>
+        </view>
+    </view>
+</mp-half-screen-dialog>
+
+<mp-half-screen-dialog title="地址编辑" show="{{targetAddress.show}}" closabled="{{false}}" buttons="{{targetAddress.dialogButtons}}" bindbuttontap="targetAddrTap" bindclose="targetAddrClose"  data-weui-theme="{{theme}}">
+    <view slot="desc">
+        <mp-form id="form" rules="{{targetAddress.rules}}" models="{{targetAddress.formData}}">
+            <mp-cells>
+                <mp-cell title="收件人" show-error prop="recipient">
+                    <input data-field="recipient" value="{{targetAddress.formData.recipient}}" type="text" class="weui-input" placeholder="名字" bindinput="inputAddrRecipient" />
+                </mp-cell>
+                <mp-cell title="手机号码" show-error prop="telNumber">
+                    <input data-field="telNumber" value="{{targetAddress.formData.telNumber}}" type="number" class="weui-input" placeholder="收货手机号" bindinput="inputAddrNumber" />
+                </mp-cell>
+                <mp-cell title="详细地址" show-error prop="fullAddr">
+                    <textarea data-field="fullAddr" value="{{targetAddress.formData.fullAddr}}" placeholder="请输入规范地址" auto-height="true" disable-default-padding="true" bindinput="inputAddrFull"></textarea>
+                </mp-cell>
+                <mp-cell title="邮政编码" show-error prop="postalCode">
+                    <input data-field="postalCode" value="{{targetAddress.formData.postalCode}}" type="number" class="weui-input" placeholder="邮政编码" bindinput="inputAddrCode" />
+                </mp-cell>
+            </mp-cells>
+        </mp-form>
+    </view>
+</mp-half-screen-dialog>
+
+<canvas id="avatar-crop" type="2d" style="width:{{canvasW}}px; height:{{canvasH}}px; position: absolute; left:-1000px; top:-1000px;"></canvas>

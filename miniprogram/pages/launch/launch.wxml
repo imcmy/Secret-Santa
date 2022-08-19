@@ -1,0 +1,12 @@
+<!--pages/launch/launch.wxml-->
+<view class="body">
+    <view>
+        <image mode="widthFix" src="/images/icon.png"></image>
+    </view>
+    <view style="display: flex; flex-direction: row;">
+        <mp-loading type="circle" tips="加载中"></mp-loading>
+    </view>
+</view>
+<view class="weui-footer">
+    <view class="weui-footer__text">Copyleft <span class="copyleft">©</span> 2022 Mingyi Chen</view>
+</view>

@@ -68,6 +68,26 @@ exports.main = async (event, context) => {
           isInGroup: isInGroup.result
         }
       case 'insert':
+        var eventRecord = unPackQuery(await cloud.callFunction({
+          name: 'eventdbo',
+          data: {
+            "action": "query",
+            "_id": event._eid
+          }
+        }))
+
+        var isInGroup = await cloud.callFunction({
+          name: 'userdbo_v2',
+          data: {
+            "action": "checkInGroup",
+            "_openid": openid,
+            "_gid": eventRecord[0].group || ''
+          }
+        })
+
+        if (!isInGroup)
+          return
+
         await db.add({ data: { _eid: event._eid, sid: openid, time: new Date().getTime() } })
         return await cloud.callFunction({
           name: 'eventdbo',

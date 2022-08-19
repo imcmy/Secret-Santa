@@ -1,84 +1,158 @@
 /* miniprogram/pages/user/user.wxss */
 page {
-  background: #f6f6f6;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif !important;
+    background: #f6f6f6;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+    font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif !important;
 }
 
 .top-bar {
-  margin-bottom: 40rpx;
-  height: 200rpx;
-  width: 100%;
-  background: #fff;
-  border-left: none;
-  border-right: none;
-  display: flex;
-  transition: all 300ms ease;
-  box-sizing: border-box;
+    margin-bottom: 40rpx;
+    height: 200rpx;
+    width: 100%;
+    background-size: cover;
+    border-left: none;
+    border-right: none;
+    display: flex;
+    transition: all 300ms ease;
+    box-sizing: border-box;
 }
 
 .userinfo {
-  flex-direction: row;
-  align-items: center;
-  padding-left: 60rpx;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around
 }
 
 .userinfo-avatar {
-  width: 100rpx;
-  height: 100rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-  background-size: cover;
-  background-color: white;
+    width: 140rpx;
+    height: 140rpx;
+    border-radius: 16rpx;
+    background-size: cover;
+    background-color: white;
 }
 
 .userinfo-avatar[size] {
-  width: 100rpx;
+    width: 140rpx;
 }
 
 .userinfo-avatar:after {
-  border: none;
+    border: none;
+}
+
+.userinfo-avatar > image {
+    width: 100%;
+    height: 100%;
+    border-radius: 16rpx;
 }
 
 .userinfo-nickname {
-  font-size: 32rpx;
-  text-align: left;
+    font-size: 34rpx;
+    font-weight: 700;
+    text-align: right;
 }
 
 .userinfo-address {
-  font-size: 24rpx;
-  text-align: left;
-  padding-top: 10rpx;
+    font-size: 28rpx;
+    font-weight: 500;
+    text-align: left;
 }
 
 .userinfo-detail-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content:space-between;
-  padding-left: 30rpx;
-  padding-right: 60rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.about {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 70rpx 40rpx;
+.weui-cell {
+    padding: 24rpx 32rpx;
 }
 
-.updateLog {
-  display: flex;
-  flex-direction: column;
-  padding: 20rpx 32rpx
+.weui-cell__hd {
+    font-size: 28rpx;
 }
 
-.updateLog-title {
-  font-weight: 600;
-  padding-top: 20rpx;
+
+.list-wrapper {
+    flex-grow: 1;
+    position: relative;
 }
 
-.updateLog-list {
-  padding-top: 10rpx;
+.list-wrapper .cell-title {
+    font-size: 28rpx;
+    padding-bottom: 12rpx;
+    color: #000;
+}
+
+.list-wrapper .addr-cell {
+    padding-right: 20rpx;
+}
+
+.list-wrapper .weui-cells {
+    margin-top: 0;
+}
+
+.list-wrapper .weui-cell {
+    padding: 18rpx 16px;
+}
+
+.list-wrapper .weui-cells__title {
+    font-size: 28rpx;
+    margin-top: 28rpx;
+    margin-bottom: 12rpx;
+}
+
+.list-wrapper .weui-cell__bd {
+    color: #969799;
+    font-size: 26rpx;
+}
+
+.weui-form__title {
+    font-size: 44rpx;
+}
+
+.weui-form__text-area {
+    padding: 0;
+}
+
+.weui-form__control-area {
+    margin: 48rpx 0;
+}
+
+.weui-label {
+    font-size: 32rpx;
+}
+
+.weui-input {
+    font-size: 32rpx;
+}
+
+.red-title {
+  color: red;
+  font-weight: 700;
+}
+
+.no-dialog-ft .weui-half-screen-dialog__ft {
+    padding: 0;
+}
+
+.no-dialog-ft .weui-label {
+    width: max-content;
+}
+
+.no-dialog-ft .weui-cell__hd {
+    padding-right: 32rpx;
+}
+
+
+@media (prefers-color-scheme: dark) {
+    page {
+        background: #121212;
+    }
+
+    .list-wrapper .cell-title {
+        color: #cccccc;
+    }
 }

@@ -1,81 +1,93 @@
 {
-	"miniprogramRoot": "miniprogram/",
-	"cloudfunctionRoot": "cloudfunctions/",
-	"setting": {
-		"urlCheck": true,
-		"es6": true,
-		"enhance": true,
-		"postcss": true,
-		"minified": true,
-		"newFeature": true,
-		"coverView": true,
-		"nodeModules": true,
-		"autoAudits": false,
-		"showShadowRootInWxmlPanel": true,
-		"scopeDataCheck": false,
-		"uglifyFileName": true,
-		"checkInvalidKey": true,
-		"checkSiteMap": true,
-		"uploadWithSourceMap": true,
-		"babelSetting": {
-			"ignore": [],
-			"disablePlugins": [],
-			"outputPath": ""
-		},
-		"useCompilerModule": false
-	},
-	"appid": "wx6b3d19a4820493a7",
-	"projectname": "Gift",
-	"libVersion": "2.11.1",
-	"simulatorType": "wechat",
-	"simulatorPluginLibVersion": {},
-	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
-	"compileType": "miniprogram",
-	"condition": {
-		"search": {
-			"current": -1,
-			"list": []
-		},
-		"conversation": {
-			"current": -1,
-			"list": []
-		},
-		"plugin": {
-			"current": -1,
-			"list": []
-		},
-		"game": {
-			"list": []
-		},
-		"gamePlugin": {
-			"current": -1,
-			"list": []
-		},
-		"miniprogram": {
-			"current": -1,
-			"list": [
-				{
-					"id": 0,
-					"name": "user_page",
-					"pathName": "pages/user/user",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "gift_page",
-					"pathName": "pages/gift/gift",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": 2,
-					"name": "address_page",
-					"pathName": "pages/address/address",
-					"query": "",
-					"scene": null
-				}
-			]
-		}
-	}
+    "miniprogramRoot": "miniprogram/",
+    "srcMiniprogramRoot": "miniprogram/",
+    "cloudfunctionRoot": "cloudfunctions/",
+    "setting": {
+        "urlCheck": true,
+        "es6": true,
+        "enhance": true,
+        "postcss": true,
+        "preloadBackgroundData": false,
+        "minified": true,
+        "newFeature": true,
+        "coverView": true,
+        "nodeModules": true,
+        "autoAudits": false,
+        "showShadowRootInWxmlPanel": true,
+        "scopeDataCheck": false,
+        "uglifyFileName": true,
+        "checkInvalidKey": true,
+        "checkSiteMap": true,
+        "uploadWithSourceMap": true,
+        "compileHotReLoad": false,
+        "useMultiFrameRuntime": true,
+        "useApiHook": true,
+        "useApiHostProcess": false,
+        "babelSetting": {
+            "ignore": [],
+            "disablePlugins": [],
+            "outputPath": ""
+        },
+        "enableEngineNative": false,
+        "bundle": false,
+        "useIsolateContext": true,
+        "useCompilerModule": true,
+        "userConfirmedUseCompilerModuleSwitch": false,
+        "userConfirmedBundleSwitch": false,
+        "packNpmManually": false,
+        "packNpmRelationList": [],
+        "minifyWXSS": true,
+        "lazyloadPlaceholderEnable": false,
+        "useStaticServer": true,
+        "showES6CompileOption": false,
+        "disableUseStrict": false,
+        "useCompilerPlugins": false,
+        "minifyWXML": true
+    },
+    "appid": "wx6b3d19a4820493a7",
+    "projectname": "Gift",
+    "libVersion": "2.24.6",
+    "simulatorType": "wechat",
+    "simulatorPluginLibVersion": {},
+    "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
+    "compileType": "miniprogram",
+    "condition": {
+        "miniprogram": {
+            "list": [
+                {
+                    "name": "user_page",
+                    "pathName": "pages/user/user",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "name": "gift_page",
+                    "pathName": "pages/gift/gift",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "name": "address_page",
+                    "pathName": "pages/address/address",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "name": "user_page",
+                    "pathName": "pages/user/user",
+                    "query": "",
+                    "scene": null
+                }
+            ]
+        }
+    },
+    "packOptions": {
+        "ignore": [],
+        "include": []
+    },
+    "description": "",
+    "editorSetting": {
+        "tabIndent": "insertSpaces",
+        "tabSize": 4
+    }
 }
