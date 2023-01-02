@@ -1,7 +1,15 @@
 {
+    "disableScroll": true,
     "usingComponents": {
-        "mp-form-page": "weui-miniprogram/form-page/form-page",
-        "mp-checkbox-group": "weui-miniprogram/checkbox-group/checkbox-group",
-        "mp-checkbox": "weui-miniprogram/checkbox/checkbox"
+        "van-field": "@vant/weapp/field/index",
+        "van-cell": "@vant/weapp/cell/index",
+        "van-cell-group": "@vant/weapp/cell-group/index",
+        "van-checkbox": "@vant/weapp/checkbox/index",
+        "van-checkbox-group": "@vant/weapp/checkbox-group/index",
+        "van-popup": "@vant/weapp/popup/index",
+        "van-loading": "@vant/weapp/loading/index",
+        "van-swipe-cell": "@vant/weapp/swipe-cell/index",
+        "van-icon": "@vant/weapp/icon/index",
+        "van-button": "@vant/weapp/button/index"
     }
 }

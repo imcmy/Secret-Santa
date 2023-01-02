@@ -1,0 +1,12 @@
+page {
+    background: #f6f6f6;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+}
+
+image {
+    width: 90%;
+    height: 120rpx;
+}

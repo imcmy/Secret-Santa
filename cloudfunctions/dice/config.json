@@ -1,9 +1,0 @@
-{
-  "triggers": [
-    {
-      "name": "diceTrigger",
-      "type": "timer",
-      "config": "0 */30 * * * * *"
-    }
-  ]
-}

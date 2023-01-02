@@ -1,4 +1,8 @@
 /* pages/user_detail/user_detail.wxss */
+@import '../../style/widget/weui-button/weui-button.wxss';
+@import '../../style/widget/weui-page/weui-form.wxss';
+@import '../../style/widget/weui-tips/weui-half-screen-dialog.wxss';
+
 .weui-form__title {
     font-size: 44rpx;
 }
@@ -19,12 +23,12 @@
     font-size: 32rpx;
 }
 
-.weui-agree__checkbox{
+.weui-agree__checkbox {
     position: absolute;
     left: -9999px;
 }
 
-.weui-agree__checkbox-icon{
+.weui-agree__checkbox-icon {
     position: relative;
     top: 4rpx;
     display: inline-block;
@@ -35,7 +39,7 @@
     height: 22rpx;
 }
 
-.weui-agree__checkbox-icon-check{
+.weui-agree__checkbox-icon-check {
     position: absolute;
     top: 1px;
     left: 1px;
@@ -54,45 +58,53 @@
     height: 160rpx;
 }
 
-textarea {
-    width: 100%;
-    min-height: 32rpx;
-    font-size: 32rpx;
-    line-height: 32rpx;
+.flex-center {
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
-.list-wrapper {
-    flex-grow: 1;
-    position: relative;
+.hint-image {
+    width: 128rpx;
+    opacity: 0.4;
 }
 
-.list-wrapper .cell-title {
-    font-size: 28rpx;
-    padding-bottom: 12rpx;
-    color: #000;
+.hint-text {
+    padding-top: 16rpx;
+    font-weight: 900 !important;
+    opacity: 0.4;
 }
 
-.list-wrapper .addr-cell {
+.error-wrapper {
+    border: 1px solid red;
+}
+
+.transparent-wrapper {
+    border: 1px solid rgba(255,255,255,0);
+}
+
+.slot {
+    display: flex;
+    height: 100%;
+}
+
+.slot-button {
+    height: 100% !important;
+    width: 60px !important;
+    border: 0 !important;
+}
+
+.selected-addr {
+    color: #07c160 !important;
+    font-size: 35rpx !important;
     padding-right: 20rpx;
 }
 
-.list-wrapper .weui-cells {
-    margin-top: 0;
-}
-
-.list-wrapper .weui-cell {
-    padding: 18rpx 16px;
-}
-
-.list-wrapper .weui-cells__title {
-    font-size: 28rpx;
-    margin-top: 28rpx;
-    margin-bottom: 12rpx;
-}
-
-.list-wrapper .weui-cell__bd {
-    color: #969799;
-    font-size: 26rpx;
+.unselected-addr {
+    color: white !important;
+    font-size: 35rpx !important;
+    padding-right: 20rpx;
 }
 
 @media (prefers-color-scheme: dark) {

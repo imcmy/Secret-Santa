@@ -1,88 +1,52 @@
-const app = getApp()
-const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
+import {
+    syncRequest
+} from '../../utils/requests'
+import {
+    getLoginCode,
+    storeSession
+} from '../../utils/states'
 import * as utils from "../../utils/utils"
+
+const app = getApp().globalData
+const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
 
 
 Page({
     data: {
         theme: 'light',
-        avatarUrl: defaultAvatarUrl,
-        nickName: '',
-        address: '',
-        isAgree: false,
         isReg: true,
 
+        avatarUrl: defaultAvatarUrl,
+        nickname: '',
+        address: '',
+        isAgree: false,
+
         addresses: {
+            show: false,
             lists: [],
-            dialogButtons: [{
-                    type: 'primary',
-                    text: '微信导入',
-                },
-                {
-                    type: 'default',
-                    text: '手动新增'
-                }
-            ],
-            show: false,
-            loaded: false,
-            maskClosable: true,
-            uploadingLock: false,
-            removeLock: false
-        },
-        targetAddress: {
-            _id: '',
-            show: false,
-            formData: {
-                recipient: '',
-                telNumber: '',
-                fullAddr: '',
-                postalCode: ''
-            },
-            dialogButtons: [{
-                    type: 'default',
-                    text: '取消',
-                },
-                {
-                    type: 'primary',
-                    text: '确认'
-                }
-            ],
-            rules: [{
-                name: 'recipient',
-                rules: {
-                    required: true,
-                    message: '请填写收件人'
-                }
-            }, {
-                name: 'telNumber',
-                rules: {
-                    required: true,
-                    message: '请填写收货手机号'
-                }
-            }, {
-                name: 'fullAddr',
-                rules: {
-                    required: true,
-                    message: '请填写规范地址'
-                }
-            }, {
-                name: 'postalCode',
-                rules: {
-                    required: true,
-                    message: '请填写邮政编码'
-                }
-            }],
-            showError: {
-                recipient: false,
-                telNumber: false,
-                fullAddr: false,
-                postalCode: false
+            errors: {
+                nickname: false,
+                address: false,
+                agree: false
             }
         },
 
-        canvasW: 0,
-        canvasH: 0
+        inputEditorId: '',
+        inputEditorRecipient: '',
+        inputEditorTel: '',
+        inputEditorAddr: '',
+        inputEditorPos: '',
+        editor: {
+            show: false,
+            errors: {
+                recipient: false,
+                tel: false,
+                addr: false,
+                pos: false
+            }
+        }
     },
+
     onLoad(options) {
         var that = this
         wx.onThemeChange((e) => {
@@ -90,28 +54,23 @@ Page({
                 that.setData({
                     theme: e.theme
                 })
-                app.globalData.theme = e.theme
+                app.theme = e.theme
             }
         })
-        if (app.globalData.userInfo && !app.globalData.userInfo.unReg) {
-            this.setData({
-                theme: app.globalData.theme,
-                avatarUrl: app.globalData.userInfo.avatar,
-                nickName: app.globalData.userInfo.nickName,
-                address: app.globalData.userInfo.fullAddr,
-                isReg: false
-            })
-        } else {
-            this.setData({
-                theme: app.globalData.theme
-            })
-        }
-        this.fetchAddresses()
     },
-    onReady() {},
-    onShow() {},
-    onHide() {},
-    onUnload() {},
+    onShow() {
+        if (!app.user)
+            return
+
+        this.setData({
+            theme: app.theme,
+            avatarUrl: app.user.avatar,
+            nickname: app.user.nickname,
+            address: app.user.fullAddr,
+            'addresses.lists': app.user.addresses,
+            isReg: false
+        })
+    },
 
     // User detail input and button handler
     onChooseAvatar(e) {
@@ -122,13 +81,7 @@ Page({
             avatarUrl
         })
     },
-    bindNicknameChange(e) {
-        this.setData({
-            nickName: e.detail.value
-        })
-        console.log(this.data.nickName)
-    },
-    bindAgreeChange(e) {
+    onAgree(e) {
         if (e.detail.value[0] === "agree") {
             this.setData({
                 isAgree: true
@@ -139,364 +92,260 @@ Page({
             })
         }
     },
-    async bindCancel() {
-        this.delayNavigate(0)
+    onUserCancel() {
+        wx.navigateBack()
     },
-    async bindSubmit(e) {
-        var avatarStorage = this.data.avatarUrl
-        if (!this.data.isReg || this.data.isAgree) {
-            wx.showToast({
-                title: "信息更新中",
-                icon: 'loading'
-            })
-            this.preProcessAvatar(avatarStorage)
-            wx.hideToast()
-            this.delayNavigate(2000)
-        } else {
-            wx.showToast({
-                title: '请同意后再注册',
-                icon: 'error'
-            })
-        }
-    },
-    delayNavigate(delay) {
-        setTimeout(() => {
-            var pages = getCurrentPages()
-            var prevPage = pages[pages.length - 2]
-            wx.navigateBack({
-                success: () => {
-                    prevPage.onLoad()
+    async onUserSubmit(e) {
+        let localData = this.data
+        let avatarUrl = this.data.avatarUrl
+        let errors = this.data.addresses.errors
+
+        errors.nickname = (e.detail.value.nickname === '')
+        errors.address = this.data.address === ''
+        errors.agree = this.data.isReg && !this.data.isAgree
+
+        this.setData({
+            'addresses.errors.nickname': errors.nickname,
+            'addresses.errors.address': errors.address,
+            'addresses.errors.agree': errors.agree
+        })
+        if (errors.nickname || errors.address || errors.agree)
+            return
+
+        wx.showLoading({
+            title: "信息更新中"
+        })
+        if (avatarUrl !== defaultAvatarUrl) {
+            wx.compressImage({
+                src: avatarUrl,
+                compressedWidth: 200,
+                success(res) {
+                    utils.storeImage(res.tempFilePath, '/avatar.png')
+                },
+                fail() {
+                    wx.hideLoading()
+                    wx.showToast({
+                        title: '头像录入失败',
+                        icon: 'error'
+                    })
+                    exit(1)
                 }
             })
-        }, delay)
-    },
+        }
 
-    // User detail opearting helper 
-    async commitUser() {
-        var localData = this.data
+        var params = {
+            nickname: e.detail.value.nickname,
+            addresses: localData.addresses.lists
+        }
+
         if (localData.isReg) {
-            await utils.syncRequest('/users', {
-                openid: app.globalData.openid,
-                action: 'insert',
-                nickName: localData.nickName
-            })
-        } else {
-            await utils.syncRequest('/users', {
-                _id: app.globalData.userInfo._id,
-                action: 'update',
-                nickName: localData.nickName
-            })
-        }
-        wx.showToast({
-            title: '操作成功',
-            icon: 'success'
-        })
-    },
-
-    // Avatar processing helper
-    async preProcessAvatar(imgPath) {
-        var that = this
-        var maxSize = 256
-        var imageInfo = await wx.getImageInfo({
-            src: imgPath
-        })
-        var imgWidth = imageInfo.width
-        var imgHeight = imageInfo.height
-        if (imgWidth > maxSize || imgHeight > maxSize) {
-            if (imgWidth / imgHeight > 1) {
-                imgWidth = maxSize;
-                imgHeight = Math.round(maxSize * (imgHeight / imageInfo.width));
-            } else {
-                imgWidth = Math.round(maxSize * (imgWidth / imageInfo.height));
-                imgHeight = maxSize;
+            try {
+                let code = await getLoginCode()
+                params.platform = app.platform
+                params.code = code.code
+                params.action = 'insert'
+            } catch (err) {
+                console.log(err);
             }
-
-            this.setData({
-                canvasW: imgWidth,
-                canvasH: imgHeight
-            });
-
-            wx.createSelectorQuery()
-                .select('#avatar-crop')
-                .fields({
-                    node: true,
-                    size: true
-                })
-                .exec(async (res) => {
-                    const canvas = res[0].node
-                    canvas.width = imgWidth
-                    canvas.height = imgHeight
-                    const ctx = canvas.getContext('2d')
-                    ctx.clearRect(0, 0, imgWidth, imgHeight)
-                    const imagePromise = new Promise((resolve, reject) => {
-                        const image = canvas.createImage()
-                        image.src = imgPath
-                        image.onload = () => {
-                            ctx.drawImage(image, 0, 0, imgWidth, imgHeight)
-                            resolve()
-                        }
-                        image.onerror = () => {
-                            reject()
-                        }
-                    })
-                    imagePromise.then(async () => {
-                        var tempFile = await wx.canvasToTempFilePath({
-                            canvas: canvas
-                        })
-                        that.storeAvatar(tempFile.tempFilePath)
-                    })
-                })
+        } else {
+            params.action = 'update'
         }
-        this.storeAvatar(imgPath)
-    },
-    async storeAvatar(imgPath) {
-        var that = this
-        utils.storeImage(imgPath, '/avatar.png')
-            .then(async () => {
-                await that.commitUser()
-            }).catch((e) => {
+
+        syncRequest('/users', params)
+            .then((session) => {
+                wx.hideLoading()
                 wx.showToast({
-                    title: '头像录入失败',
-                    icon: 'error'
+                    title: '操作成功',
+                    icon: 'success'
                 })
+                if (localData.isReg) {
+                    storeSession(session)
+                    wx.reLaunch({
+                      url: '/pages/launch/launch',
+                    })
+                } else {
+                    app.user.nickname = localData.nickname
+                    app.user.addresses = localData.addresses.lists
+                    getApp().syncFullAddr()
+                    utils.delayBack(2000)
+                }
+            }).catch((e) => {
+                wx.hideLoading()
+                if (e.data.errCode === 0x11) {
+                    wx.showToast({
+                        title: '您已注册',
+                        icon: 'error'
+                    })
+                } else if (e.data.errCode === 0x4) {
+                    wx.showToast({
+                        title: '昵称未通过内容安全检测',
+                        icon: 'error'
+                    })
+                } else {
+                    wx.showToast({
+                        title: '未知错误',
+                        icon: 'error'
+                    })
+                }
             })
     },
 
     // Address UI handler
-    showAddressDialog(e) {
+    onAddrDialogShow(e) {
         this.setData({
             'addresses.show': true
         })
     },
-    addrTap(e) {
-        if (e.detail.index == 0) {
-            var that = this
-            wx.chooseAddress({
-                success: async addr => {
-                    that.data.targetAddress.formData.recipient = addr.userName
-                    that.data.targetAddress.formData.telNumber = addr.telNumber
-                    that.data.targetAddress.formData.fullAddr = addr.provinceName + addr.cityName + addr.countyName + addr.detailInfo
-                    that.data.targetAddress.formData.postalCode = addr.postalCode
-                    await that.uploadAddress()
-                    await that.fetchAddresses()
-                }
-            })
-        } else {
-            this.setData({
-                'targetAddress.show': true,
-                'addresses.maskClosable': false
-            })
+    onAddrDialogHide(e) {
+        this.setData({
+            'addresses.show': false
+        })
+    },
+    onAddrImport(e) {
+        var that = this
+        wx.chooseAddress({
+            success: async addr => {
+                that.data.inputEditorRecipient = addr.userName
+                that.data.inputEditorTel = addr.telNumber
+                that.data.inputEditorAddr = addr.provinceName + addr.cityName + addr.countyName + addr.detailInfo
+                that.data.inputEditorPos = addr.postalCode
+                that.uploadAddress()
+            },
+            fail: errMsg => {}
+        })
+    },
+    onAddrManual(e) {
+        this.setData({
+            'editor.show': true
+        })
+    },
+    onAddrChange(e) {
+        let addressList = this.data.addresses.lists
+        let id = e.currentTarget.id
+        for (var i = 0; i < addressList.length; i++) {
+            if (addressList[i]._id === id) {
+                this.setData({
+                    inputEditorId: addressList[i]._id,
+                    inputEditorRecipient: addressList[i].recipient,
+                    inputEditorTel: addressList[i].telNumber,
+                    inputEditorAddr: addressList[i].fullAddr,
+                    inputEditorPos: addressList[i].postalCode,
+                    'editor.show': true
+                })
+                return
+            }
         }
     },
-    async clickAddress(e) {
+    onAddrRemove(e) {
+        let addressList = this.data.addresses.lists
+        if (this.data.addresses.lists.length <= 1) {
+            wx.showToast({
+                title: '删除失败',
+                icon: 'error'
+            })
+            return
+        }
+
+        let id = e.currentTarget.id
+        var i = 0,
+            current = false;
+        for (; i < addressList.length; i++) {
+            if (addressList[i]._id === id) {
+                current = addressList[i].current
+                break
+            }
+        }
+        addressList.splice(i, 1)
+
+        if (current) {
+            addressList[0].current = true
+            this.setData({
+                address: addressList[0].fullAddr
+            })
+        }
+        this.setData({
+            'addresses.lists': addressList
+        })
+    },
+    onAddrClick(e) {
         var that = this
         let addressId = e.currentTarget.id
         let addressList = this.data.addresses.lists
 
-        for (var i = 0; i < addressList.length; i++)
-            if (addressList[i].current && addressList[i]._id === addressId) return
-
-        await utils.syncRequest('/addresses', {
-            action: 'toCurrent',
-            _id: addressId
-        }).then(() => {
-            for (let i = 0; i < addressList.length; i++) {
-                if (addressList[i]._id === addressId) {
-                    addressList[i].current = true
-                    app.globalData.userInfo.fullAddr = addressList[i].fullAddr
-                    break
-                } else {
-                    addressList[i].current = false
-                }
-            }
-            that.setData({
-                address: app.globalData.userInfo.fullAddr,
-                'addresses.show': false
-            })
-            that.fetchAddresses()
-        }).catch(() => {
-            wx.showToast({
-                title: '修改主地址失败',
-                icon: 'error'
-            })
-        })
-    },
-
-    // Addresses operation helpers
-    fetchAddresses: async function () {
-        this.fetchLoading = true
-        this.setData({
-            'addresses.loaded': false
-        })
-        let addresses = await utils.syncRequest('/addresses', {
-            openid: app.globalData.openid,
-            action: 'queryAll'
-        })
-        for (let addr of addresses.data) {
-            addr.slideButtons = [{
-                    type: 'default',
-                    text: '修改',
-                    data: addr._id
-                },
-                {
-                    type: 'warn',
-                    text: '删除',
-                    data: addr._id
-                }
-            ];
-            if (addr.current) {
-                if (!app.globalData.userInfo)
-                    app.globalData.userInfo = {unReg: true}
-                app.globalData.userInfo.fullAddr = addr.fullAddr
+        for (let i = 0; i < addressList.length; i++) {
+            if (addressList[i]._id === addressId) {
+                addressList[i].current = true
+                this.data.address = addressList[i].fullAddr
+            } else {
+                addressList[i].current = false
             }
         }
         this.setData({
-            'addresses.lists': addresses.data,
-            'addresses.loaded': true,
-            address: addresses.data.length ? app.globalData.userInfo.fullAddr : ''
+            address: that.data.address,
+            'addresses.lists': that.data.addresses.lists
         })
-        this.fetchLoading = false
     },
-    operateAddress(e) {
-        var that = this
-        var addressId = e.detail.data
 
-        if (e.detail.index == 0) {
-            this.clearTargetAddr()
-            var addressList = this.data.addresses.lists
-            for (var i = addressList.length - 1; i >= 0; i--) {
-                if (addressList[i]._id === addressId) {
-                    this.setData({
-                        'targetAddress._id': addressId,
-                        'targetAddress.formData.recipient': addressList[i].recipient,
-                        'targetAddress.formData.telNumber': addressList[i].telNumber,
-                        'targetAddress.formData.fullAddr': addressList[i].fullAddr,
-                        'targetAddress.formData.postalCode': addressList[i].postalCode,
-                        'targetAddress.show': true,
-                        'addresses.maskClosable': false
-                    })
-                }
-            }
-        } else {
-            if (this.data.addresses.lists.length <= 1 && !this.data.isReg) {
-                wx.showToast({
-                    title: '删除失败',
-                    icon: 'error'
-                })
-                return
-            }
+    onEditorDialogHide(e) {
+        this.setData({
+            'editor.show': false
+        })
+    },
+    onEditorSubmit(e) {
+        let data = this.data
+        let errors = data.editor.errors
 
-            if (this.data.addresses.removeLock) return
-            this.data.addresses.removeLock = true
-            wx.showModal({
-                content: '确认是否删除该地址',
-                async success(res) {
-                    if (res.confirm) {
-                        wx.showLoading({
-                            title: '删除中',
-                        })
-                        await utils.syncRequest('/addresses', {
-                            action: 'remove',
-                            _id: addressId
-                        }).then(async () => {
-                            wx.hideLoading()
-                            await that.fetchAddresses()
-                        }).catch((e) => {
-                            wx.hideLoading()
-                            wx.showToast({
-                                title: '删除失败',
-                                icon: 'error'
-                            })
-                        })
-                    }
-                }
-            })
-            this.data.addresses.removeLock = false
-        }
+        errors.recipient = data.inputEditorRecipient === ''
+        errors.tel = data.inputEditorTel === ''
+        errors.addr = data.inputEditorAddr === ''
+        errors.pos = data.inputEditorPos === ''
+
+        this.setData({
+            'editor.errors.recipient': errors.recipient,
+            'editor.errors.tel': errors.tel,
+            'editor.errors.addr': errors.addr,
+            'editor.errors.pos': errors.pos
+        })
+        if (errors.recipient || errors.tel || errors.addr || errors.pos)
+            return
+
+        this.uploadAddress()
+        this.onEditorDialogHide()
     },
 
     // Input validator 
-    inputAddrRecipient(e) {
-        this.data.targetAddress.formData.recipient = e.detail.value
-    },
-    inputAddrNumber(e) {
-        this.data.targetAddress.formData.telNumber = e.detail.value
-    },
-    inputAddrFull(e) {
-        this.data.targetAddress.formData.fullAddr = e.detail.value
-    },
-    inputAddrCode(e) {
-        this.data.targetAddress.formData.postalCode = e.detail.value
-    },
-    clearTargetAddr: function () {
-        this.setData({
-            'targetAddress._id': '',
-            'targetAddress.formData.recipient': '',
-            'targetAddress.formData.telNumber': '',
-            'targetAddress.formData.fullAddr': '',
-            'targetAddress.formData.postalCode': ''
-        })
-    },
-
-    uploadAddress: async function () {
-        if (this.data.addresses.uploadingLock) return
+    uploadAddress: function () {
         let that = this
-        let current = this.data.addresses.lists.length == 0
-
-        this.data.addresses.uploadingLock = true
-        wx.showLoading({
-            title: '上传中',
-        })
-        await utils.syncRequest('/addresses', {
-            _id: that.data.targetAddress._id,
-            action: that.data.targetAddress._id == '' ? 'insert' : 'update',
-            postalCode: that.data.targetAddress.formData.postalCode,
-            telNumber: that.data.targetAddress.formData.telNumber,
-            recipient: that.data.targetAddress.formData.recipient,
-            fullAddr: that.data.targetAddress.formData.fullAddr,
-            current: current
-        }).then(() => {
-            wx.hideLoading()
-        }).catch(() => {
-            wx.hideLoading()
-            wx.showToast({
-                title: '新增失败',
-                icon: 'error'
-            })
-        })
-        that.data.addresses.uploadingLock = false
-    },
-    targetAddrTap(e) {
-        var that = this
-        if (e.detail.index == 0) {
-            this.setData({
-                'targetAddress.show': false,
-                'addresses.maskClosable': true
+        let isCurrent = this.data.addresses.lists.length == 0
+        if (this.data.inputEditorId === '') {
+            this.data.addresses.lists.push({
+                _id: utils.uuid(),
+                postalCode: this.data.inputEditorPos,
+                telNumber: this.data.inputEditorTel,
+                recipient: this.data.inputEditorRecipient,
+                fullAddr: this.data.inputEditorAddr,
+                current: isCurrent
             })
         } else {
-            this.setData({
-                [`targetAddress.formData.recipient`]: that.data.targetAddress.formData.recipient,
-                [`targetAddress.formData.telNumber`]: that.data.targetAddress.formData.telNumber,
-                [`targetAddress.formData.fullAddr`]: that.data.targetAddress.formData.fullAddr,
-                [`targetAddress.formData.postalCode`]: that.data.targetAddress.formData.postalCode
-            })
-            this.selectComponent('#form')
-                .validate(async (valid, errors) => {
-                    if (valid) {
-                        await that.uploadAddress()
-                        that.setData({
-                            'targetAddress.show': false,
-                            'addresses.maskClosable': true
-                        })
-                        await that.fetchAddresses()
-                        that.clearTargetAddr()
-                    }
-                })
+            for (var addr of this.data.addresses.lists) {
+                if (addr._id === this.data.inputEditorId) {
+                    addr.postalCode = this.data.inputEditorPos,
+                    addr.telNumber = this.data.inputEditorTel,
+                    addr.recipient = this.data.inputEditorRecipient,
+                    addr.fullAddr = this.data.inputEditorAddr
+                    isCurrent = addr.current
+                    break
+                }
+            }
         }
-    },
-    targetAddrClose(e) {
         this.setData({
-            'addresses.maskClosable': true
+            address: isCurrent ? that.data.inputEditorAddr : that.data.address,
+            'addresses.lists': that.data.addresses.lists,
+            'inputEditorId': '',
+            'inputEditorRecipient': '',
+            'inputEditorTel': '',
+            'inputEditorAddr': '',
+            'inputEditorPos': ''
         })
     }
 })

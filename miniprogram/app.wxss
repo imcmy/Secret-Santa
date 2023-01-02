@@ -1,4 +1,26 @@
-/**app.wxss**/
+/* @import 'style/weui.wxss'; */
+
+/* Variable */
+page {   
+    --main-focus-color: #1AAD19;
+}
+
+@media (prefers-color-scheme: dark) {
+    page {
+        --main-focus-color: #2BA245;
+    }
+}
+
+/* Components */
+page {
+    /* Dropdown */
+    --dropdown-menu-title-active-text-color: var(--main-focus-color);
+    --dropdown-menu-option-active-color: var(--main-focus-color);
+
+    /* Collapse */
+    --collapse-item-content-padding: 0;
+}
+
 /* Custom background */
 .no-bg {
     background: #fff;

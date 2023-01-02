@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view data-weui-theme="{{theme}}">
+<view data-weui-theme="{{theme}}" style="height: 100%;">
     <view class="weui-flex">
         <view wx:if="{{logged}}" class="top-bar userinfo {{themeBg}}-bg">
             <view class="userinfo-avatar">
@@ -10,19 +10,13 @@
                 <text class="userinfo-address">{{ addressInfo }}</text>
             </view>
         </view>
-        <view wx:else class="top-bar login">
-            <button type="default" plain class="login-button" bindtap="onTapRegister">点击注册</button>
-        </view>
     </view>
-    <view class="weui-flex">
-        <scroll-view class="scroll-wrapper" scroll-x scroll-with-animation="true" enable-flex="true" scroll-into-view="tab{{currentTab}}">
-            <view class="navigate-item" id="tab{{index}}" wx:for="{{tabList}}" wx:key="index" data-index="{{index}}" bindtap="handleClick">
-                <view class="names {{currentTab === index ? 'active' : ''}}">{{item.name}} <mp-badge wx:if="{{index==1 && event.ableToApply.length > 0}}" content="{{event.ableToApply.length}}" /></view>
-                <view class="currtline {{currentTab === index ? 'active' : ''}}"></view>
-            </view>
-        </scroll-view>
-    </view>
-    <view>
+    <view wx:if="{{logged}}">
+        <van-tabs animated swipeable sticky color="#2ba245">
+            <van-tab title="我的活动"></van-tab>
+            <van-tab title="报名中"></van-tab>
+            <van-tab title="未开始"></van-tab>
+        </van-tabs>
         <swiper indicator-dots="{{false}}" bindchange="handleSwiper" current="{{currentTab}}">
             <swiper-item>
                 <scroll-view scroll-y>
@@ -77,5 +71,8 @@
                 </scroll-view>
             </swiper-item>
         </swiper>
+    </view>
+    <view wx:if="{{!logged}}" class="weui-flex flex-center">
+        <van-empty image="/images/open-box.png" description="注册开启礼物交换" />
     </view>
 </view>

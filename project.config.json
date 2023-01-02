@@ -1,7 +1,6 @@
 {
     "miniprogramRoot": "miniprogram/",
     "srcMiniprogramRoot": "miniprogram/",
-    "cloudfunctionRoot": "cloudfunctions/",
     "setting": {
         "urlCheck": true,
         "es6": true,
@@ -45,11 +44,11 @@
         "minifyWXML": true
     },
     "appid": "wx6b3d19a4820493a7",
+    "qqappid": "1112158275",
     "projectname": "Gift",
     "libVersion": "2.24.6",
     "simulatorType": "wechat",
     "simulatorPluginLibVersion": {},
-    "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
     "compileType": "miniprogram",
     "condition": {
         "miniprogram": {
@@ -69,12 +68,6 @@
                 {
                     "name": "address_page",
                     "pathName": "pages/address/address",
-                    "query": "",
-                    "scene": null
-                },
-                {
-                    "name": "user_page",
-                    "pathName": "pages/user/user",
                     "query": "",
                     "scene": null
                 }

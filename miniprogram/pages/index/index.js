@@ -1,5 +1,8 @@
-const app = getApp()
+const app = getApp().globalData
 import * as utils from "../../utils/utils"
+import {
+    syncRequest
+} from "../../utils/requests"
 
 
 Page({
@@ -28,52 +31,32 @@ Page({
             if (e.theme) {
                 that.setData({
                     theme: e.theme,
-                    themeBg: e.theme === 'light' ? app.globalData.themeBg : 'dark'
+                    themeBg: e.theme === 'light' ? app.themeBg : 'dark'
                 })
-                app.globalData.theme = e.theme
+                app.theme = e.theme
             }
         })
     },
     onShow: function (e) {
         wx.hideHomeButton();
-        if (app.globalData.userInfo && !app.globalData.userInfo.unReg) {
-            this.setData({
-                theme: app.globalData.theme,
-                themeBg: app.globalData.theme === 'light' ? app.globalData.themeBg : 'dark',
-                avatarUrl: app.globalData.userInfo.avatar,
-                nickName: app.globalData.userInfo.nickName,
-                addressInfo: app.globalData.userInfo.fullAddr,
-                logged: true
-            })
-            this.fetchEvents()
-            wx.getStorage({
-                key: 'v1.6',
-                fail() {
-                    wx.showModal({
-                        title: '更新头像',
-                        content: '因接口调整，请更新头像',
-                        success(res) {
-                            wx.setStorage({
-                                key: "v1.6",
-                                data: true
-                            })
-                            if (res.confirm)
-                                wx.navigateTo({
-                                    url: '../user_detail/user_detail'
-                                })
-                        }
-                    })
-                }
-            })
-        } else {
-            wx.hideTabBar()
-        }
+        if (!app.user)
+            return
+        
+        this.setData({
+            theme: app.theme,
+            themeBg: app.settings.background.red ? 'red' : 'green',
+            avatarUrl: app.user.avatar,
+            nickName: app.user.nickname,
+            addressInfo: app.user.fullAddr,
+            logged: true
+        })
+        this.fetchEvents()
     },
 
     fetchEvents: async function () {
         this.loading = true
 
-        let events = await utils.syncRequest('/events', {
+        let events = await syncRequest('/events', {
             action: 'list'
         })
         for (let key in events.data) {

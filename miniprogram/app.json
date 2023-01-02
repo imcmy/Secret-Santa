@@ -8,7 +8,12 @@
         "pages/critical_error/critical_error",
         "pages/agreement/aggrement",
         "pages/about/about",
-        "pages/un_reg/un_reg"
+        "pages/un_reg/un_reg",
+        "pages/prefs/prefs",
+        "pages/wish_list/wish_list",
+        "pages/groups/groups",
+        "pages/group_create/group_create",
+        "pages/events/events"
     ],
     "entryPagePath": "pages/launch/launch",
     "themeLocation": "theme.json",
@@ -16,7 +21,7 @@
         "backgroundColor": "@bgColor",
         "backgroundTextStyle": "@bgTextStyle",
         "navigationBarBackgroundColor": "@nbBackgroundColor",
-        "navigationBarTitleText": "湾仔码头礼物交换",
+        "navigationBarTitleText": "匿名礼物交换",
         "navigationBarTextStyle": "@nbTextStyle"
     },
     "tabBar": {
@@ -24,20 +29,24 @@
         "selectedColor": "#2BA245",
         "backgroundColor": "@bgColor",
         "borderStyle": "@nbTextStyle",
-        "position": "top",
+        "position": "bottom",
         "list": [
             {
                 "pagePath": "pages/index/index",
+                "iconPath": "images/gift.png",
+                "selectedIconPath": "images/gift-selected.png",
                 "text": "活动"
             },
             {
                 "pagePath": "pages/user/user",
-                "text": "我"
+                "iconPath": "images/pref.png",
+                "selectedIconPath": "images/pref-selected.png",
+                "text": "设置"
             }
         ]
     },
-    "style": "v2",
     "darkmode": true,
+    "style": "v2",
     "useExtendedLib": {
         "weui": true
     },
@@ -57,7 +66,8 @@
         "mp-checkbox-group": "weui-miniprogram/checkbox-group/checkbox-group",
         "mp-checkbox": "weui-miniprogram/checkbox/checkbox",
         "mp-msg": "weui-miniprogram/msg/msg",
-        "mp-badge": "weui-miniprogram/badge/badge"
+        "mp-badge": "weui-miniprogram/badge/badge",
+        "van-config-provider": "@vant/weapp/config-provider/index"
     },
     "sitemapLocation": "sitemap.json"
 }

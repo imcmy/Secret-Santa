@@ -1,0 +1,79 @@
+@import '../../style/widget/weui-button/weui-button.wxss';
+@import '../../style/widget/weui-tips/weui-half-screen-dialog.wxss';
+
+
+.weui-form__title {
+    font-size: 44rpx;
+}
+
+.weui-form__text-area {
+    padding: 0;
+}
+
+.weui-form__control-area {
+    margin: 48rpx 0;
+}
+
+.weui-label {
+    font-size: 32rpx;
+}
+
+.weui-input {
+    font-size: 32rpx;
+}
+
+
+page {
+    background: #f6f6f6;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100vh;
+}
+
+.flex-center {
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.updown {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.van-empty__image__img {
+    width: 256rpx;
+    opacity: 0.4;
+}
+
+.main {
+    flex: 1;
+    width: 100%;
+    overflow: auto;
+  }
+
+.footer {
+    height: 100rpx;
+    background-color: #FFF;
+    border-top: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.slot {
+    display: flex;
+    height: 100%;
+}
+
+.slot-button {
+    height: 100% !important;
+    width: 60px !important;
+    border: 0 !important;
+}

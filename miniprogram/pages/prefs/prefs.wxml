@@ -1,0 +1,27 @@
+<view>
+    <radio-group bindchange="onBackgroundSelect">
+        <van-cell-group title="浅色背景">
+            <van-cell center>
+                <view slot="title">
+                    <image mode="aspectFill" src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-c1b28ba0-3d60-440e-b797-c927294b93f2/382c86a3-214c-4f09-ac5a-4a56959bd9e4.png"></image>
+                </view>
+                <radio slot="right-icon" value="red" checked="{{settings.background.red}}" />
+            </van-cell>
+            <van-cell center>
+                <view slot="title">
+                    <image mode="aspectFill" src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-c1b28ba0-3d60-440e-b797-c927294b93f2/758a3128-df2a-4a6d-91c6-f31a11416807.png"></image>
+                </view>
+                <radio slot="right-icon" value="green" checked="{{settings.background.green}}" />
+            </van-cell>
+        </van-cell-group>
+    </radio-group>
+
+    <van-cell-group title="深色模式（测试）">
+        <van-cell center title="启用深色模式">
+            <switch slot="right-icon" checked="{{settings.darkMode.enable}}" bind:change="onDarkModeSwitch" />
+        </van-cell>
+        <van-cell center title="深色模式跟随系统">
+            <switch slot="right-icon" checked="{{settings.darkMode.followSystem}}" bind:change="onFollowSystemSwitch" />
+        </van-cell>
+    </van-cell-group>
+</view>

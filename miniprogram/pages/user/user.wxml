@@ -1,7 +1,6 @@
-<!--miniprogram/pages/user/user.wxml-->
 <view data-weui-theme="{{theme}}">
     <view class="weui-flex">
-        <view class="top-bar userinfo {{themeBg}}-bg">
+        <view wx:if="{{logged}}" class="top-bar userinfo {{themeBg}}-bg">
             <view class="userinfo-avatar">
                 <image mode="heightFix" src="{{avatarUrl}}" />
             </view>
@@ -12,121 +11,30 @@
         </view>
     </view>
 
-    <mp-cells>
-        <mp-cell title="用户信息" url="/pages/user_detail/user_detail" link hover>
-        </mp-cell>
-        <mp-cell title="个性化设置" bindtap="onCustomize" link="{{true}}">
-        </mp-cell>
-    </mp-cells>
-    <mp-cells>
-        <mp-cell title="我的小组" bindtap="onMyGroups" link="{{true}}">
-        </mp-cell>
-        <!-- <mp-cell title="创建活动" bindtap="onCreateEvent" link="{{true}}">
-        </mp-cell> -->
-    </mp-cells>
+    <van-cell-group title=" " wx:if="{{!logged}}">
+        <van-cell title="我要登录" bind:click="onLogin" is-link />
+        <van-cell title="我要注册" link-type="navigateTo" url="/pages/user_detail/user_detail" is-link />
+        <!-- <van-cell title="我要绑定" is-link disabled /> -->
+    </van-cell-group>
 
-    <mp-cells>
-        <mp-cell title="我要注销" url="/pages/un_reg/un_reg" link hover>
-        </mp-cell>
-    </mp-cells>
+    <van-cell-group wx:if="{{logged}}">
+        <van-cell title="用户信息" link-type="navigateTo" url="/pages/user_detail/user_detail" is-link />
+        <van-cell title="愿望清单" link-type="navigateTo" url="/pages/wish_list/wish_list" is-link />
+        <van-cell title="个性化设置" link-type="navigateTo" url="/pages/prefs/prefs" is-link />
+    </van-cell-group>
 
-    <mp-cells>
-        <mp-cell title="用户服务协议及隐私政策" url="/pages/agreement/aggrement" link hover>
-        </mp-cell>
-        <mp-cell title="关于" url="/pages/about/about" link hover>
-        </mp-cell>
-    </mp-cells>
+    <van-cell-group wx:if="{{logged}}" title=" ">
+        <van-cell title="小组及活动管理" link-type="navigateTo" url="/pages/groups/groups" is-link />
+        <van-cell title="我要注销" link-type="navigateTo" url="/pages/un_reg/un_reg" is-link />
+    </van-cell-group>
+
+    <van-cell-group title=" ">
+        <van-cell title="用户服务协议及隐私政策" link-type="navigateTo" url="/pages/agreement/aggrement" is-link />
+        <van-cell title="图像授权及开源软件组件" link-type="navigateTo" url="/pages/about/about" is-link />
+        
+    </van-cell-group>
 </view>
 
-<mp-half-screen-dialog title="我的小组" show="{{groups.show}}" closabled="{{false}}" buttons="{{groups.dialogButtons}}" bindbuttontap="tapJoinGroup" bindclose="closeJoinGroup" data-weui-theme="{{theme}}">
-    <view slot="desc">
-        <view wx:if="{{groups.loaded}}" class="list-wrapper">
-            <scroll-view class="list" scroll-y>
-                <view wx:for="{{groups.lists}}" wx:key="group" wx:for-item="group">
-                    <mp-cells>
-                        <mp-cell>
-                            <view class="cell-title">{{group.groupName}}</view>
-                            <view>{{group.groupDescription}}</view>
-                            <view slot="icon" class="addr-cell">
-                                <mp-icon icon="group-detail" color="{{theme==='light'?'black':'white'}}"></mp-icon>
-                            </view>
-                        </mp-cell>
-                    </mp-cells>
-                </view>
-            </scroll-view>
-        </view>
-        <view wx:else>
-            <mp-loading type="dot-gray"></mp-loading>
-        </view>
-    </view>
-</mp-half-screen-dialog>
-
-<mp-half-screen-dialog title="个性化设置" show="{{prefs.show}}" closabled="{{false}}" bindclose="closeCustomize" data-weui-theme="{{theme}}" class="no-dialog-ft">
-    <view slot="desc">
-        <mp-form>
-            <mp-cells>
-                <mp-cell title="浅色背景">
-                    <radio-group bindchange="onBgChange">
-                        <label class="weui-cell weui-check__label">
-                            <view class="weui-cell__hd">
-                                <radio value="red" checked="{{prefs.themeRed}}" />
-                            </view>
-                            <view class="weui-cell__bd">
-                                <image style="height: 80rpx;" mode="aspectFill" src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-c1b28ba0-3d60-440e-b797-c927294b93f2/382c86a3-214c-4f09-ac5a-4a56959bd9e4.png"></image>
-                            </view>
-                        </label>
-                        <label class="weui-cell weui-check__label">
-                            <view class="weui-cell__hd">
-                                <radio value="green" checked="{{prefs.themeGreen}}" />
-                            </view>
-                            <view class="weui-cell__bd">
-                                <image style="height: 80rpx;" mode="aspectFill" src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-c1b28ba0-3d60-440e-b797-c927294b93f2/758a3128-df2a-4a6d-91c6-f31a11416807.png"></image>
-                            </view>
-                        </label>
-                    </radio-group>
-                </mp-cell>
-                <view class="weui-cell weui-cell_switch">
-                    <view class="weui-cell__bd" style="text-decoration: line-through;">深色模式</view>
-                    <view class="weui-cell__ft">
-                        <switch disabled checked="{{prefs.darkModeSwitch}}" bindchange="onDarkModeSwitch" />
-                    </view>
-                </view>
-                <view class="weui-cell weui-cell_switch">
-                    <view class="weui-cell__bd" style="text-decoration: line-through;">深色模式跟随系统</view>
-                    <view class="weui-cell__ft">
-                        <switch disabled checked="{{prefs.darkFollowSysSwitch}}" bindchange="onDarkFollowSysSwitch" />
-                    </view>
-                </view>
-            </mp-cells>
-        </mp-form>
-    </view>
-</mp-half-screen-dialog>
-
-<!-- <mp-half-screen-dialog title="创建活动" show="{{newEvent.show}}" closabled="{{false}}" buttons="{{newEvent.dialogButtons}}" bindbuttontap="tapCreateEvent">
-    <view slot="desc">
-        <mp-form id="form" rules="{{newEvent.rules}}" models="{{newEvent.formData}}">
-            <mp-cells>
-                <mp-cell title="活动名称" show-error prop="eventName">
-                    <input data-field="eventName" value="{{newEvent.formData.eventName}}" type="text" class="weui-input" placeholder="活动名称" bindinput="checkEventName" />
-                </mp-cell>
-                <mp-cell title="所属小组" show-error prop="eventGroup">
-                    <picker bindchange="bindPickerChange" value="{{0}}" range="{{groups.nameLists}}">
-                        <view class="picker">{{groups.nameLists[0]}}</view>
-                    </picker>
-                </mp-cell>
-                <mp-cell title="开始时间" show-error prop="eventStartFormatted">
-                    <input data-field="eventStartFormatted" value="{{newEvent.formData.eventStartFormatted}}" type="text" class="weui-input" placeholder="请确认开始时间" bindinput="" />
-                </mp-cell>
-                <mp-cell title="抽签时间" show-error prop="eventRollFormatted">
-                    <input data-field="eventRollFormatted" value="{{newEvent.formData.eventRollFormatted}}" type="text" class="weui-input" placeholder="请确认抽签时间" bindinput="" />
-                </mp-cell>
-                <mp-cell title="结束时间" show-error prop="eventEndFormatted">
-                    <input data-field="eventEndFormatted" value="{{newEvent.formData.eventEndFormatted}}" type="text" class="weui-input" placeholder="请确认结束时间" bindinput="" />
-                </mp-cell>
-                <mp-cell title="活动描述" show-error prop="eventDescription">
-                    <textarea data-field="eventDescription" value="{{newEvent.formData.eventDescription}}" placeholder="请输入活动描述" auto-height="true" disable-default-padding="true" bindinput="checkEventDesc"></textarea>
-                </mp-cell>
-            </mp-cells>
-        </mp-form>
-    </view>
-</mp-half-screen-dialog> -->
+<view class="weui-footer">
+    <view class="weui-footer__text">版本号 1.7</view>
+</view>

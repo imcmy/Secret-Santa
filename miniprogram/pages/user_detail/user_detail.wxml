@@ -1,81 +1,84 @@
-<!--pages/user_detail/user_detail.wxml-->
-<mp-form-page title="用户信息" data-weui-theme="{{theme}}">
-    <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-        <image class="avatar" src="{{avatarUrl}}"></image>
-    </button>
-    <mp-form>
-        <mp-cells>
-            <mp-cell title="昵称">
-                <input value="{{nickName}}" type="nickname" class="weui-input" placeholder="请输入昵称" bindinput="bindNicknameChange" />
-            </mp-cell>
-            <mp-cell title="联系方式" link="{{true}}" bindtap="showAddressDialog">
-                <textarea value="{{address}}" placeholder="请添加联系方式" auto-height="true" disable-default-padding="true" disabled="true"></textarea>
-            </mp-cell>
-        </mp-cells>
-    </mp-form>
-    <checkbox-group slot="tips" bindchange="bindAgreeChange" wx:if="{{isReg}}">
-        <label class="weui-agree" for="weuiAgree">
-            <view class="weui-agree__text">
-                <checkbox class="weui-agree__checkbox" id="weuiAgree" value="agree" checked="{{isAgree}}" />
-                <view class="weui-agree__checkbox-icon">
-                    <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{isAgree}}"></icon>
-                </view>
-                我同意<navigator url="../agreement/aggrement" class="weui-agree__link"><b>用户服务协议及隐私政策</b></navigator>
-            </view>
-        </label>
-    </checkbox-group>
-    <view slot="button">
-        <button class="weui-btn" type="primary" bindtap="bindSubmit">{{isReg ? '注册' : '更新'}}</button>
-        <button class="weui-btn" type="default" bindtap="bindCancel">取消</button>
+<form class="weui-form"  bindsubmit="onUserSubmit">
+    <view class="weui-form__title" style="text-align: center;">用户信息</view>
+    <view class="weui-form__control-area">
+        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+            <image class="avatar" src="{{avatarUrl}}"></image>
+        </button>
+        <van-cell-group inset>
+            <van-field model:value="{{nickname}}" type="nickname" size="large" label="昵称" error="{{addresses.errors.nickname}}" placeholder="请输入昵称" name="nickname" required clearable  />
+            <van-field model:value="{{address}}" type="textarea" size="large" required readonly autosize is-link disable-default-padding label="联系方式" error="{{addresses.errors.address}}"  placeholder="请添加联系方式" bindtap="onAddrDialogShow" />
+        </van-cell-group>
     </view>
-</mp-form-page>
-
-<mp-half-screen-dialog title="联系方式" show="{{addresses.show}}" closabled="{{false}}" mask="{{addresses.maskClosable}}" buttons="{{addresses.dialogButtons}}" bindbuttontap="addrTap"  data-weui-theme="{{theme}}">
-    <view slot="desc">
-        <view wx:if="{{addresses.loaded}}" class="list-wrapper">
-            <scroll-view class="list" scroll-y>
-                <view wx:for="{{addresses.lists}}" wx:key="address" wx:for-item="address">
-                    <mp-slideview buttons="{{address.slideButtons}}" bindbuttontap="operateAddress">
-                        <mp-cells>
-                            <mp-cell id="{{address._id}}" bindtap="clickAddress">
-                                <view>
-                                    <view class="cell-title">{{address.recipient}} {{address.telNumber}}</view>
-                                    <view>{{address.fullAddr}} {{address.postalCode}}</view>
-                                </view>
-                                <view slot="icon" class="addr-cell">
-                                    <mp-icon icon="done" color="{{ address.current ? 'green' : 'white' }}"></mp-icon>
-                                </view>
-                            </mp-cell>
-                        </mp-cells>
-                    </mp-slideview>
+    <view class="weui-form__text-area">
+        <checkbox-group wx:if="{{isReg}}" bindchange="onAgree">
+            <label class="weui-agree" for="weuiAgree">
+                <view class="weui-agree__text {{addresses.errors.agree ? 'error-wrapper' : 'transparent-wrapper'}}">
+                    <checkbox class="weui-agree__checkbox" id="weuiAgree" value="agree" checked="{{isAgree}}" />
+                    <view class="weui-agree__checkbox-icon">
+                        <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{isAgree}}"></icon>
+                    </view>
+                    我同意<navigator url="../agreement/aggrement" class="weui-agree__link"><b>用户服务协议及隐私政策</b></navigator>
                 </view>
+            </label>
+        </checkbox-group>
+    </view>
+    <view class="weui-form__control-area">
+        <button form-type="submit" type="primary" class="weui-btn">{{isReg ? '注册' : '更新'}}</button>
+        <button type="default" class="weui-btn" bindtap="onUserCancel">取消</button>
+    </view>
+</form>
+
+<van-popup show="{{addresses.show}}" round position="bottom" bind:close="onAddrDialogHide" custom-class="weui-half-screen-dialog">
+    <view class="weui-half-screen-dialog__hd" style="padding-bottom: 0">
+        <view class="weui-half-screen-dialog__hd__main">
+            <view class="weui-half-screen-dialog__title">联系方式</view>
+        </view>
+    </view>
+    <view class="weui-half-screen-dialog__bd" style="padding: 0 0 32px;">
+        <view wx:if="{{addresses.lists.length == 0}}" style="display: flex; flex-direction: column;align-items: center; justify-content: center;">
+            <image class="hint-image" mode="widthFix" src="/images/location.png"></image>
+            <view class="hint-text">还没有联系方式</view>
+        </view>
+        <view class="list-wrapper">
+            <scroll-view class="list" scroll-y>
+                <van-swipe-cell right-width="{{120}}" wx:for="{{addresses.lists}}" wx:key="address" wx:for-item="address">
+                    <van-cell-group>
+                        <van-cell id="{{address._id}}" title="{{address.recipient}} {{address.telNumber}}" label="{{address.fullAddr}} {{address.postalCode}}" clickable bind:click="onAddrClick" center>
+                            <van-icon slot="icon" name="success" class="{{ address.current ? 'selected-addr' : 'unselected-addr' }}" />
+                        </van-cell>
+                    </van-cell-group>
+                    <view slot="right" class="slot">
+                        <van-button id="{{address._id}}" type="primary" block square custom-class="slot-button" bind:click="onAddrChange">修改</van-button>
+                        <van-button id="{{address._id}}" type="danger" block square custom-class="slot-button" bind:click="onAddrRemove">删除</van-button>
+                    </view>
+                </van-swipe-cell>
             </scroll-view>
         </view>
-        <view wx:else>
-            <mp-loading type="dot-gray"></mp-loading>
+    </view>
+    <view class="weui-half-screen-dialog__ft" style="padding: 0 24px 32px;">
+        <button type="primary" class="weui-btn" bindtap="onAddrImport">微信导入</button>
+        <button type="default" class="weui-btn" bindtap="onAddrManual">手动新增</button>
+    </view>
+</van-popup>
+
+<van-popup show="{{editor.show}}" round position="bottom" bind:close="onEditorDialogHide" custom-class="weui-half-screen-dialog">
+    <view class="weui-half-screen-dialog__hd" style="padding-bottom: 0">
+        <view class="weui-half-screen-dialog__hd__main">
+            <view class="weui-half-screen-dialog__title">地址编辑</view>
         </view>
     </view>
-</mp-half-screen-dialog>
-
-<mp-half-screen-dialog title="地址编辑" show="{{targetAddress.show}}" closabled="{{false}}" buttons="{{targetAddress.dialogButtons}}" bindbuttontap="targetAddrTap" bindclose="targetAddrClose"  data-weui-theme="{{theme}}">
-    <view slot="desc">
-        <mp-form id="form" rules="{{targetAddress.rules}}" models="{{targetAddress.formData}}">
-            <mp-cells>
-                <mp-cell title="收件人" show-error prop="recipient">
-                    <input data-field="recipient" value="{{targetAddress.formData.recipient}}" type="text" class="weui-input" placeholder="名字" bindinput="inputAddrRecipient" />
-                </mp-cell>
-                <mp-cell title="手机号码" show-error prop="telNumber">
-                    <input data-field="telNumber" value="{{targetAddress.formData.telNumber}}" type="number" class="weui-input" placeholder="收货手机号" bindinput="inputAddrNumber" />
-                </mp-cell>
-                <mp-cell title="详细地址" show-error prop="fullAddr">
-                    <textarea data-field="fullAddr" value="{{targetAddress.formData.fullAddr}}" placeholder="请输入规范地址" auto-height="true" disable-default-padding="true" bindinput="inputAddrFull"></textarea>
-                </mp-cell>
-                <mp-cell title="邮政编码" show-error prop="postalCode">
-                    <input data-field="postalCode" value="{{targetAddress.formData.postalCode}}" type="number" class="weui-input" placeholder="邮政编码" bindinput="inputAddrCode" />
-                </mp-cell>
-            </mp-cells>
-        </mp-form>
+    <view class="weui-half-screen-dialog__bd" style="padding: 0 0 32px;">
+        <form>
+            <van-cell-group>
+                <van-field model:value="{{inputEditorRecipient}}" error="{{editor.errors.recipient}}" type="text" size="large" required clearable label="收件人" placeholder="请输入姓名" />
+                <van-field model:value="{{inputEditorTel}}" error="{{editor.errors.tel}}" type="number" size="large" required clearable label="手机号" placeholder="请输入收货手机号" />
+                <van-field model:value="{{inputEditorAddr}}" error="{{editor.errors.addr}}" type="textarea" size="large" required clearable autosize disable-default-padding label="详细地址" placeholder="请输入规范地址" />
+                <van-field model:value="{{inputEditorPos}}" error="{{editor.errors.pos}}" type="number" size="large" required clearable label="邮政编码" placeholder="请输入邮政编码" />
+            </van-cell-group>
+        </form>
     </view>
-</mp-half-screen-dialog>
-
-<canvas id="avatar-crop" type="2d" style="width:{{canvasW}}px; height:{{canvasH}}px; position: absolute; left:-1000px; top:-1000px;"></canvas>
+    <view class="weui-half-screen-dialog__ft" style="padding: 0 0 32px;">
+        <button type="default" class="weui-btn" bindtap="onEditorDialogHide">取消</button>
+        <button type="primary" class="weui-btn" bindtap="onEditorSubmit">确认</button>
+    </view>
+</van-popup>

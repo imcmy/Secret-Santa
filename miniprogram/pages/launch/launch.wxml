@@ -1,9 +1,8 @@
-<!--pages/launch/launch.wxml-->
 <view class="body">
     <view>
-        <image mode="widthFix" src="/images/icon.png"></image>
+        <image style="width: 450rpx" mode="widthFix" src="/images/logo.png"></image>
     </view>
-    <view style="display: flex; flex-direction: row;">
+    <view style="display: flex; flex-direction: row; justify-content: center; margin-top:50rpx; width: 100%;">
         <mp-loading type="circle" tips="加载中"></mp-loading>
     </view>
 </view>

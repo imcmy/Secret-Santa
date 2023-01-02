@@ -1,4 +1,18 @@
-const app = getApp()
+const app = getApp().globalData
+
+export const uuid = function () {
+    var s = [];
+    var hexDigits = "0123456789abcdef";
+    for (var i = 0; i < 36; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    }
+    s[14] = "4";
+    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+    s[8] = s[13] = s[18] = s[23] = "-";
+
+    var uuid = s.join("");
+    return uuid
+}
 
 export const cutdown = time => {
     var cutdown = new Date().getTime() - time
@@ -28,59 +42,29 @@ export const unixToFormatted = timeStamp => {
     return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute].map(formatNumber).join(':')
 }
 
-export const nextOKTime = () => {
-    var date = new Date()
-    if (date.getMinutes() < 30) {
-        date.setMinutes(30)
-    } else if (date.getMinutes() > 30) {
-        date.setMinutes(0)
-        date.setHours(date.getHours() + 1)
-    }
-    return date.getTime()
+export const pickerDate = (time = null) => {
+    const minutes = 30;
+    const ms = 1000 * 60 * minutes;
+
+    var minDate = time ? time : new Date()
+    minDate = new Date(Math.ceil(minDate.getTime() / ms) * ms);
+    
+    var maxDate = new Date(minDate.getTime())
+    maxDate = new Date(maxDate.setMonth(maxDate.getMonth() + 3));
+    
+    return [minDate.getTime(), maxDate.getTime()]
 }
 
-const _syncRequest = (requestMapping, data, requestWay, contentType) => {
-    return new Promise(function (resolve, reject) {
-        data.openid = app.globalData.openid
-        wx.request({
-            url: app.globalData.url + requestMapping,
-            data: data,
-            header: {
-                'content-type': contentType
-            },
-            method: requestWay,
-            success(res) {
-                if (res.data.success === false || res.data.statusCode === 404) {
-                    reject(res)
-                } else {
-                    resolve(res)
-                }
-            },
-            fail(e) {
-                reject(e)
+export const delayBack = (delay) => {
+    setTimeout(() => {
+        var pages = getCurrentPages()
+        var prevPage = pages[pages.length - 1]
+        wx.navigateBack({
+            success: () => {
+                prevPage.onLoad()
             }
         })
-    })
-}
-
-export const syncRequest = (requestMapping, data, requestWay = 'GET',
-    contentType = 'application/json', times = 1, delay = 3000) => {
-    return new Promise((resolve, reject) => {
-        const retry = () => {
-            _syncRequest(requestMapping, data, requestWay, contentType)
-                .then(resolve)
-                .catch(e => {
-                    if (--times === 0) {
-                        wx.reportEvent("request_error", e)
-                        reject(e)
-                    }
-                    setTimeout(() => {
-                        retry()
-                    }, delay)
-                })
-        }
-        retry()
-    })
+    }, delay)
 }
 
 export const storeImage = (tempPath, permanentPath) => {

@@ -22,9 +22,5 @@
 ## TODO
 
 [ ] 退出小组
-[ ] 注销用户
 [ ] 活动管理
-
-## 使用组件
-
-[Vant Weapp](https://github.com/youzan/vant-weapp)
+[x] 注销用户

@@ -1,7 +1,6 @@
 {
   "enablePullDownRefresh": true,
   "usingComponents": {
-      "mp-badge": "weui-miniprogram/badge/badge",
-      "tag": "../../components/tag/tag"
+      "mp-badge": "weui-miniprogram/badge/badge"
   }
 }

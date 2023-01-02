@@ -1,5 +1,6 @@
 // pages/critical_error/critical_error.js
 const app = getApp()
+
 Page({
     data: {
         theme: 'light'

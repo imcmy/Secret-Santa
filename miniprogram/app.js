@@ -1,12 +1,31 @@
-//app.js
 App({
+    data: {
+        url: 'https://fc-mp-6e650b7d-9aea-45a9-be79-0602370af57a.next.bspapp.com',
+        platform: 'wechat',
+        theme: 'light',
+        settings: {
+            background: {
+                red: true,
+                green: false
+            },
+            darkMode: {
+                enable: false,
+                followSystem: false
+            }
+        },
+        user: undefined,
+        sessionId: '',
+        sessionExpire: new Date()
+    },
     onLaunch: function () {
-        this.globalData = {
-            openid: '',
-            session_key: '',
-            version: '1.6.220817',
-            theme: 'light',
-            url: 'https://c1b28ba0-3d60-440e-b797-c927294b93f2.bspapp.com'
+        this.globalData = this.data
+    },
+    syncFullAddr() {
+        for (let address in this.data.user.addresses) {
+            if (this.data.user.addresses[address].current) {
+                this.data.user.fullAddr = this.data.user.addresses[address].fullAddr
+                break
+            }
         }
     },
     setTheme(theme) {

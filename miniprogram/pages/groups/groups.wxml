@@ -1,0 +1,72 @@
+<view class="main">
+    <view wx:if="{{groups.length > 0}}">
+        <van-dropdown-menu>
+            <van-dropdown-item value="{{groupId}}" options="{{groups}}" bind:change="onSelectGroup">
+            </van-dropdown-item>
+        </van-dropdown-menu>
+        <view>
+            <van-cell-group>
+                <van-cell title="{{group.group_name}}" label="{{group.group_description}}" size="large" center>
+                    <view slot="right-icon">
+                        <van-icon name="{{group.group_icon}}" size="60rpx" />
+                    </view>
+                </van-cell>
+            </van-cell-group>
+
+            <van-cell-group title="信息">
+                <van-field value="{{group.group_manager}}" label="管理员" input-align="right" readonly />
+                <van-field value="{{group.group_token}}" label="口令" input-align="right" readonly />
+                <van-field label="入组需要审核" title-width="80%" input-align="right" readonly>
+                    <view slot="right-icon">
+                        <van-icon wx:if="{{group.audit_join}}" name="success" color="green" />
+                        <van-icon wx:else name="cross" color="red" />
+                    </view>
+                </van-field>
+                <van-field label="允许组员创建活动" title-width="80%" input-align="right" readonly>
+                    <view slot="right-icon">
+                        <van-icon wx:if="{{group.allow_member_create}}" name="success" color="green" />
+                        <van-icon wx:else name="cross" color="red" />
+                    </view>
+                </van-field>
+                <van-field label="组员发布活动需要审核" title-width="80%" input-align="right" readonly>
+                    <view slot="right-icon">
+                        <van-icon wx:if="{{group.audit_create}}" name="success" color="green" />
+                        <van-icon wx:else name="cross" color="red" />
+                    </view>
+                </van-field>
+            </van-cell-group>
+
+            <van-cell-group title="成员及活动">
+                <van-collapse value="{{activeCollapse}}" bind:change="onChangeCollapse" bind:open="onOpenCollapse">
+                    <van-collapse-item wx:if="{{group.audit_join && group.waiting_members}}" title="待批准成员" name="waiting_members" value="{{group.waiting_members}} 人">
+                        <view slot="icon">
+                            <van-icon name="info" color="red" />
+                        </view>
+                    </van-collapse-item>
+                    <van-collapse-item wx:if="{{group.audit_create && group.waiting_events}}" title="待批准活动" name="waiting_events" value="{{group.waiting_events}} 项">
+                        <view slot="icon">
+                            <van-icon name="info" color="red" />
+                        </view>
+                    </van-collapse-item>
+                    <van-collapse-item title="成员" name="group_members" value="{{group.group_members}} 人">
+                        <van-cell wx:for="{{group_members}}" wx:key="group_members" title="{{item.nickname}}" id="{{item._id}}" />
+                    </van-collapse-item>
+                    <van-collapse-item title="活动" name="group_events" value="{{group.waiting_events}} 项">
+                        <view>
+                            L
+                        </view>
+                    </van-collapse-item>
+                </van-collapse>
+            </van-cell-group>
+        </view>
+    </view>
+    <view wx:else class="weui-flex flex-center">
+        <van-empty image="/images/meeting.png" description="还没有加入小组" />
+    </view>
+</view>
+
+<van-action-sheet show="{{ sheetShow }}" actions="{{ actions }}" cancel-text="取消" bind:close="onCloseSheet" bind:cancel="onCloseSheet" bind:select="onSelectSheet" />
+
+<view class="footer" bindtap="onOpenSheet">
+    <text>操作</text>
+</view>

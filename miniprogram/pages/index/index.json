@@ -1,5 +1,8 @@
 {
-  "enablePullDownRefresh": true,
-  "usingComponents": {
-  }
+    "enablePullDownRefresh": true,
+    "usingComponents": {
+        "van-empty": "@vant/weapp/empty/index",
+        "van-tab": "@vant/weapp/tab/index",
+        "van-tabs": "@vant/weapp/tabs/index"
+    }
 }

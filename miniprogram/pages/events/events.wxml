@@ -1,0 +1,52 @@
+<page-meta page-style="{{ show ? 'overflow: hidden;' : '' }}" />
+
+<form class="weui-form" bindsubmit="onCreate">
+    <view class="weui-form__title" style="text-align: center;">创建活动</view>
+    <view class="weui-form__control-area">
+        <van-cell-group title="基本信息" inset>
+            <van-field model:value="{{name}}" error="{{errors.name}}" size="large" label="名称" placeholder="请输入活动的名称" name="name" required clearable />
+            <van-field model:value="{{icon}}" icon="{{icon}}" error="{{errors.icon}}" size="large" label="小组" placeholder="请选择归属的小组" bindtap="onIconsShow" name="icon" readonly is-link required clearable />
+            <van-field model:value="{{description}}" error="{{errors.description}}" type="textarea" size="large" label="描述" placeholder="请输入活动的描述" name="description" autosize disable-default-padding />
+            <van-field model:value="{{startTimeFormatted}}" error="{{errors.token}}" size="large" label="开始时间" placeholder="请选择时间" name="token" readonly is-link required clearable />
+            <van-field model:value="{{rollTimeFormatted}}" error="{{errors.token}}" size="large" label="抽签时间" placeholder="请选择时间" name="token" readonly is-link required clearable />
+            <van-field model:value="{{endTimeFormatted}}" error="{{errors.token}}" size="large" label="结束时间" placeholder="请选择时间" name="token" readonly is-link required clearable />
+        </van-cell-group>
+    </view>
+    <view class="weui-form__control-area">
+        <button form-type="submit" type="primary" class="weui-btn">创建</button>
+        <button type="default" class="weui-btn" bindtap="onCancel">取消</button>
+    </view>
+</form>
+
+<van-popup show="{{false}}" round position="bottom" bind:close="onIconsHide">
+    <van-datetime-picker title="{{ pickerTitle }}" type="datetime" value="{{ pickerValue }}" min-date="{{ pickerMin }}" max-date="{{ pickerMax }}" filter="{{ filter }}" bind:input="onInput" />
+</van-popup>
+
+<!-- <mp-half-screen-dialog title="创建活动" show="{{newEvent.show}}" closabled="{{false}}" buttons="{{newEvent.dialogButtons}}" bindbuttontap="tapCreateEvent">
+    <view slot="desc">
+        <mp-form id="form" rules="{{newEvent.rules}}" models="{{newEvent.formData}}">
+            <mp-cells>
+                <mp-cell title="活动名称" show-error prop="eventName">
+                    <input data-field="eventName" value="{{newEvent.formData.eventName}}" type="text" class="weui-input" placeholder="活动名称" bindinput="checkEventName" />
+                </mp-cell>
+                <mp-cell title="所属小组" show-error prop="eventGroup">
+                    <picker bindchange="bindPickerChange" value="{{0}}" range="{{groups.nameLists}}">
+                        <view class="picker">{{groups.nameLists[0]}}</view>
+                    </picker>
+                </mp-cell>
+                <mp-cell title="开始时间" show-error prop="eventStartFormatted">
+                    <input data-field="eventStartFormatted" value="{{newEvent.formData.eventStartFormatted}}" type="text" class="weui-input" placeholder="请确认开始时间" bindinput="" />
+                </mp-cell>
+                <mp-cell title="抽签时间" show-error prop="eventRollFormatted">
+                    <input data-field="eventRollFormatted" value="{{newEvent.formData.eventRollFormatted}}" type="text" class="weui-input" placeholder="请确认抽签时间" bindinput="" />
+                </mp-cell>
+                <mp-cell title="结束时间" show-error prop="eventEndFormatted">
+                    <input data-field="eventEndFormatted" value="{{newEvent.formData.eventEndFormatted}}" type="text" class="weui-input" placeholder="请确认结束时间" bindinput="" />
+                </mp-cell>
+                <mp-cell title="活动描述" show-error prop="eventDescription">
+                    <textarea data-field="eventDescription" value="{{newEvent.formData.eventDescription}}" placeholder="请输入活动描述" auto-height="true" disable-default-padding="true" bindinput="checkEventDesc"></textarea>
+                </mp-cell>
+            </mp-cells>
+        </mp-form>
+    </view>
+</mp-half-screen-dialog> -->

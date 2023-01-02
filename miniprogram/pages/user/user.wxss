@@ -3,9 +3,8 @@ page {
     background: #f6f6f6;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    height: 100%;
-    font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif !important;
+    justify-content: space-between;
+    height: 100vh;
 }
 
 .top-bar {
@@ -20,10 +19,18 @@ page {
     box-sizing: border-box;
 }
 
+.login {
+    background: #FFFFFF;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .userinfo {
     flex-direction: row;
     align-items: center;
-    justify-content: space-around
+    justify-content: space-between;
+    padding:0 16px;
 }
 
 .userinfo-avatar {
@@ -64,6 +71,15 @@ page {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.van-button {
+    width: 50vw;
+}
+
+.van-button__text {
+    font-size: 34rpx;
+    font-weight: 700 !important;
 }
 
 .weui-cell {
@@ -144,6 +160,10 @@ page {
 
 .no-dialog-ft .weui-cell__hd {
     padding-right: 32rpx;
+}
+
+.weui-footer {
+    padding: 32rpx 0;
 }
 
 
