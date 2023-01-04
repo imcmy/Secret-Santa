@@ -24,13 +24,13 @@ export const formatNumber = n => {
     return n[1] ? n : '0' + n
 }
 
-export const secondsNo = timeStamp => {
+export const trimSeconds = timeStamp => {
     var date = new Date(timeStamp)
     date.setSeconds(0, 0)
     return date.getTime()
 }
 
-export const unixToFormatted = timeStamp => {
+export const formattedTime = timeStamp => {
     var date = new Date(timeStamp)
     const year = date.getFullYear()
     const month = date.getMonth() + 1
@@ -42,15 +42,16 @@ export const unixToFormatted = timeStamp => {
     return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute].map(formatNumber).join(':')
 }
 
-export const pickerDate = (time = null) => {
-    const minutes = 30;
-    const ms = 1000 * 60 * minutes;
+export const pickerDate = (time = 0) => {
+    const minutes = 30
+    const ms = 1000 * 60 * minutes
+    var lastMonth = time ? 1 : 3
 
-    var minDate = time ? time : new Date()
-    minDate = new Date(Math.ceil(minDate.getTime() / ms) * ms);
+    var minDate = time ? new Date(time + ms * 2) : new Date()
+    minDate = new Date(Math.ceil(minDate.getTime() / ms) * ms)
     
     var maxDate = new Date(minDate.getTime())
-    maxDate = new Date(maxDate.setMonth(maxDate.getMonth() + 3));
+    maxDate = new Date(maxDate.setMonth(maxDate.getMonth() + lastMonth))
     
     return [minDate.getTime(), maxDate.getTime()]
 }
