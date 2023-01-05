@@ -5,7 +5,7 @@
     <view class="weui-form__control-area">
         <van-cell-group title="基本信息" inset>
             <van-field model:value="{{name}}" error="{{errors.name}}" size="large" label="名称" placeholder="请输入活动的名称" name="name" required clearable />
-            <van-field model:value="{{group}}" error="{{errors.group}}" size="large" label="小组" placeholder="请选择归属的小组" bind:tap="onIconsShow" name="group" readonly is-link required clearable />
+            <van-field model:value="{{group}}" error="{{errors.group}}" size="large" label="小组" placeholder="请选择归属的小组" bind:tap="onClickGroup" name="group" readonly is-link required clearable />
             <van-field model:value="{{description}}" error="{{errors.description}}" type="textarea" size="large" label="描述" placeholder="请输入活动的描述" name="description" autosize disable-default-padding />
         </van-cell-group>
         <van-cell-group title="时间节点" inset>
@@ -21,5 +21,6 @@
 </form>
 
 <van-popup show="{{popup}}" round position="bottom" bind:close="onPopupClose">
-    <van-datetime-picker title="{{ pickerTitle }}" type="datetime" value="{{ pickerValue }}" min-date="{{ pickerMin }}" max-date="{{ pickerMax }}" filter="{{ filter }}" bind:confirm="onConfirmPicker" bind:cancel="onPopupClose" />
+    <van-datetime-picker wx:if="{{scene > 0 && scene < 4}}" title="{{ pickerTitle }}" type="datetime" value="{{ pickerValue }}" min-date="{{ pickerMin }}" max-date="{{ pickerMax }}" filter="{{ filter }}" bind:confirm="onConfirmPicker" bind:cancel="onPopupClose" />
+    <van-picker wx:if="{{scene === 4}}" show-toolbar title="{{ pickerTitle }}" columns="{{ pickerGroups }}" bind:cancel="onPopupClose" bind:confirm="onConfirmPicker" />
 </van-popup>

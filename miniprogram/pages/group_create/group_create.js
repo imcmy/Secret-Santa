@@ -47,7 +47,7 @@ Page({
         })
     },
 
-    async onCreate(e) {
+    onCreate(e) {
         let that = this
         let values = e.detail.value
         let errors = this.data.errors

@@ -1,9 +1,13 @@
+import {
+    syncRequest
+} from '../../utils/requests'
 import * as utils from '../../utils/utils'
 
 Page({
     data: {
         popup: false,
         scene: 0,
+
         pickerTitle: '',
         pickerValue: null,
         pickerMin: null,
@@ -11,6 +15,8 @@ Page({
         filter(type, options) {
             return type === 'minute' ? options.filter(option => option % 30 === 0) : options;
         },
+        pickerGroups: [],
+        pickerGroupsId: [],
 
         name: '',
         group: '',
@@ -76,6 +82,12 @@ Page({
                     endFormatted: utils.formattedTime(time)
                 })
                 break
+            case 4:
+                data = Object.assign(data, {
+                    group: e.detail.value,
+                    groupId: this.data.pickerGroupsId[e.detail.index]
+                })
+                break
         }
         this.setData(data)
     },
@@ -119,6 +131,44 @@ Page({
             pickerMax: date[1]
         })
     },
+    async onClickGroup() {
+        try {
+            if (this.data.pickerGroups.length > 0) {
+                this.setData({
+                    popup: true,
+                    scene: 4,
+                    pickerTitle: '选择小组'
+                })
+            } else {
+                let res = await syncRequest('/users', {
+                    action: 'load_groups_allow_create'
+                })
+                this.setData({
+                    popup: true,
+                    scene: 4,
+                    pickerTitle: '选择小组',
+                    pickerGroups: res.data.groups,
+                    pickerGroupsId: res.data.groups_id
+                })
+            }
+        } catch (e) {
+            if (e.data.errCode === 0x21) {
+                wx.showToast({
+                    title: '无符合的小组',
+                    icon: 'error'
+                })
+            } else {
+                wx.showToast({
+                    title: '未知错误',
+                    icon: 'error'
+                })
+            }
+        }
+    },
+
+    onCancel() {
+        wx.navigateBack()
+    }
 
 
 
