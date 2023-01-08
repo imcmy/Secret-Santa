@@ -16,7 +16,6 @@ export const promiseRequest = (requestMapping, data,
             },
             success(res) {
                 if (res.statusCode !== 200 || res.data.success === false || res.data.errCode) {
-                    // console.log(res)
                     reject(res)
                 } else {
                     resolve(res)
@@ -31,32 +30,31 @@ export const promiseRequest = (requestMapping, data,
 
 const _retryRequest = (requestMapping, data,
     requestWay = 'GET', contentType = 'application/json',
-    times = 1, delay = 3000) => {
+    times = 0, delay = 3000) => {
     return new Promise((resolve, reject) => {
-        const retry = (time) => {
+        const retry = (time, ensure_login) => {
             data.session_id = app.sessionId
             promiseRequest(requestMapping, data, requestWay, contentType)
                 .then(resolve)
                 .catch(e => {
-                    if (e.data && e.data.errCode === 0x3) {
-                        if (time-- === 0)
-                            reject(e)
-                        else
+                    if (!ensure_login) {
+                        if (e.data && e.data.errCode === 0x3) {
                             setTimeout(async () => {
                                 await testSetLogin(true)
-                                retry(time)
+                                retry(time, true)
                             }, delay)
-                    } else {
-                        if (--time === 0)
-                            reject(e)
-                        else
-                            setTimeout(() => {
-                                retry(time)
-                            }, delay)
+                            return
+                        }
                     }
+                    if (times-- <= 0)
+                        reject(e)
+                    else
+                        setTimeout(() => {
+                            retry(time, false)
+                        }, delay)
                 })
         }
-        retry(times)
+        retry(times, false)
     })
 }
 

@@ -167,6 +167,12 @@ Page({
                     group_members: res.data.data,
                     groupMembersLoading: false
                 })
+            } else if (e.detail === "waiting_events") {
+                let res = await syncRequest('/groups', {
+                    action: 'load_waiting_events',
+                    group_id: group_id
+                })
+                console.log(res)
             }
         } catch (e) {
             wx.showToast({

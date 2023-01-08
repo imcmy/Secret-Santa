@@ -166,6 +166,71 @@ Page({
         }
     },
 
+    onCreate(e) {
+        let that = this
+        let values = e.detail.value
+        let errors = this.data.errors
+
+        errors.name = (values.name === '')
+        errors.group = (values.group === '')
+        errors.start = (this.data.start === 0)
+        errors.roll = (this.data.roll === 0)
+        errors.end = (this.data.end === 0)
+
+        this.setData({
+            'errors.name': errors.name,
+            'errors.group': errors.group,
+            'errors.start': errors.start,
+            'errors.roll': errors.roll,
+            'errors.end': errors.end
+        })
+        if (!Object.values(errors).every(e => e === false))
+            return
+
+        wx.showLoading({
+            title: "创建活动中"
+        })
+
+        var params = values
+        params.action = 'create'
+        params.group = this.data.groupId
+        params.start = this.data.start
+        params.roll = this.data.roll
+        params.end = this.data.end
+        
+        syncRequest('/events', params)
+            .then(() => {
+                wx.hideLoading()
+                wx.showToast({
+                    title: '创建成功',
+                    icon: 'success'
+                })
+                utils.delayBack(2000)
+            }).catch((e) => {
+                wx.hideLoading()
+                if (e.data.errCode === 0x31) {
+                    wx.showToast({
+                        title: '名称或描述未通过内容安全检测',
+                        icon: 'error'
+                    })
+                    this.setData({
+                        'errors.name': true,
+                        'errors.description': true
+                    })
+                } else if (e.data.errCode === 0x32) {
+                    wx.showToast({
+                        title: '没有创建权限',
+                        icon: 'error'
+                    })
+                } else {
+                    console.log(e)
+                    wx.showToast({
+                        title: '未知错误',
+                        icon: 'error'
+                    })
+                }
+            })
+    },
     onCancel() {
         wx.navigateBack()
     }

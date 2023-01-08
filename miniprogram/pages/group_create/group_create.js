@@ -61,7 +61,7 @@ Page({
             'errors.name': errors.name,
             'errors.token': errors.token
         })
-        if (errors.icon || errors.name || errors.token)
+        if (!Object.values(errors).every(e => e === false))
             return
 
         wx.showLoading({
