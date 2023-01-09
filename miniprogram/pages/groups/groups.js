@@ -4,6 +4,7 @@ import {
 import {
     showModalPromisified
 } from '../../utils/promisify'
+import * as utils from '../../utils/utils'
 
 Page({
     data: {
@@ -27,10 +28,13 @@ Page({
         ],
 
         groups: [],
+        group: {},
         groupId: 0,
 
-        group: {},
-        popup: true,
+        event: {},
+        event_show: false,
+
+        waiting_events: [],
         group_members: [],
 
         activeCollapse: []
@@ -172,7 +176,10 @@ Page({
                     action: 'load_waiting_events',
                     group_id: group_id
                 })
-                console.log(res)
+                res.data.data.map(o => o.event_start = utils.formattedTime(o.event_start))
+                this.setData({
+                    waiting_events: res.data.data
+                })
             }
         } catch (e) {
             wx.showToast({
@@ -180,6 +187,25 @@ Page({
                 icon: 'error'
             })
         }
+    },
 
+    async onAuditEvent(e) {
+        let res = await syncRequest('/events', {
+            action: 'query',
+            event_id: e.currentTarget.id
+        })
+        var event = res.data.data
+        event.event_start = utils.formattedTime(event.event_start)
+        event.event_roll = utils.formattedTime(event.event_roll)
+        event.event_end = utils.formattedTime(event.event_end)
+        this.setData({
+            event: event,
+            event_show: true
+        })
+    },
+    onPopupClose() {
+        this.setData({
+            event_show: false
+        })
     }
 })

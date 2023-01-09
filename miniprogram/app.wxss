@@ -21,6 +21,19 @@ page {
     --collapse-item-content-padding: 0;
 }
 
+/* Flex */
+.flex-row-space-around {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Button */
+.square {
+    border-radius: 0;
+}
+
 /* Custom background */
 .no-bg {
     background: #fff;

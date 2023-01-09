@@ -30,7 +30,7 @@
 <van-popup show="{{popup}}" round bind:close="onIconsHide" custom-style="width: 85%; height: 60%" bind:touchstart catch:touchmove bind:touchend>
         <view class="list-wrapper">
             <scroll-view class="list" scroll-y>
-                <van-grid square column-num="5" >
+                <van-grid square column-num="5">
                     <van-grid-item wx:for="{{icons}}" wx:key="iconKey" id="{{item}}" icon="{{item}}" bind:click="onChooseIcon" />
                 </van-grid>
             </scroll-view>

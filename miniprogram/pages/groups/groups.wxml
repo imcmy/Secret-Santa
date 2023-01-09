@@ -47,6 +47,11 @@
                         <view slot="icon">
                             <van-icon name="info" color="red" />
                         </view>
+                        <van-cell wx:for="{{waiting_events}}" wx:key="waiting_events" title="{{item.event_name}}" id="{{item._id}}" label="{{item.event_description}}" bind:click="onAuditEvent" clickable center is-link>
+                            <view>
+                                <view>{{item.event_start}}</view>
+                            </view>
+                        </van-cell>
                     </van-collapse-item>
                     <van-collapse-item title="成员" name="group_members" value="{{group.group_members}} 人">
                         <van-cell wx:for="{{group_members}}" wx:key="group_members" title="{{item.nickname}}" id="{{item._id}}" />
@@ -66,6 +71,20 @@
 </view>
 
 <van-action-sheet show="{{ sheetShow }}" actions="{{ actions }}" cancel-text="取消" bind:close="onCloseSheet" bind:cancel="onCloseSheet" bind:select="onSelectSheet" />
+
+<van-popup show="{{ event_show }}" round bind:close="onPopupClose" custom-style="width: 85%;">
+    <van-cell-group>
+        <van-cell title="{{event.event_name}}" label="{{event.event_description}}" size="large" />
+        <van-cell title="创建者" value="{{event.event_creator}}" />
+        <van-cell title="开始时间" value="{{event.event_start}}" />
+        <van-cell title="抽签时间" value="{{event.event_roll}}" />
+        <van-cell title="结束时间" value="{{event.event_end}}" />
+    </van-cell-group>
+    <view class="flex-row-space-around">
+        <button class="square" type="warn" bindtap="onFailAudit">拒绝</button>
+        <button class="square" type="primary" bindtap="onPassAudit">通过</button>
+    </view>
+</van-popup>
 
 <view class="footer" bindtap="onOpenSheet">
     <text>操作</text>
