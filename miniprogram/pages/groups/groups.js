@@ -36,6 +36,7 @@ Page({
 
         waiting_events: [],
         group_members: [],
+        group_events: [],
 
         activeCollapse: []
     },
@@ -202,6 +203,59 @@ Page({
             event: event,
             event_show: true
         })
+    },
+    async onPassAudit(e) {
+        try {
+            await syncRequest('/events', {
+                action: 'audit',
+                result: 'pass',
+                event_id: this.data.event._id,
+                group_id: this.data.groupId
+            })
+            this.data.waiting_events = this.data.waiting_events.filter(o => {
+                if (o._id !== this.data.event._id) {
+                    return true
+                } else {
+                    this.data.group_events.push(o)
+                    return false
+                }
+            });
+            this.setData({
+                event_show: false,
+                waiting_events: this.data.waiting_events,
+                group_events: this.data.group_events,
+                'group.waiting_events': this.data.group.waiting_events - 1,
+                'group.group_events': this.data.group.group_events + 1,
+            })
+        } catch (e) {
+            wx.showToast({
+                title: '未知错误',
+                icon: 'error'
+            })
+        }
+    },
+    async onFailAudit(e) {
+        try {
+            await syncRequest('/events', {
+                action: 'audit',
+                result: 'fail',
+                event_id: this.data.event._id,
+                group_id: this.data.groupId
+            })
+            this.data.waiting_events = this.data.waiting_events.filter(o => {
+                return o._id !== this.data.event._id
+            });
+            this.setData({
+                event_show: false,
+                waiting_events: this.data.waiting_events,
+                'group.waiting_events': this.data.group.waiting_events - 1
+            })
+        } catch (e) {
+            wx.showToast({
+                title: '未知错误',
+                icon: 'error'
+            })
+        }
     },
     onPopupClose() {
         this.setData({
