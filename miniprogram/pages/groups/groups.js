@@ -181,8 +181,21 @@ Page({
                 this.setData({
                     waiting_events: res.data.data
                 })
+            } else if (e.detail === "group_events") {
+                let res = await syncRequest('/groups', {
+                    action: 'load_events',
+                    group_id: group_id
+                })
+                res.data.data.map(o => {
+                    o.event_rolled = o.event_rolled === 'true'
+                    o.event_ended = o.event_ended === 'true'
+                })
+                this.setData({
+                    group_events: res.data.data
+                })
             }
         } catch (e) {
+            console.log(e)
             wx.showToast({
                 title: '未知错误',
                 icon: 'error'
