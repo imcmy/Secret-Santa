@@ -42,6 +42,13 @@
                         <view slot="icon">
                             <van-icon name="info" color="red" />
                         </view>
+                        <van-cell wx:for="{{waiting_members}}" wx:key="waiting_members" title="{{item.nickname}}">
+                            <view slot="right-icon" class="updown">
+                                <van-tag round id="{{item._id}}" type="danger" bindtap="onRejectAudit" size="medium"><van-icon name="clear" /> 拒绝</van-tag>
+                                <view style="width: 14px;"></view>
+                                <van-tag round id="{{item._id}}" type="success" bindtap="onAcceptAudit" size="medium"><van-icon name="checked" /> 接受</van-tag>
+                            </view>
+                        </van-cell>
                     </van-collapse-item>
                     <van-collapse-item wx:if="{{group.audit_create && group.waiting_events}}" title="待批准活动" name="waiting_events" value="{{group.waiting_events}} 项">
                         <view slot="icon">

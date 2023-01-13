@@ -35,3 +35,9 @@ page {
     width: 256rpx;
     opacity: 0.4;
 }
+
+.updown {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}

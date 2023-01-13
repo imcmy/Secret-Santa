@@ -29,14 +29,16 @@ Page({
 
         groups: [],
         group: {},
-        groupId: 0,
+        groupId: '',
 
         event: {},
         event_show: false,
 
-        waiting_events: [],
+        
         group_members: [],
         group_events: [],
+        waiting_members: [],
+        waiting_events: [],
 
         activeCollapse: []
     },
@@ -114,7 +116,7 @@ Page({
             } else if (e.data.errCode === 0x25) {
                 wx.showToast({
                     title: '等待审核',
-                    icon: 'loading'
+                    icon: 'success'
                 })
             } else if (e.data.errCode === 0x26) {
                 wx.showToast({
@@ -122,6 +124,7 @@ Page({
                     icon: 'error'
                 })
             } else {
+                console.log(e)
                 wx.showToast({
                     title: '未知错误',
                     icon: 'error'
@@ -172,15 +175,6 @@ Page({
                     group_members: res.data.data,
                     groupMembersLoading: false
                 })
-            } else if (e.detail === "waiting_events") {
-                let res = await syncRequest('/groups', {
-                    action: 'load_waiting_events',
-                    group_id: group_id
-                })
-                res.data.data.map(o => o.event_start = utils.formattedTime(o.event_start))
-                this.setData({
-                    waiting_events: res.data.data
-                })
             } else if (e.detail === "group_events") {
                 let res = await syncRequest('/groups', {
                     action: 'load_events',
@@ -193,7 +187,24 @@ Page({
                 this.setData({
                     group_events: res.data.data
                 })
-            }
+            } else if (e.detail === "waiting_members") {
+                let res = await syncRequest('/groups', {
+                    action: 'load_waiting_members',
+                    group_id: group_id
+                })
+                this.setData({
+                    waiting_members: res.data.data
+                })
+            } else if (e.detail === "waiting_events") {
+                let res = await syncRequest('/groups', {
+                    action: 'load_waiting_events',
+                    group_id: group_id
+                })
+                res.data.data.map(o => o.event_start = utils.formattedTime(o.event_start))
+                this.setData({
+                    waiting_events: res.data.data
+                })
+            } 
         } catch (e) {
             console.log(e)
             wx.showToast({
@@ -274,5 +285,55 @@ Page({
         this.setData({
             event_show: false
         })
+    },
+
+    async onAcceptAudit(e) {
+        try {
+            await syncRequest('/groups', {
+                action: 'audit',
+                result: 'accept',
+                user_id: e.currentTarget.id
+            })
+            this.data.waiting_members = this.data.waiting_members.filter(o => {
+                if (o._id !== e.currentTarget.id) {
+                    return true
+                } else {
+                    this.data.group_members.push(o)
+                    return false
+                }
+            });
+            this.setData({
+                waiting_members: this.data.waiting_members,
+                group_members: this.data.group_members,
+                'group.waiting_members': this.data.group.waiting_members - 1,
+                'group.group_members': this.data.group.group_members + 1,
+            })
+        } catch (e) {
+            wx.showToast({
+                title: '未知错误',
+                icon: 'error'
+            })
+        }
+    },
+    async onRejectAudit(e) {
+        try {
+            await syncRequest('/groups', {
+                action: 'audit',
+                result: 'reject',
+                user_id: e.currentTarget.id
+            })
+            this.data.waiting_members = this.data.waiting_members.filter(o => {
+                return o._id !== e.currentTarget.id
+            });
+            this.setData({
+                waiting_members: this.data.waiting_members,
+                'group.waiting_members': this.data.group.waiting_members - 1
+            })
+        } catch (e) {
+            wx.showToast({
+                title: '未知错误',
+                icon: 'error'
+            })
+        }
     }
 })
