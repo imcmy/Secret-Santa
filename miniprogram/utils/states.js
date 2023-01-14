@@ -58,8 +58,9 @@ export const testSetLogin = async (force = false, login = false) => {
             if (login)
                 getApp().syncFullAddr()
         } catch (e) {
-            if (!login && e.data.errCode !== 0x4)
-                errorHandler(e)
+            if (login && e.data && e.data.errCode === 0x4)
+                return false
+            errorHandler(e)
             return false
         }
     }

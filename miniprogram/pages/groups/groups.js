@@ -292,6 +292,7 @@ Page({
             await syncRequest('/groups', {
                 action: 'audit',
                 result: 'accept',
+                group_id: this.data.groupId,
                 user_id: e.currentTarget.id
             })
             this.data.waiting_members = this.data.waiting_members.filter(o => {
@@ -320,6 +321,7 @@ Page({
             await syncRequest('/groups', {
                 action: 'audit',
                 result: 'reject',
+                group_id: this.data.groupId,
                 user_id: e.currentTarget.id
             })
             this.data.waiting_members = this.data.waiting_members.filter(o => {

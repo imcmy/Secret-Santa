@@ -6,71 +6,61 @@
                 <image mode="heightFix" src="{{avatarUrl}}" />
             </view>
             <view class="userinfo-detail-wrapper">
-                <text class="userinfo-nickname">{{ nickName }}</text>
-                <text class="userinfo-address">{{ addressInfo }}</text>
+                <text class="userinfo-nickname">{{nickName}}</text>
+                <text class="userinfo-address">{{addressInfo}}</text>
             </view>
         </view>
     </view>
     <view wx:if="{{logged}}">
         <van-tabs animated swipeable sticky color="#2ba245">
-            <van-tab title="我的活动"></van-tab>
-            <van-tab title="报名中"></van-tab>
-            <van-tab title="未开始"></van-tab>
+            <van-tab title="我的活动" name="participated">
+                <scroll-view scroll-y>
+                    <van-cell-group wx:if="{{event.started.length > 0}}" title="已报名">
+                        <van-cell wx:for="{{event.started}}" title="{{item.event_name}}" label="抽签于 {{item.timeFormatted}}" wx:key="started" link-type="navigateTo" url="/pages/gift/gift?eid={{item._id}}" is-link center>
+                            <view>
+                                <van-tag type="success">{{item.event_group_name}}</van-tag>
+                            </view>
+                        </van-cell>
+                    </van-cell-group>
+                    <van-cell-group wx:if="{{event.rolled.length > 0}}" title="已抽签">
+                        <van-cell wx:for="{{event.rolled}}" title="{{item.event_name}}" label="结束于 {{item.timeFormatted}}" wx:key="rolled" link-type="navigateTo" url="/pages/gift/gift?eid={{item._id}}" is-link center>
+                            <view>
+                                <van-tag type="success">{{item.event_group_name}}</van-tag>
+                            </view>
+                        </van-cell>
+                    </van-cell-group>
+                    <van-cell-group wx:if="{{event.ended.length > 0}}" title="已结束">
+                        <van-cell wx:for="{{event.ended}}" title="{{item.event_name}}" label="结束于 {{item.timeFormatted}}" wx:key="ended" link-type="navigateTo" url="/pages/gift/gift?eid={{item._id}}" is-link center>
+                            <view>
+                                <van-tag type="success">{{item.event_group_name}}</van-tag>
+                            </view>
+                        </van-cell>
+                    </van-cell-group>
+                </scroll-view>
+            </van-tab>
+            <van-tab title="报名中" name="underway">
+                <scroll-view scroll-y>
+                    <van-cell-group>
+                        <van-cell wx:for="{{event.underway}}" title="{{item.event_name}}" label="结束于 {{item.timeFormatted}}" wx:key="underway" link-type="navigateTo" url="/pages/gift/gift?eid={{item._id}}" is-link center>
+                            <view>
+                                <van-tag type="success">{{item.event_group_name}}</van-tag>
+                            </view>
+                        </van-cell>
+                    </van-cell-group>
+                </scroll-view>
+            </van-tab>
+            <van-tab title="未开始" name="notStarted">
+                <scroll-view scroll-y>
+                    <van-cell-group>
+                        <van-cell wx:for="{{event.notStarted}}" title="{{item.event_name}}" label="开始于 {{item.timeFormatted}}" wx:key="notStarted" link-type="navigateTo" url="/pages/gift/gift?eid={{item._id}}" is-link center>
+                            <view>
+                                <van-tag type="success">{{item. event_group_name}}</van-tag>
+                            </view>
+                        </van-cell>
+                    </van-cell-group>
+                </scroll-view>
+            </van-tab>
         </van-tabs>
-        <swiper indicator-dots="{{false}}" bindchange="handleSwiper" current="{{currentTab}}">
-            <swiper-item>
-                <scroll-view scroll-y>
-                    <mp-cells wx:if="{{ event.applied.length > 0 }}" title="已报名">
-                        <mp-cell wx:for="{{ event.applied }}" wx:key="appliedEve" wx:for-item="eve" link-type="navigateTo" url="/pages/gift/gift?eid={{eve._id}}" link="{{true}}">
-                            <view>
-                                <view class="cell-title">{{ eve.eventName }}</view>
-                                <view>结束于 {{ eve.timeFormatted }}</view>
-                            </view>
-                        </mp-cell>
-                    </mp-cells>
-                    <mp-cells wx:if="{{ event.publish.length > 0 }}" title="已抽签">
-                        <mp-cell wx:for="{{ event.publish }}" wx:key="publishedEve" wx:for-item="eve" link-type="navigateTo" url="/pages/gift/gift?eid={{eve._id}}" link="{{true}}">
-                            <view>
-                                <view class="cell-title">{{ eve.eventName }}</view>
-                                <view>结束于 {{ eve.timeFormatted }}</view>
-                            </view>
-                        </mp-cell>
-                    </mp-cells>
-                    <mp-cells wx:if="{{ event.end.length > 0 }}" title="已结束">
-                        <mp-cell wx:for="{{ event.end }}" wx:key="endEve" wx:for-item="eve" link-type="navigateTo" url="/pages/gift/gift?eid={{eve._id}}" link="{{true}}">
-                            <view>
-                                <view class="cell-title">{{ eve.eventName }}</view>
-                                <view>结束于 {{ eve.timeFormatted }}</view>
-                            </view>
-                        </mp-cell>
-                    </mp-cells>
-                </scroll-view>
-            </swiper-item>
-            <swiper-item>
-                <scroll-view scroll-y>
-                    <mp-cells>
-                        <mp-cell wx:for="{{ event.ableToApply }}" wx:key="regEve" wx:for-item="eve" link-type="navigateTo" url="/pages/gift/gift?eid={{eve._id}}" link="{{true}}">
-                            <view>
-                                <view class="cell-title">{{ eve.eventName }}</view>
-                                <view>结束于 {{ eve.timeFormatted }}</view>
-                            </view>
-                        </mp-cell>
-                    </mp-cells>
-                </scroll-view>
-            </swiper-item>
-            <swiper-item>
-                <scroll-view scroll-y>
-                    <mp-cells>
-                        <mp-cell wx:for="{{ event.notStarted }}" wx:key="endEve" wx:for-item="eve" link-type="navigateTo" url="/pages/gift/gift?eid={{eve._id}}" link="{{true}}">
-                            <view>
-                                <view class="cell-title">{{ eve.eventName }}</view>
-                                <view>结束于 {{ eve.timeFormatted }}</view>
-                            </view>
-                        </mp-cell>
-                    </mp-cells>
-                </scroll-view>
-            </swiper-item>
-        </swiper>
     </view>
     <view wx:if="{{!logged}}" class="weui-flex flex-center">
         <van-empty image="/images/open-box.png" description="注册开启礼物交换" />

@@ -61,14 +61,17 @@ Page({
         })
         for (let key in events.data) {
             events.data[key].forEach((item, _) => {
-                if (item.status == 0) item.timeFormatted = utils.unixToFormatted(item.rollTime)
-                else if (item.status == 1) item.timeFormatted = utils.unixToFormatted(item.startTime)
-                else if (item.status == 2 || item.status == 3) item.timeFormatted = utils.unixToFormatted(item.endTime)
+                if (key === 'notStarted')
+                    item.timeFormatted = utils.formattedTime(item.event_start)
+                else if (key === 'started' || key === 'underway')
+                    item.timeFormatted = utils.formattedTime(item.event_roll)
+                else if (key === 'rolled' || key === 'ended')
+                    item.timeFormatted = utils.formattedTime(item.event_end)
             })
         }
+        console.log(events.data)
         this.setData({
-            event: events.data,
-            myEventLength: events.data.applied.length + events.data.publish.length
+            event: events.data
         })
 
         this.loading = false

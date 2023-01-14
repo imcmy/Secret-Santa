@@ -46,7 +46,7 @@
                             <view slot="right-icon" class="updown">
                                 <van-tag round id="{{item._id}}" type="danger" bindtap="onRejectAudit" size="medium"><van-icon name="clear" /> 拒绝</van-tag>
                                 <view style="width: 14px;"></view>
-                                <van-tag round id="{{item._id}}" type="success" bindtap="onAcceptAudit" size="medium"><van-icon name="checked" /> 接受</van-tag>
+                                <van-tag round id="{{item._id}}" type="success" bindtap="onAcceptAudit" size="medium"><van-icon name="checked" /> 同意</van-tag>
                             </view>
                         </van-cell>
                     </van-collapse-item>
