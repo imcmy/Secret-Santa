@@ -35,8 +35,13 @@
                     <view class="article__p">5.1 开发者承诺，不会主动共享或转让你的信息至任何第三方，如存在确需共享或转让时，开发者应当直接征得或确认第三方征得你的单独同意。</view>
                     <view class="article__p">5.2 开发者承诺，不会对外公开披露你的信息，如必须公开披露时，开发者应当向你告知公开披露的目的、披露信息的类型及可能涉及的信息，并征得你的单独同意。</view>
                 </view>
+                <view class="article__h3">六、免责声明</view>
                 <view class="article__section">
-                    <view class="article__p">更新日期：2022年12月23日</view>
+                    <view class="article__p">6.1 小程序运行在微信环境下；你的信息存储在由数字天堂（北京）网络技术有限公司联合阿里云所运维的云开发平台中。开发者不对任何由平台方服务所导致的问题负责。</view>
+                    <view class="article__p">6.2 小程序是由开发者自愿提供，你可以免费使用。小程序未经过严格测试，可能存在缺陷。使用小程序需要你自行承担风险，并在参加匿名礼物交换前仔细鉴别。开发者不对你使用小程序过程中可能遭受的任何损失负责。</view>
+                </view>
+                <view class="article__section">
+                    <view class="article__p">更新日期：2023年1月13日</view>
                 </view>
             </view>
         </view>
