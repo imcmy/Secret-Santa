@@ -15,7 +15,8 @@ App({
         },
         user: undefined,
         sessionId: '',
-        sessionExpire: Date.now()
+        sessionExpire: Date.now(),
+        event: undefined
     },
     onLaunch: function () {
         this.globalData = this.data

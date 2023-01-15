@@ -166,6 +166,7 @@ Page({
                 } else {
                     app.user.nickname = localData.nickname
                     app.user.addresses = localData.addresses.lists
+                    app.user.avatar = `${wx.env.USER_DATA_PATH}` + '/avatar.png'
                     getApp().syncFullAddr()
                     utils.delayBack(2000)
                 }

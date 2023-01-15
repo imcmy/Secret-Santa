@@ -1,4 +1,3 @@
-<!--index.wxml-->
 <view data-weui-theme="{{theme}}" style="height: 100%;">
     <view class="weui-flex">
         <view wx:if="{{logged}}" class="top-bar userinfo {{themeBg}}-bg">
@@ -15,22 +14,23 @@
         <van-tabs animated swipeable sticky color="#2ba245">
             <van-tab title="我的活动" name="participated">
                 <scroll-view scroll-y>
-                    <van-cell-group wx:if="{{event.started.length > 0}}" title="已报名">
-                        <van-cell wx:for="{{event.started}}" title="{{item.event_name}}" label="抽签于 {{item.timeFormatted}}" wx:key="started" link-type="navigateTo" url="/pages/gift/gift?eid={{item._id}}" is-link center>
+                    <event-cell events="{{events.started}}" title="已报名" label="抽签于" />
+                    <van-cell-group wx:if="{{events.started.length > 0}}" title="已报名">
+                        <van-cell wx:for="{{events.started}}" title="{{item.event_name}}" label="抽签于 {{item.timeFormatted}}" wx:key="started" id="started-{{item._id}}" bind:click="onNavigateEvent" is-link center>
                             <view>
                                 <van-tag type="success">{{item.event_group_name}}</van-tag>
                             </view>
                         </van-cell>
                     </van-cell-group>
-                    <van-cell-group wx:if="{{event.rolled.length > 0}}" title="已抽签">
-                        <van-cell wx:for="{{event.rolled}}" title="{{item.event_name}}" label="结束于 {{item.timeFormatted}}" wx:key="rolled" link-type="navigateTo" url="/pages/gift/gift?eid={{item._id}}" is-link center>
+                    <van-cell-group wx:if="{{events.rolled.length > 0}}" title="已抽签">
+                        <van-cell wx:for="{{events.rolled}}" title="{{item.event_name}}" label="结束于 {{item.timeFormatted}}" wx:key="rolled" id="rolled-{{item._id}}" bind:click="onNavigateEvent" is-link center>
                             <view>
                                 <van-tag type="success">{{item.event_group_name}}</van-tag>
                             </view>
                         </van-cell>
                     </van-cell-group>
-                    <van-cell-group wx:if="{{event.ended.length > 0}}" title="已结束">
-                        <van-cell wx:for="{{event.ended}}" title="{{item.event_name}}" label="结束于 {{item.timeFormatted}}" wx:key="ended" link-type="navigateTo" url="/pages/gift/gift?eid={{item._id}}" is-link center>
+                    <van-cell-group wx:if="{{events.ended.length > 0}}" title="已结束">
+                        <van-cell wx:for="{{events.ended}}" title="{{item.event_name}}" label="结束于 {{item.timeFormatted}}" wx:key="ended" id="ended-{{item._id}}" bind:click="onNavigateEvent" is-link center>
                             <view>
                                 <van-tag type="success">{{item.event_group_name}}</van-tag>
                             </view>
@@ -41,7 +41,7 @@
             <van-tab title="报名中" name="underway">
                 <scroll-view scroll-y>
                     <van-cell-group>
-                        <van-cell wx:for="{{event.underway}}" title="{{item.event_name}}" label="结束于 {{item.timeFormatted}}" wx:key="underway" link-type="navigateTo" url="/pages/gift/gift?eid={{item._id}}" is-link center>
+                        <van-cell wx:for="{{events.underway}}" title="{{item.event_name}}" label="结束于 {{item.timeFormatted}}" wx:key="underway" id="underway-{{item._id}}" bind:click="onNavigateEvent" is-link center>
                             <view>
                                 <van-tag type="success">{{item.event_group_name}}</van-tag>
                             </view>
@@ -52,7 +52,7 @@
             <van-tab title="未开始" name="notStarted">
                 <scroll-view scroll-y>
                     <van-cell-group>
-                        <van-cell wx:for="{{event.notStarted}}" title="{{item.event_name}}" label="开始于 {{item.timeFormatted}}" wx:key="notStarted" link-type="navigateTo" url="/pages/gift/gift?eid={{item._id}}" is-link center>
+                        <van-cell wx:for="{{events.notStarted}}" title="{{item.event_name}}" label="开始于 {{item.timeFormatted}}" wx:key="notStarted" id="notStarted-{{item._id}}" bind:click="onNavigateEvent" is-link center>
                             <view>
                                 <van-tag type="success">{{item. event_group_name}}</van-tag>
                             </view>

@@ -1,12 +1,10 @@
 /* miniprogram/pages/gift/gift.wxss */
 page {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif !important;
+    background: #f6f6f6;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100vh;
 }
 
 .page {

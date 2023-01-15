@@ -1,61 +1,72 @@
-<!--miniprogram/pages/gift/gift.wxml-->
-<view class="loading" wx:if="{{ loading }}" data-weui-theme="{{theme}}">
-    <mp-loading type="circle" tips="加载中"></mp-loading>
-</view>
-<view class="page" wx:else data-weui-theme="{{theme}}">
-    <view class="weui-panel">
-        <view class="weui-panel__bd">
-            <view class="weui-panel__hd weui-media-box__title_flex">
-                <tag type="{{event.status_style[event.status]}}">{{event.status_text[event.status]}}</tag>
-                <tag wx:if="{{event.status===0}}" type="primary">{{ event.time }} 抽签</tag>
-                <tag wx:elif="{{event.status===1}}" type="primary">{{ event.time }} 开始</tag>
-                <tag wx:elif="{{event.status===2}}" type="end">{{ event.time }} 结束</tag>
-            </view>
-            <view class="weui-media-box weui-media-box_text" style="padding-bottom: 10rpx;">
-                <view class="weui-media-box__title weui-media-box__title_in-text">
-                    {{event._event.eventName}}
+<view class="main">
+    <view data-weui-theme="{{theme}}">
+        <van-steps steps="{{steps}}" active="{{step}}" />
+        <van-cell-group title="基本信息">
+            <van-cell title="{{event.event_name}}" label="{{event.event_description}}" size="large" center>
+                <view>
+                    <van-tag type="success" size="large">{{step <= 1 ? event.event_participates : event.event_participates.legnth}} 人</van-tag>
                 </view>
-                <view class="weui-media-box__desc">{{event._event.description}}</view>
-            </view>
-            <view wx:if="{{_in && event._event.rolled && !event._event.ended}}">
-                <view class="weui-panel__hd">抽签结果</view>
-                <view class="weui-media-box weui-media-box_text">
-                    <view class="gift-line-content">
-                        <text selectable>{{ receiver[0].recipient }}</text>
-                        <text selectable>{{ receiver[0].telNumber }}</text>
-                    </view>
-                    <view class="gift-line-content">
-                        <text selectable>{{ receiver[0].fullAddr }}</text>
-                    </view>
-                    <view class="gift-line-content">
-                        <text selectable>{{ receiver[0].postalCode }}</text>
-                    </view>
+            </van-cell>
+            <van-cell title="创建者">
+                <view>
+                    <van-tag type="success">{{event.event_group_name}}</van-tag> {{event.event_creator}}
                 </view>
-            </view>
-            <view wx:if="{{_in && !event._event.ended}}">
-                <view class="weui-panel__hd">{{event._event.enrollment}} 人参与</view>
-                <view class="weui-media-box weui-media-box_text">
-                    <view class="gift-line-inline" wx:for="{{ event._event.names }}" wx:key="globalNames" wx:for-item="name" wx:for-index="idx">
-                        <text wx:if="{{ idx != (event._event.names.length - 1) }}">{{ name }}, </text>
-                        <text wx:else>{{ name }}</text>
+            </van-cell>
+            <van-cell wx:if="{{step < 1}}" title="开始时间" value="{{event.event_start}}" />
+            <van-cell wx:if="{{step < 2}}" title="抽签时间" value="{{event.event_roll}}" />
+            <van-cell wx:if="{{step < 3}}" title="结束时间" value="{{event.event_end}}" />
+        </van-cell-group>
+        <van-cell-group wx:if="{{step === 2}}" title="抽签结果">
+        </van-cell-group>
+        <van-cell-group wx:if="{{step === 3}}" title="全局顺序">
+        </van-cell-group>
+        <!-- <view class="weui-panel">
+            <view class="weui-panel__bd">
+                
+                <view wx:if="{{_in && event._event.rolled && !event._event.ended}}">
+                    <view class="weui-panel__hd">抽签结果</view>
+                    <view class="weui-media-box weui-media-box_text">
+                        <view class="gift-line-content">
+                            <text selectable>{{ receiver[0].recipient }}</text>
+                            <text selectable>{{ receiver[0].telNumber }}</text>
+                        </view>
+                        <view class="gift-line-content">
+                            <text selectable>{{ receiver[0].fullAddr }}</text>
+                        </view>
+                        <view class="gift-line-content">
+                            <text selectable>{{ receiver[0].postalCode }}</text>
+                        </view>
                     </view>
                 </view>
-            </view>
-            <view wx:if="{{_in && event._event.rolled}}">
-                <view class="weui-panel__hd">全局顺序</view>
-                <view class="weui-media-box weui-media-box_text">
-                    <view class="gift-global-inline" wx:for="{{ event._event.idx_diced }}" wx:key="globalResult" wx:for-item="eveR" wx:for-index="idx">
-                        <tag plain wx:if="{{!event._event.ended && eveR === record[0].myno}}">{{ nickName + ' ' + eveR }}号 </tag>
-                        <tag plain wx:elif="{{!event._event.ended && eveR === record[0].itno}}">{{ receiver[0].recipient + ' ' + eveR }}号 </tag>
-                        <tag plain wx:elif="{{!event._event.ended}}">{{ eveR }}号</tag>
-                        <tag plain wx:else>{{ event._event._names_diced[idx] + ' ' + eveR }}号</tag>
-                        <mp-icon wx:if="{{ idx != (event._event.idx_diced.length - 1) }}" size="10" icon="arrow" style="padding: 0 10rpx" color="green" />
+                <view wx:if="{{_in && !event._event.ended}}">
+                    <view class="weui-panel__hd">{{event._event.enrollment}} 人参与</view>
+                    <view class="weui-media-box weui-media-box_text">
+                        <view class="gift-line-inline" wx:for="{{ event._event.names }}" wx:key="globalNames" wx:for-item="name" wx:for-index="idx">
+                            <text wx:if="{{ idx != (event._event.names.length - 1) }}">{{ name }}, </text>
+                            <text wx:else>{{ name }}</text>
+                        </view>
+                    </view>
+                </view>
+                <view wx:if="{{_in && event._event.rolled}}">
+                    <view class="weui-panel__hd">全局顺序</view>
+                    <view class="weui-media-box weui-media-box_text">
+                        <view class="gift-global-inline" wx:for="{{ event._event.idx_diced }}" wx:key="globalResult" wx:for-item="eveR" wx:for-index="idx">
+                            <tag plain wx:if="{{!event._event.ended && eveR === record[0].myno}}">{{ nickName + ' ' + eveR }}号 </tag>
+                            <tag plain wx:elif="{{!event._event.ended && eveR === record[0].itno}}">{{ receiver[0].recipient + ' ' + eveR }}号 </tag>
+                            <tag plain wx:elif="{{!event._event.ended}}">{{ eveR }}号</tag>
+                            <tag plain wx:else>{{ event._event._names_diced[idx] + ' ' + eveR }}号</tag>
+                            <mp-icon wx:if="{{ idx != (event._event.idx_diced.length - 1) }}" size="10" icon="arrow" style="padding: 0 10rpx" color="green" />
+                        </view>
                     </view>
                 </view>
             </view>
-        </view>
+        </view> -->
+        <!-- <button style="margin-bottom: 64rpx;" wx:if="{{event.status == '0'}}" type="{{!_in ? 'primary' : 'default'}}" bindtap="onButton">
+            {{!_in ? '我要参加': '我要退出'}}
+        </button> -->
     </view>
-    <button style="margin-bottom: 64rpx;" wx:if="{{event.status == '0'}}" type="{{!_in ? 'primary' : 'default'}}" bindtap="onButton">
-        {{!_in ? '我要参加': '我要退出'}}
-    </button>
+</view>
+
+<view wx:if="{{step < 2}}" class="footer" bindtap="onInOutEvent">
+    <text>{{event.joined ? '退出活动': '参加活动'}}</text>
 </view>

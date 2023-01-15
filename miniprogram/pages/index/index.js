@@ -15,7 +15,7 @@ Page({
         nickName: '',
         addressInfo: '',
 
-        event: {},
+        events: {},
         currentTab: 0,
         tabList: [{
             name: '我的活动'
@@ -69,27 +69,12 @@ Page({
                     item.timeFormatted = utils.formattedTime(item.event_end)
             })
         }
-        console.log(events.data)
         this.setData({
-            event: events.data
+            events: events.data
         })
 
         this.loading = false
     },
-
-    // Event Handler
-    onTapRegister: function (e) {
-        wx.navigateTo({
-            url: '/pages/user_detail/user_detail',
-        })
-    },
-    onTapUser: function () {
-        wx.navigateTo({
-            url: '/pages/user/user',
-        })
-    },
-
-    // UI interaction helper functions
     onPullDownRefresh: function () {
         if (!this.data.loading) {
             this.fetchEvents().then(() => {
@@ -97,22 +82,18 @@ Page({
             })
         }
     },
-    handleClick: function (e) {
-        let currentTab = e.currentTarget.dataset.index
-        this.setData({
-            currentTab
-        })
-    },
-    handleSwiper: function (e) {
-        let {
-            current,
-            source
-        } = e.detail
-        if (source === 'autoplay' || source === 'touch') {
-            const currentTab = current
-            this.setData({
-                currentTab
-            })
+
+    onNavigateEvent(e) {
+        let id = e.currentTarget.id
+        let parts = id.split("-")
+        for (let idx in this.data.events[parts[0]]) {
+            if (this.data.events[parts[0]][idx]._id === parts[1]) {
+                app.event = this.data.events[parts[0]][idx]
+                wx.navigateTo({
+                    url: '/pages/gift/gift'
+                })
+                return
+            }
         }
-    },
+    }
 })

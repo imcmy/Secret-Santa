@@ -47,6 +47,7 @@ export const getLoginCode = () => {
 }
 
 export const testSetLogin = async (force = false, login = false) => {
+    // if (app. not exist)
     if (force || isSessionExpired()) {
         try {
             let code = await getLoginCode()
