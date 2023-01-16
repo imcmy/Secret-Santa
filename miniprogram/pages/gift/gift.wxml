@@ -67,6 +67,6 @@
     </view>
 </view>
 
-<view wx:if="{{step < 2}}" class="footer" bindtap="onInOutEvent">
+<view wx:if="{{step === 1}}" class="footer" bindtap="onInOutEvent">
     <text>{{event.joined ? '退出活动': '参加活动'}}</text>
 </view>

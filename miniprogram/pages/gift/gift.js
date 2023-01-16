@@ -8,7 +8,7 @@ Page({
     data: {
         step: 0,
         steps: [{
-            text: '待开始'
+            text: '未开始'
         }, {
             text: '报名中'
         }, {
@@ -65,7 +65,7 @@ Page({
             })
             this.setData({
                 'event.joined': !this.data.event.joined,
-                'event.event_participates': res.data.event_participates
+                'event.event_participates': res.data
             })
         } catch (e) {
             console.log(e)
