@@ -6,6 +6,9 @@ import {
 
 Page({
     data: {
+        theme: 'light',
+        loading: true,
+
         step: 0,
         steps: [{
             text: '未开始'
@@ -16,8 +19,6 @@ Page({
         }, {
             text: '已结束'
         }],
-
-        theme: 'light',
         event: {}
     },
 
@@ -50,7 +51,8 @@ Page({
         app.event.event_participates = res.data.event_participates
         this.setData({
             step: res.data.step,
-            event: app.event
+            event: app.event,
+            loading: false
         })
 
         this.fetchLoading = false

@@ -1,7 +1,7 @@
 {
     "enablePullDownRefresh": true,
     "usingComponents": {
-        "van-skeleton": "@vant/weapp/skeleton/index",
+        "van-loading": "@vant/weapp/loading/index",
         "van-steps": "@vant/weapp/steps/index",
         "van-cell": "@vant/weapp/cell/index",
         "van-cell-group": "@vant/weapp/cell-group/index",

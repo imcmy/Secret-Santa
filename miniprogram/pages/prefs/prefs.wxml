@@ -3,13 +3,13 @@
         <van-cell-group title="浅色背景">
             <van-cell center>
                 <view slot="title">
-                    <image mode="aspectFill" src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-c1b28ba0-3d60-440e-b797-c927294b93f2/382c86a3-214c-4f09-ac5a-4a56959bd9e4.png"></image>
+                    <image mode="aspectFill" src="https://secret-santa.top/images/red.png"></image>
                 </view>
                 <radio slot="right-icon" value="red" checked="{{settings.background.red}}" />
             </van-cell>
             <van-cell center>
                 <view slot="title">
-                    <image mode="aspectFill" src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-c1b28ba0-3d60-440e-b797-c927294b93f2/758a3128-df2a-4a6d-91c6-f31a11416807.png"></image>
+                    <image mode="aspectFill" src="https://secret-santa.top/images/green.png"></image>
                 </view>
                 <radio slot="right-icon" value="green" checked="{{settings.background.green}}" />
             </van-cell>

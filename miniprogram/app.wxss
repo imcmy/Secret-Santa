@@ -3,12 +3,19 @@
 /* Variable */
 page {   
     --main-focus-color: #1AAD19;
+    --main-background-color: #F1F1F1;
 }
 
 @media (prefers-color-scheme: dark) {
     page {
         --main-focus-color: #2BA245;
+        --main-background-color: #4D4D4D;
     }
+}
+
+/* Common */
+page {
+    background: var(--main-background-color);
 }
 
 /* Components */
@@ -58,13 +65,13 @@ page {
 }
 
 .green-bg {
-    background-image: url("https://vkceyugu.cdn.bspapp.com/VKCEYUGU-c1b28ba0-3d60-440e-b797-c927294b93f2/758a3128-df2a-4a6d-91c6-f31a11416807.png");
+    background-image: url("https://secret-santa.top/images/green.png");
 }
 
 .red-bg {
-    background-image: url("https://vkceyugu.cdn.bspapp.com/VKCEYUGU-c1b28ba0-3d60-440e-b797-c927294b93f2/382c86a3-214c-4f09-ac5a-4a56959bd9e4.png");
+    background-image: url("https://secret-santa.top/images/red.png");
 }
 
 .dark-bg {
-    background-image: url("https://vkceyugu.cdn.bspapp.com/VKCEYUGU-c1b28ba0-3d60-440e-b797-c927294b93f2/d49f5013-24a7-4563-91cc-2e6c93f9eacd.png");
+    background-image: url("https://secret-santa.top/images/dark.png");
 }

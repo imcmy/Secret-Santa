@@ -1,4 +1,6 @@
-<view class="main">
+<van-loading wx:if="{{loading}}" class="loading">载入中</van-loading>
+
+<view wx:if="{{!loading}}" class="main">
     <view data-weui-theme="{{theme}}">
         <van-steps steps="{{steps}}" active="{{step}}" />
         <van-cell-group title="基本信息">
@@ -61,12 +63,9 @@
                 </view>
             </view>
         </view> -->
-        <!-- <button style="margin-bottom: 64rpx;" wx:if="{{event.status == '0'}}" type="{{!_in ? 'primary' : 'default'}}" bindtap="onButton">
-            {{!_in ? '我要参加': '我要退出'}}
-        </button> -->
     </view>
 </view>
 
-<view wx:if="{{step === 1}}" class="footer" bindtap="onInOutEvent">
+<view wx:if="{{!loading && step === 1}}" class="footer" bindtap="onInOutEvent">
     <text>{{event.joined ? '退出活动': '参加活动'}}</text>
 </view>
