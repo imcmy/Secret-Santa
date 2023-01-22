@@ -1,12 +1,8 @@
-/**index.wxss**/
-
 page {
-    background: #f6f6f6;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     height: 100%;
-    font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif !important;
 }
 
 .top-bar {
@@ -56,6 +52,12 @@ page {
     border-radius: 16rpx;
 }
 
+.userinfo-detail-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .userinfo-nickname {
     font-size: 34rpx;
     font-weight: 700;
@@ -66,16 +68,6 @@ page {
     font-size: 28rpx;
     font-weight: 500;
     text-align: left;
-}
-
-.userinfo-detail-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.login-button {
-    font-weight: 700 !important;
 }
 
 .flex-center {
@@ -99,113 +91,4 @@ page {
     padding-top: 32rpx;
     font-weight: 900 !important;
     opacity: 0.4;
-}
-
-.scroll-wrapper {
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    background: #FFF;
-    height: 88rpx;
-    box-sizing: border-box;
-    display: flex;
-    align-items: stretch;
-    justify-content: space-around;
-}
-
-::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    color: transparent;
-}
-
-.navigate-item {
-    display: inline-block;
-    text-align: center;
-    height: 88rpx;
-    line-height: 88rpx;
-}
-
-.names {
-    font-size: 30rpx;
-    color: #666;
-}
-
-.names.active {
-    font-weight: bold;
-    font-size: 30rpx;
-    color: #000;
-}
-
-.currtline {
-    margin: -8rpx auto 0 auto;
-    width: 100rpx;
-    height: 8rpx;
-    border-radius: 4rpx;
-}
-
-.currtline.active {
-    background: #47CD88;
-    transition: all .3s;
-}
-
-swiper {
-    min-height: calc(100vh - 100rpx);
-}
-
-.swiper-item {
-    display: flex;
-    width: 100%;
-    text-align: center;
-    padding: 32rpx 0;
-}
-
-scroll-view {
-    height: calc(100vh - 100rpx);
-}
-
-.weui-cell {
-    padding: 18rpx 16px;
-}
-
-.cell-title {
-    font-size: 28rpx;
-    padding-bottom: 12rpx;
-    color: #000;
-}
-
-.weui-cells__title {
-    font-size: 28rpx;
-    margin-top: 28rpx;
-    margin-bottom: 16rpx;
-}
-
-.weui-cell__bd {
-    color: #969799;
-    font-size: 26rpx;
-}
-
-@media (prefers-color-scheme: dark) {
-    page {
-        background: #121212;
-    }
-
-    .login {
-        background: #121212;
-    }
-
-    .scroll-wrapper {
-        background: #121212;
-    }
-
-    .names {
-        color: #969799;
-    }
-
-    .names.active {
-        color: #D9D9D9;
-    }
-
-    .cell-title {
-        color: #cccccc;
-    }
 }

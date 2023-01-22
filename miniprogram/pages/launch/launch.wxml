@@ -7,5 +7,5 @@
     </view>
 </view>
 <view class="weui-footer">
-    <view class="weui-footer__text">Copyleft <span class="copyleft">©</span> 2022 Mingyi Chen</view>
+    <view class="weui-footer__text">Developed by Mingyi Chen</view>
 </view>

@@ -46,7 +46,6 @@ Page({
             action: 'list_one',
             'event_id': app.event._id
         })
-        console.log(res)
         app.event.event_creator = res.data.event_creator
         app.event.event_start = utils.formattedTime(app.event.event_start)
         app.event.event_roll = utils.formattedTime(app.event.event_start)
@@ -63,7 +62,6 @@ Page({
     },
 
     async onInOutEvent(e) {
-        console.log(e)
         try {
             let res = await syncRequest("/events", {
                 action: this.data.event.joined ? 'leave' : 'join',
@@ -84,10 +82,11 @@ Page({
         })
     },
 
-    onPullDownRefresh: function () {
-        if (!this.fetchLoading)
-            this.fetchEvent().then(() => {
-                wx.stopPullDownRefresh()
-            })
-    },
+    onCopyAddress() {
+        var address = this.data.event.event_pairs.target.address
+        address = address.recipient + ',' + address.fullAddr + ',' + address.postalCode + ',' + address.telNumber
+        wx.setClipboardData({
+            data: address
+        })
+    }
 })

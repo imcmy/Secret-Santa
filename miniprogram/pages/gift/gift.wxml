@@ -20,10 +20,10 @@
         </van-cell-group>
         <van-cell-group wx:if="{{step === 2}}" title="抽签结果">
             <van-cell title="收礼人" value="{{event.event_pairs.target.nickname}}" />
-            <van-cell title="收货地址">
-                <view>{{event.event_pairs.target.address.recipient}}</view>
-                <view>{{event.event_pairs.target.address.fullAddr}} {{event.event_pairs.target.address.postalCode}}</view>
-                <view>{{event.event_pairs.target.address.telNumber}}</view>
+            <van-cell title="收货地址" bind:click="onCopyAddress">
+                <text user-select>{{event.event_pairs.target.address.recipient}}</text>
+                <text user-select>{{event.event_pairs.target.address.fullAddr}} {{event.event_pairs.target.address.postalCode}}</text>
+                <text user-select>{{event.event_pairs.target.address.telNumber}}</text>
             </van-cell>
             <van-collapse wx:if="{{event.event_pairs.target.wishlist.length}}" border="{{false}}" value="{{ wishlistCollpase }}" bind:change="onCollapseWishlist">
                 <van-collapse-item title="礼物清单" name="wishlist">
@@ -34,9 +34,9 @@
         <van-cell-group wx:if="{{step >= 2}}" title="{{step === 2 ? '参与人员' : '全局顺序'}}">
             <van-cell use-label-slot>
                 <view slot="label">
-                    <view class="inline" wx:for="{{event.event_participates}}" wx:key="event_participates">
+                    <view class="inline" wx:for="{{event.event_participates}}" wx:key="event_participates" size="large">
                         <van-tag type="primary">{{item}}</van-tag>
-                        <van-icon wx:if="{{step === 3 && index != event.event_participates.length}}" name="arrow" />
+                        <van-icon style="padding: 0 10rpx;" wx:if="{{step === 3 && index != event.event_participates.length - 1}}" name="arrow" />
                     </view>
                 </view>
             </van-cell>

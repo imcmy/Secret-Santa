@@ -16,5 +16,4 @@ page {
 
 .inline {
     display: inline;
-    padding-right: 20rpx;
 }

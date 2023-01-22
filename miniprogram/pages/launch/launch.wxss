@@ -1,5 +1,6 @@
 /* pages/launch/launch.wxss */
 page {
+    background-color: var(--focus-background-color);
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -31,9 +32,4 @@ page {
 
 .weui-footer {
     padding-bottom: 64rpx;
-}
-
-.copyleft {
-    display: inline-block;
-    transform: rotate(180deg);
 }

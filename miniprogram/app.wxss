@@ -1,21 +1,22 @@
-/* @import 'style/weui.wxss'; */
-
 /* Variable */
 page {
   --main-focus-color: #1aad19;
   --main-background-color: #f1f1f1;
+  --focus-background-color: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
   page {
     --main-focus-color: #2ba245;
     --main-background-color: #4d4d4d;
+    --focus-background-color: #4d4d4d;
   }
 }
 
 /* Common */
 page {
   background: var(--main-background-color);
+  font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif !important;
 }
 
 /* Components */
@@ -26,6 +27,9 @@ page {
 
   /* Collapse */
   --collapse-item-content-padding: 0;
+
+  /* Tag */
+  --tag-success-color: var(--main-focus-color);
 }
 
 /* Flex */
@@ -40,8 +44,8 @@ page {
   flex: 1;
   width: 100%;
   overflow: auto;
-  padding-bottom: constant(safe-area-inset-bottom);
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: max(constant(safe-area-inset-bottom, 32rpx), 32rpx);
+  padding-bottom: max(env(safe-area-inset-bottom, 32rpx), 32rpx);
 }
 
 .footer {

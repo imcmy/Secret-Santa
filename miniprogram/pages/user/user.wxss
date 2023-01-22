@@ -1,6 +1,4 @@
-/* miniprogram/pages/user/user.wxss */
 page {
-    background: #f6f6f6;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -17,13 +15,6 @@ page {
     display: flex;
     transition: all 300ms ease;
     box-sizing: border-box;
-}
-
-.login {
-    background: #FFFFFF;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .userinfo {
@@ -73,106 +64,6 @@ page {
     justify-content: space-between;
 }
 
-.van-button {
-    width: 50vw;
-}
-
-.van-button__text {
-    font-size: 34rpx;
-    font-weight: 700 !important;
-}
-
-.weui-cell {
-    padding: 24rpx 32rpx;
-}
-
-.weui-cell__hd {
-    font-size: 28rpx;
-}
-
-
-.list-wrapper {
-    flex-grow: 1;
-    position: relative;
-}
-
-.list-wrapper .cell-title {
-    font-size: 28rpx;
-    padding-bottom: 12rpx;
-    color: #000;
-}
-
-.list-wrapper .addr-cell {
-    padding-right: 20rpx;
-}
-
-.list-wrapper .weui-cells {
-    margin-top: 0;
-}
-
-.list-wrapper .weui-cell {
-    padding: 18rpx 16px;
-}
-
-.list-wrapper .weui-cells__title {
-    font-size: 28rpx;
-    margin-top: 28rpx;
-    margin-bottom: 12rpx;
-}
-
-.list-wrapper .weui-cell__bd {
-    color: #969799;
-    font-size: 26rpx;
-}
-
-.weui-form__title {
-    font-size: 44rpx;
-}
-
-.weui-form__text-area {
-    padding: 0;
-}
-
-.weui-form__control-area {
-    margin: 48rpx 0;
-}
-
-.weui-label {
-    font-size: 32rpx;
-}
-
-.weui-input {
-    font-size: 32rpx;
-}
-
-.red-title {
-  color: red;
-  font-weight: 700;
-}
-
-.no-dialog-ft .weui-half-screen-dialog__ft {
-    padding: 0;
-}
-
-.no-dialog-ft .weui-label {
-    width: max-content;
-}
-
-.no-dialog-ft .weui-cell__hd {
-    padding-right: 32rpx;
-}
-
 .weui-footer {
     padding: 32rpx 0;
-}
-
-
-@media (prefers-color-scheme: dark) {
-    page {
-        background: #121212;
-    }
-
-    .list-wrapper .cell-title {
-        color: #cccccc;
-    }
 }

@@ -31,7 +31,6 @@
     <van-cell-group title=" ">
         <van-cell title="用户服务协议及隐私政策" link-type="navigateTo" url="/pages/agreement/aggrement" is-link />
         <van-cell title="图像授权及开源软件组件" link-type="navigateTo" url="/pages/about/about" is-link />
-        
     </van-cell-group>
 </view>
 

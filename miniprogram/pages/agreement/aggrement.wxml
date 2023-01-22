@@ -22,8 +22,8 @@
                 <view class="article__h3">三、开发者对信息的存储</view>
                 <view class="article__section">
                     <view class="article__p">3.1 开发者承诺，除法律法规另有规定外，开发者对你的信息的保存期限应当为实现处理目的所必要的最短时间。</view>
-                    <view class="article__p">3.2 在申请注销后，所收集的信息均不保留（除活动结束后的活动结果中保留的当次昵称和收件人）。</view>
-                    <view class="article__p">3.3 <text style="color: red;">用户申请注销时不应处于参与任何活动的状态中。</text>如果参与的活动尚未进行抽签，请在退出活动后申请注销；如果参与的活动已进行抽签，请等待活动结束后申请注销。</view>
+                    <view class="article__p">3.2 在申请注销后，除活动结果中保留的当次昵称外，其余所收集的信息均不保留。</view>
+                    <view class="article__p">3.3 <text style="color: red;">当申请注销账号时，用户应当停止参与任何活动并不再管理任何小组。</text>若用户已参与尚未进行抽签的活动，请于退出该活动后再提出注销申请；若已参与已进行抽签的活动，请等待该活动结束后再提出申请。若用户管理小组，请在转移管理权后再提出注销申请。</view>
                 </view>
                 <view class="article__h3">四、信息的使用规则</view>
                 <view class="article__section">

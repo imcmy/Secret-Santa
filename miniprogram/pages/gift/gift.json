@@ -1,5 +1,5 @@
 {
-    "enablePullDownRefresh": true,
+    "enablePullDownRefresh": false,
     "usingComponents": {
         "van-loading": "@vant/weapp/loading/index",
         "van-steps": "@vant/weapp/steps/index",
