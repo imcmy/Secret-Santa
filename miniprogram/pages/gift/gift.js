@@ -19,7 +19,9 @@ Page({
         }, {
             text: '已结束'
         }],
-        event: {}
+        event: {},
+
+        wishlistCollpase: []
     },
 
     onLoad: function (options) {
@@ -44,11 +46,13 @@ Page({
             action: 'list_one',
             'event_id': app.event._id
         })
+        console.log(res)
         app.event.event_creator = res.data.event_creator
         app.event.event_start = utils.formattedTime(app.event.event_start)
         app.event.event_roll = utils.formattedTime(app.event.event_start)
         app.event.event_end = utils.formattedTime(app.event.event_start)
         app.event.event_participates = res.data.event_participates
+        app.event.event_pairs = res.data.event_pairs
         this.setData({
             step: res.data.step,
             event: app.event,
@@ -72,6 +76,12 @@ Page({
         } catch (e) {
             console.log(e)
         }
+    },
+
+    onCollapseWishlist(e) {
+        this.setData({
+            wishlistCollpase: e.detail
+        })
     },
 
     onPullDownRefresh: function () {

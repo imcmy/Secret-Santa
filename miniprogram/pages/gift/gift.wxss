@@ -6,15 +6,6 @@ page {
     height: 100vh;
 }
 
-.page {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
 .loading {
   display: flex;
   flex-direction: column;
@@ -23,63 +14,7 @@ page {
   height: 100%;
 }
 
-.panel-content {
-  display: flex;
-  justify-content: space-between;
-  padding: 20rpx 32rpx;
-}
-
-.gift-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.gift-line-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 10rpx;
-  font-size: 28rpx;
-}
-
-.gift-line-inline {
-  display: inline;
-  padding-bottom: 10rpx;
-  font-size: 28rpx;
-}
-
-.gift-line-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 20rpx;
-}
-
-.gift-global-inline {
-  display: inline-block;
-  padding-bottom: 10rpx;
-}
-
-.weui-panel__hd {
-    padding: 32rpx 32rpx 16rpx;
-}
-
-.weui-media-box__title_flex {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border: 0;
-}
-
-.weui-media-box {
-    padding: 16rpx 32rpx 0;
-}
-
-.weui-panel::after {
-    border-bottom: 0;
-}
-
-.no-lh {
-    line-height: 0;
+.inline {
+    display: inline;
+    padding-right: 20rpx;
 }

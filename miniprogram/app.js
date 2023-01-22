@@ -1,6 +1,6 @@
 App({
     data: {
-        url: 'https://fc-mp-6e650b7d-9aea-45a9-be79-0602370af57a.next.bspapp.com',
+        url: 'https://api.secret-santa.top',
         platform: 'wechat',
         theme: 'light',
         settings: {

@@ -1,77 +1,79 @@
 /* @import 'style/weui.wxss'; */
 
 /* Variable */
-page {   
-    --main-focus-color: #1AAD19;
-    --main-background-color: #F1F1F1;
+page {
+  --main-focus-color: #1aad19;
+  --main-background-color: #f1f1f1;
 }
 
 @media (prefers-color-scheme: dark) {
-    page {
-        --main-focus-color: #2BA245;
-        --main-background-color: #4D4D4D;
-    }
+  page {
+    --main-focus-color: #2ba245;
+    --main-background-color: #4d4d4d;
+  }
 }
 
 /* Common */
 page {
-    background: var(--main-background-color);
+  background: var(--main-background-color);
 }
 
 /* Components */
 page {
-    /* Dropdown */
-    --dropdown-menu-title-active-text-color: var(--main-focus-color);
-    --dropdown-menu-option-active-color: var(--main-focus-color);
+  /* Dropdown */
+  --dropdown-menu-title-active-text-color: var(--main-focus-color);
+  --dropdown-menu-option-active-color: var(--main-focus-color);
 
-    /* Collapse */
-    --collapse-item-content-padding: 0;
+  /* Collapse */
+  --collapse-item-content-padding: 0;
 }
 
 /* Flex */
 .flex-row-space-around {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .main {
-    flex: 1;
-    width: 100%;
-    overflow: auto;
-  }
+  flex: 1;
+  width: 100%;
+  overflow: auto;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
 
 .footer {
-    height: 100rpx;
-    background-color: #FFF;
-    border-top: 1px solid #ccc;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-bottom: env(safe-area-inset-bottom);
+  height: 100rpx;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* Button */
 .square {
-    border-radius: 0;
+  border-radius: 0;
 }
 
 /* Custom background */
 .no-bg {
-    background: #fff;
+  background: #fff;
 }
 
 .green-bg {
-    background-image: url("https://secret-santa.top/images/green.png");
+  background-image: url("https://secret-santa.top/images/green.png");
 }
 
 .red-bg {
-    background-image: url("https://secret-santa.top/images/red.png");
+  background-image: url("https://secret-santa.top/images/red.png");
 }
 
 .dark-bg {
-    background-image: url("https://secret-santa.top/images/dark.png");
+  background-image: url("https://secret-santa.top/images/dark.png");
 }
