@@ -18,12 +18,12 @@ Page({
                 id: 'join_group'
             },
             {
-                name: '离开小组',
-                id: 'leave_group'
-            },
-            {
                 name: '创建活动',
                 id: 'create_event'
+            },
+            {
+                name: '离开小组',
+                id: 'leave_group'
             }
         ],
 
@@ -34,7 +34,6 @@ Page({
         event: {},
         event_show: false,
 
-        
         group_members: [],
         group_events: [],
         waiting_members: [],
@@ -48,9 +47,6 @@ Page({
     },
     onShow() {
         this.loadGroups()
-    },
-    onPullDownRefresh() {
-
     },
 
     onOpenSheet() {
@@ -95,7 +91,9 @@ Page({
                     }
                 }
             } else if (e.detail.id === 'leave_group') {
+                if (this.data.group.is_manager) {} else {
 
+                }
             } else if (e.detail.id === 'create_event') {
                 wx.navigateTo({
                     url: '/pages/events/events'
@@ -133,11 +131,35 @@ Page({
         }
     },
 
-    onSelectGroup(e) {
-        let id = e.detail
-        this.setData({
-            groupId: id
-        })
+    async onSelectGroup(e) {
+        try {
+            let res = await syncRequest('/groups', {
+                action: 'load_group',
+                group_id: e.detail
+            })
+            var actions = this.data.actions
+            if(res.data.is_manager)
+                actions = actions.slice(0, 3)
+            else if (actions.length === 3)
+                actions.push({
+                    name: '离开小组',
+                    id: 'leave_group'
+                })
+            this.setData({
+                actions: actions,
+                group: res.data,
+                groupId: res.data._id,
+                group_members: [],
+                group_events: [],
+                waiting_members: [],
+                waiting_events: []
+            })
+        } catch (e) {
+            wx.showToast({
+                title: '未知错误',
+                icon: 'error'
+            })
+        }
     },
 
     async loadGroups() {
@@ -145,10 +167,23 @@ Page({
             let res = await syncRequest('/users', {
                 action: 'load_groups'
             })
+            var actions = this.data.actions
+            if(res.data.group.is_manager)
+                actions = actions.slice(0, 3)
+            else if (actions.length === 3)
+                actions.push({
+                    name: '离开小组',
+                    id: 'leave_group'
+                })
             this.setData({
+                actions: actions,
                 groups: res.data.groups,
                 group: res.data.group,
-                groupId: res.data.group._id
+                groupId: res.data.group._id,
+                group_members: [],
+                group_events: [],
+                waiting_members: [],
+                waiting_events: []
             })
         } catch (e) {
             wx.showToast({
@@ -204,7 +239,7 @@ Page({
                 this.setData({
                     waiting_events: res.data.data
                 })
-            } 
+            }
         } catch (e) {
             console.log(e)
             wx.showToast({
@@ -337,5 +372,9 @@ Page({
                 icon: 'error'
             })
         }
+    },
+
+    onTransferManager(e) {
+        console.log(e)
     }
 })

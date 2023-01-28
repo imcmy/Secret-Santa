@@ -61,6 +61,7 @@ const _retryRequest = (requestMapping, data,
 export const syncRequest = (requestMapping, data,
     requestWay = 'GET', contentType = 'application/json') => {
     return new Promise((resolve, reject) => {
+        console.log(app)
         testSetLogin()
         _retryRequest(requestMapping, data, requestWay, contentType)
             .then(resolve)
