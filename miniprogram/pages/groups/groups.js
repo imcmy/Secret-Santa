@@ -5,6 +5,7 @@ import {
     showModalPromisified
 } from '../../utils/promisify'
 import * as utils from '../../utils/utils'
+const app = getApp().globalData
 
 Page({
     data: {
@@ -43,11 +44,9 @@ Page({
     },
 
     onLoad(options) {
-
-    },
-    onShow() {
         this.loadGroups()
     },
+    onShow() {},
 
     onOpenSheet() {
         this.setData({
@@ -91,8 +90,47 @@ Page({
                     }
                 }
             } else if (e.detail.id === 'leave_group') {
-                if (this.data.group.is_manager) {} else {
-
+                if (this.data.group.is_manager) {
+                    wx.showToast({
+                      title: '管理员无法离开',
+                      icon: 'error'
+                    })
+                } else {
+                    wx.showModal({
+                      title: '确认离开',
+                      content: '是否确认离开小组\r\n' + this.data.group.group_name,
+                      complete: async (res) => {
+                        if (res.confirm) {
+                            try {
+                                await syncRequest('/groups', {
+                                    action: 'leave',
+                                    group_id: this.data.groupId
+                                })
+                                wx.showToast({
+                                    title: '离开成功',
+                                    icon: 'success'
+                                })
+                                setTimeout(() => {
+                                    wx.reLaunch({
+                                        url: '/pages/launch/launch',
+                                    })
+                                }, 1500)
+                            } catch (e) {
+                                if (e.data.errCode === 0x27) {
+                                    wx.showToast({
+                                        title: '等待活动结束',
+                                        icon: 'error'
+                                    })
+                                } else {
+                                    wx.showToast({
+                                        title: '未知错误',
+                                        icon: 'error'
+                                    })
+                                }
+                            }
+                        }
+                      }
+                    })
                 }
             } else if (e.detail.id === 'create_event') {
                 wx.navigateTo({
@@ -100,7 +138,6 @@ Page({
                 })
             }
         } catch (e) {
-            var title = '未知错误'
             if (e.data.errCode === 0x21) {
                 wx.showToast({
                     title: '未匹配到小组',
@@ -137,22 +174,14 @@ Page({
                 action: 'load_group',
                 group_id: e.detail
             })
-            var actions = this.data.actions
-            if(res.data.is_manager)
-                actions = actions.slice(0, 3)
-            else if (actions.length === 3)
-                actions.push({
-                    name: '离开小组',
-                    id: 'leave_group'
-                })
             this.setData({
-                actions: actions,
                 group: res.data,
                 groupId: res.data._id,
                 group_members: [],
                 group_events: [],
                 waiting_members: [],
-                waiting_events: []
+                waiting_events: [],
+                activeCollapse: []
             })
         } catch (e) {
             wx.showToast({
@@ -167,23 +196,10 @@ Page({
             let res = await syncRequest('/users', {
                 action: 'load_groups'
             })
-            var actions = this.data.actions
-            if(res.data.group.is_manager)
-                actions = actions.slice(0, 3)
-            else if (actions.length === 3)
-                actions.push({
-                    name: '离开小组',
-                    id: 'leave_group'
-                })
             this.setData({
-                actions: actions,
                 groups: res.data.groups,
                 group: res.data.group,
-                groupId: res.data.group._id,
-                group_members: [],
-                group_events: [],
-                waiting_members: [],
-                waiting_events: []
+                groupId: res.data.group._id
             })
         } catch (e) {
             wx.showToast({
@@ -215,10 +231,6 @@ Page({
                     action: 'load_events',
                     group_id: group_id
                 })
-                res.data.data.map(o => {
-                    o.event_rolled = o.event_rolled === 'true'
-                    o.event_ended = o.event_ended === 'true'
-                })
                 this.setData({
                     group_events: res.data.data
                 })
@@ -246,6 +258,19 @@ Page({
                 title: '未知错误',
                 icon: 'error'
             })
+        }
+    },
+
+    onNavigateEvent(e) {
+        let id = e.currentTarget.id
+        for (let idx in this.data.group_events) {
+            if (this.data.group_events[idx]._id === id) {
+                app.event = this.data.group_events[idx]
+                wx.navigateTo({
+                    url: '/pages/gift/gift'
+                })
+                return
+            }
         }
     },
 
@@ -375,6 +400,42 @@ Page({
     },
 
     onTransferManager(e) {
-        console.log(e)
+        var id = e.currentTarget.id
+        var nickname = ''
+        for (let idx in this.data.group_members)
+            if (this.data.group_members[idx]._id === id) {
+                nickname = this.data.group_members[idx].nickname
+                break
+            }
+        wx.showModal({
+            title: '转移确认',
+            content: '是否将管理权转移至\r\n' + nickname,
+            complete: async (res) => {
+                if (res.confirm) {
+                    try {
+                        var res = await syncRequest('/groups', {
+                            action: 'transfer',
+                            group_id: this.data.groupId,
+                            user_id: id
+                        })
+                        wx.showToast({
+                            title: '转移成功',
+                            icon: 'success'
+                        })
+                        setTimeout(() => {
+                            wx.reLaunch({
+                                url: '/pages/launch/launch',
+                            })
+                        }, 1500)
+                    } catch (e) {
+                        console.log(e)
+                        wx.showToast({
+                            title: '未知错误',
+                            icon: 'error'
+                        })
+                    }
+                }
+            }
+        })
     }
 })

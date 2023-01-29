@@ -31,7 +31,7 @@
                 </van-collapse-item>
             </van-collapse>
         </van-cell-group>
-        <van-cell-group wx:if="{{step >= 2}}" title="{{step === 2 ? '参与人员' : '全局顺序'}}">
+        <van-cell-group wx:if="{{step >= 2 && event_participates.length > 0}}" title="{{step === 2 ? '参与人员' : '全局顺序'}}">
             <van-cell use-label-slot>
                 <view slot="label">
                     <view class="inline" wx:for="{{event.event_participates}}" wx:key="event_participates" size="large">

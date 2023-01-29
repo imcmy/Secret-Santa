@@ -13,6 +13,7 @@ export const cloudErrorCodes = {
     0x24: "Validation not passed",
     0x25: "Need audit",
     0x26: "Already in the waiting list",
+    0x27: "Still in event",
 
     0x31: "Validation not passed",
     0x32: "Not allowed to create"

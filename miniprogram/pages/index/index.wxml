@@ -54,7 +54,7 @@
                     <van-cell-group>
                         <van-cell wx:for="{{events.notStarted}}" title="{{item.event_name}}" label="开始于 {{item.timeFormatted}}" wx:key="notStarted" id="notStarted-{{item._id}}" bind:click="onNavigateEvent" is-link center>
                             <view>
-                                <van-tag type="success">{{item. event_group_name}}</van-tag>
+                                <van-tag type="success">{{item.event_group_name}}</van-tag>
                             </view>
                         </van-cell>
                     </van-cell-group>

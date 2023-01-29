@@ -68,7 +68,7 @@
                         </van-cell>
                     </van-collapse-item>
                     <van-collapse-item title="活动" name="group_events" value="{{group.group_events}} 项" is-link="{{group.group_events !== 0}}">
-                        <van-cell wx:for="{{group_events}}" wx:key="group_events" title="{{item.event_name}}" id="{{item._id}}" label="{{item.event_description}}" bind:click="" clickable center is-link>
+                        <van-cell wx:for="{{group_events}}" wx:key="group_events" title="{{item.event_name}}" id="{{item._id}}" label="{{item.event_description}}" center>
                             <view>
                                 <van-tag wx:if="{{!item.event_rolled && !item.event_ended}}" type="success">待抽签</van-tag>
                                 <van-tag wx:elif="{{item.event_rolled && !item.event_ended}}" type="success">公布中</van-tag>

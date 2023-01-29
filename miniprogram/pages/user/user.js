@@ -40,7 +40,7 @@ Page({
             themeBg: app.settings.background.red ? 'red' : 'green',
             avatarUrl: app.user.avatar,
             nickName: app.user.nickname,
-            addressInfo: app.user.fullAddr,
+            addressInfo: app.user.fullAddr, // 会消失
             logged: true
         })
     },
