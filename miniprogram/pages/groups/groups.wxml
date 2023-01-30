@@ -15,7 +15,8 @@
 
             <van-cell-group title="信息">
                 <van-field value="{{group.group_manager}}" label="管理员" input-align="right" readonly />
-                <van-field value="{{group.group_token}}" label="口令" input-align="right" readonly />
+                <van-field wx:if="{{group.is_manager}}" value="{{group.group_token}}" label="口令" input-align="right" readonly>
+                </van-field>
                 <van-field label="入组需要审核" title-width="80%" input-align="right" readonly>
                     <view slot="right-icon">
                         <van-icon wx:if="{{group.audit_join}}" name="success" color="green" />
@@ -44,9 +45,13 @@
                         </view>
                         <van-cell wx:for="{{waiting_members}}" wx:key="waiting_members" title="{{item.nickname}}">
                             <view slot="right-icon" class="updown">
-                                <van-tag round id="{{item._id}}" type="danger" bindtap="onRejectAudit" size="medium"><van-icon name="clear" /> 拒绝</van-tag>
+                                <van-tag round id="{{item._id}}" type="danger" bindtap="onRejectAudit" size="medium">
+                                    <van-icon name="clear" /> 拒绝
+                                </van-tag>
                                 <view style="width: 14px;"></view>
-                                <van-tag round id="{{item._id}}" type="success" bindtap="onAcceptAudit" size="medium"><van-icon name="checked" /> 同意</van-tag>
+                                <van-tag round id="{{item._id}}" type="success" bindtap="onAcceptAudit" size="medium">
+                                    <van-icon name="checked" /> 同意
+                                </van-tag>
                             </view>
                         </van-cell>
                     </van-collapse-item>
@@ -63,7 +68,9 @@
                     <van-collapse-item title="成员" name="group_members" value="{{group.group_members}} 人">
                         <van-cell wx:for="{{group_members}}" wx:key="group_members" title="{{item.nickname}}">
                             <view wx:if="{{group.is_manager && !item.is_self}}">
-                                <van-tag id="{{item._id}}" type="primary" bindtap="onTransferManager"><van-icon name="exchange" />转移管理</van-tag>
+                                <van-tag id="{{item._id}}" type="primary" bindtap="onTransferManager">
+                                    <van-icon name="exchange" />转移管理
+                                </van-tag>
                             </view>
                         </van-cell>
                     </van-collapse-item>

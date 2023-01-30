@@ -3,6 +3,8 @@ page {
   --main-focus-color: #1aad19;
   --main-background-color: #f1f1f1;
   --focus-background-color: #ffffff;
+
+  --font-color: #000000;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -10,6 +12,7 @@ page {
     --main-focus-color: #2ba245;
     --main-background-color: #4d4d4d;
     --focus-background-color: #4d4d4d;
+    --font-color: #ffffff;
   }
 }
 
@@ -30,6 +33,10 @@ page {
 
   /* Tag */
   --tag-success-color: var(--main-focus-color);
+
+  /* Button */
+  /* --button-normal-font-size: 12pt; */
+  --button-primary-background-color: var(--main-focus-color);
 }
 
 /* Flex */
@@ -63,6 +70,39 @@ page {
 /* Button */
 .square {
   border-radius: 0;
+}
+
+/* Emphasis page */
+.emphasis {
+    padding-top: calc(48rpx + env(safe-area-inset-top));
+    text-align: center;
+}
+
+.emphasis .icon-slot {
+    margin-bottom: 32rpx;
+}
+
+.emphasis .text-slot {
+    padding: 0 64rpx;
+    margin-bottom: 64rpx;
+}
+
+.emphasis .text-slot .title {
+    font-size: 17pt;
+    font-weight: 700;
+    margin-bottom: 32rpx;
+}
+
+.emphasis .text-slot .desc {
+    margin-bottom: 32rpx;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.emphasis .btn-slot {
+    display: flex;
+    flex-direction: column;
+    gap: 24rpx;
 }
 
 /* Custom background */

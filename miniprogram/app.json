@@ -2,18 +2,18 @@
     "pages": [
         "pages/launch/launch",
         "pages/index/index",
-        "pages/gift/gift",
-        "pages/user/user",
-        "pages/user_detail/user_detail",
+        "pages/event_detail/event_detail",
+        "pages/setting/setting",
+        "pages/user_form/user_form",
         "pages/critical_error/critical_error",
         "pages/agreement/aggrement",
-        "pages/about/about",
-        "pages/un_reg/un_reg",
-        "pages/prefs/prefs",
+        "pages/authorize_license/authorize_license",
+        "pages/user_del/user_del",
+        "pages/customize/customize",
         "pages/wish_list/wish_list",
         "pages/groups/groups",
-        "pages/group_create/group_create",
-        "pages/events/events"
+        "pages/group_form/group_form",
+        "pages/event_form/event_form"
     ],
     "entryPagePath": "pages/launch/launch",
     "themeLocation": "theme.json",
@@ -38,7 +38,7 @@
                 "text": "活动"
             },
             {
-                "pagePath": "pages/user/user",
+                "pagePath": "pages/setting/setting",
                 "iconPath": "images/pref.png",
                 "selectedIconPath": "images/pref-selected.png",
                 "text": "设置"

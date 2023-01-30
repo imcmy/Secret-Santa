@@ -6,6 +6,7 @@ export const cloudErrorCodes = {
     
     0x11: "User already registered",
     0x12: "Nickname validation not passed",
+    0x13: "Still a manager",
     
     0x21: "No group matched",
     0x22: "Already in the group",

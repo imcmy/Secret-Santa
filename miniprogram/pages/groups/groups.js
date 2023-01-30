@@ -47,6 +47,18 @@ Page({
         this.loadGroups()
     },
     onShow() {},
+    onShareAppMessage(e) {
+        return {
+            title: '邀请您加入小组',
+            path: '/pages/group_share/group_share'
+        }
+    },
+    onShareGroup(e) {
+        console.log(e)
+        wx.showShareMenu({
+            withShareTicket: true
+        })
+    },
 
     onOpenSheet() {
         this.setData({
@@ -62,7 +74,7 @@ Page({
         try {
             if (e.detail.id === 'create_group') {
                 wx.navigateTo({
-                    url: '/pages/group_create/group_create'
+                    url: '/pages/group_form/group_form'
                 })
             } else if (e.detail.id === 'join_group') {
                 var res = await showModalPromisified({
@@ -92,49 +104,49 @@ Page({
             } else if (e.detail.id === 'leave_group') {
                 if (this.data.group.is_manager) {
                     wx.showToast({
-                      title: '管理员无法离开',
-                      icon: 'error'
+                        title: '管理员无法离开',
+                        icon: 'error'
                     })
                 } else {
                     wx.showModal({
-                      title: '确认离开',
-                      content: '是否确认离开小组\r\n' + this.data.group.group_name,
-                      complete: async (res) => {
-                        if (res.confirm) {
-                            try {
-                                await syncRequest('/groups', {
-                                    action: 'leave',
-                                    group_id: this.data.groupId
-                                })
-                                wx.showToast({
-                                    title: '离开成功',
-                                    icon: 'success'
-                                })
-                                setTimeout(() => {
-                                    wx.reLaunch({
-                                        url: '/pages/launch/launch',
+                        title: '确认离开',
+                        content: '是否确认离开小组\r\n' + this.data.group.group_name,
+                        complete: async (res) => {
+                            if (res.confirm) {
+                                try {
+                                    await syncRequest('/groups', {
+                                        action: 'leave',
+                                        group_id: this.data.groupId
                                     })
-                                }, 1500)
-                            } catch (e) {
-                                if (e.data.errCode === 0x27) {
                                     wx.showToast({
-                                        title: '等待活动结束',
-                                        icon: 'error'
+                                        title: '离开成功',
+                                        icon: 'success'
                                     })
-                                } else {
-                                    wx.showToast({
-                                        title: '未知错误',
-                                        icon: 'error'
-                                    })
+                                    setTimeout(() => {
+                                        wx.reLaunch({
+                                            url: '/pages/launch/launch',
+                                        })
+                                    }, 1500)
+                                } catch (e) {
+                                    if (e.data.errCode === 0x27) {
+                                        wx.showToast({
+                                            title: '等待活动结束',
+                                            icon: 'error'
+                                        })
+                                    } else {
+                                        wx.showToast({
+                                            title: '未知错误',
+                                            icon: 'error'
+                                        })
+                                    }
                                 }
                             }
                         }
-                      }
                     })
                 }
             } else if (e.detail.id === 'create_event') {
                 wx.navigateTo({
-                    url: '/pages/events/events'
+                    url: '/pages/event_form/event_form'
                 })
             }
         } catch (e) {
@@ -267,7 +279,7 @@ Page({
             if (this.data.group_events[idx]._id === id) {
                 app.event = this.data.group_events[idx]
                 wx.navigateTo({
-                    url: '/pages/gift/gift'
+                    url: '/pages/event_detail/event_detail'
                 })
                 return
             }

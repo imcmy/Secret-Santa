@@ -90,7 +90,7 @@ Page({
             if (this.data.events[parts[0]][idx]._id === parts[1]) {
                 app.event = this.data.events[parts[0]][idx]
                 wx.navigateTo({
-                    url: '/pages/gift/gift'
+                    url: '/pages/event_detail/event_detail'
                 })
                 return
             }

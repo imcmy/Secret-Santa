@@ -50,30 +50,7 @@
     "simulatorType": "wechat",
     "simulatorPluginLibVersion": {},
     "compileType": "miniprogram",
-    "condition": {
-        "miniprogram": {
-            "list": [
-                {
-                    "name": "user_page",
-                    "pathName": "pages/user/user",
-                    "query": "",
-                    "scene": null
-                },
-                {
-                    "name": "gift_page",
-                    "pathName": "pages/gift/gift",
-                    "query": "",
-                    "scene": null
-                },
-                {
-                    "name": "address_page",
-                    "pathName": "pages/address/address",
-                    "query": "",
-                    "scene": null
-                }
-            ]
-        }
-    },
+    "condition": {},
     "packOptions": {
         "ignore": [],
         "include": []

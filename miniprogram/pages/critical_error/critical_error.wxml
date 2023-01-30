@@ -1,13 +1,19 @@
-<view class="page" data-weui-theme="{{theme}}">
-    <mp-msg type="cancel" title="严重错误">
-        <view slot="desc">小程序无法连接至服务器</view>
-        <view slot="extend">
-            <view>1. 请确认网络环境良好并重试</view>
-            <view>2. 若网络环境良好，请报告错误</view>
+<view class="main">
+    <view class="emphasis">
+        <view class="icon-slot">
+            <icon type="cancel" size="64"></icon>
         </view>
-        <view slot="handle">
-            <button class="weui-btn" type="primary" bindtap="retry">重试</button>
-            <button class="weui-btn" type="default" bindtap="reportError">报告错误</button>
+        <view class="text-slot">
+            <view class="title">严重错误</view>
+            <view class="desc">小程序无法连接至服务器</view>
+            <view class="extend">
+                <view>1. 请确认网络环境良好并重试</view>
+                <view>2. 若网络环境良好，请报告错误</view>
+            </view>
         </view>
-    </mp-msg>
+        <view class="btn-slot">
+            <van-button type="primary" size="large" icon="replay" bindtap="retry">重试</van-button>
+            <van-button plain type="default" size="large" icon="comment-circle" open-type="feedback">报告错误</van-button>
+        </view>
+    </view>
 </view>

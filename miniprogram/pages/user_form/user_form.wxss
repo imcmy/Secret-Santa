@@ -1,7 +1,10 @@
-/* pages/user_detail/user_detail.wxss */
 @import '../../style/widget/weui-button/weui-button.wxss';
 @import '../../style/widget/weui-page/weui-form.wxss';
 @import '../../style/widget/weui-tips/weui-half-screen-dialog.wxss';
+
+page {
+    background: var(--focus-background-color);
+}
 
 .weui-form__title {
     font-size: 44rpx;

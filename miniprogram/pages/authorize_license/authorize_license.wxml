@@ -1,0 +1,16 @@
+<view class="main">
+    <view class="article">
+        <view class="h1">图像授权</view>
+        <view class="section">
+            <view class="p">Gift icons created by Phoenix Group - Flaticon</view>
+            <view class="p">Gift icons created by wanicon - Flaticon</view>
+            <view class="p">Wish list icons created by Pixelmeetup - Flaticon</view>
+            <view class="p">Discussion icons created by Freepik - Flaticon</view>
+        </view>
+        <view class="h1">开源软件组件</view>
+        <view class="section">
+            <view class="p">Vant Weapp - MIT</view>
+            <view class="p">WeUI for wxss - MIT</view>
+        </view>
+    </view>
+</view>

@@ -14,22 +14,10 @@
         "miniprogram": {
             "list": [
                 {
-                    "name": "user_detail_page",
-                    "pathName": "pages/user_detail/user_detail",
+                    "name": "critical_error",
+                    "pathName": "pages/critical_error/critical_error",
                     "query": "",
                     "launchMode": "default",
-                    "scene": null
-                },
-                {
-                    "name": "gift_page",
-                    "pathName": "pages/gift/gift",
-                    "query": "",
-                    "scene": null
-                },
-                {
-                    "name": "user_page",
-                    "pathName": "pages/user/user",
-                    "query": "",
                     "scene": null
                 }
             ]

@@ -13,24 +13,24 @@
 
     <van-cell-group title=" " wx:if="{{!logged}}">
         <van-cell title="我要登录" bind:click="onLogin" is-link />
-        <van-cell title="我要注册" link-type="navigateTo" url="/pages/user_detail/user_detail" is-link />
+        <van-cell title="我要注册" link-type="navigateTo" url="/pages/user_form/user_form" is-link />
         <!-- <van-cell title="我要绑定" is-link disabled /> -->
     </van-cell-group>
 
     <van-cell-group wx:if="{{logged}}">
-        <van-cell title="用户信息" link-type="navigateTo" url="/pages/user_detail/user_detail" is-link />
+        <van-cell title="用户信息" link-type="navigateTo" url="/pages/user_form/user_form" is-link />
         <van-cell title="愿望清单" link-type="navigateTo" url="/pages/wish_list/wish_list" is-link />
-        <van-cell title="个性化设置" link-type="navigateTo" url="/pages/prefs/prefs" is-link />
+        <van-cell title="个性化设置" link-type="navigateTo" url="/pages/customize/customize" is-link />
     </van-cell-group>
 
     <van-cell-group wx:if="{{logged}}" title=" ">
         <van-cell title="小组及活动管理" link-type="navigateTo" url="/pages/groups/groups" is-link />
-        <van-cell title="我要注销" link-type="navigateTo" url="/pages/un_reg/un_reg" is-link />
+        <van-cell title="申请注销账户" link-type="navigateTo" url="/pages/user_del/user_del" is-link />
     </van-cell-group>
 
     <van-cell-group title=" ">
         <van-cell title="用户服务协议及隐私政策" link-type="navigateTo" url="/pages/agreement/aggrement" is-link />
-        <van-cell title="图像授权及开源软件组件" link-type="navigateTo" url="/pages/about/about" is-link />
+        <van-cell title="图像授权及开源软件组件" link-type="navigateTo" url="/pages/authorize_license/authorize_license" is-link />
     </van-cell-group>
 </view>
 

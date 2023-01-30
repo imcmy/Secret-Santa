@@ -2,7 +2,6 @@ const app = getApp().globalData
 import {
     testSetLogin
 } from '../../utils/states'
-import * as utils from "../../utils/utils"
 
 
 Page({
@@ -53,12 +52,12 @@ Page({
             })
         else
             wx.navigateTo({
-                url: '/pages/user_detail/user_detail',
+                url: '/pages/user_form/user_form',
             })
     },
     onTapRegister: function (e) {
         wx.navigateTo({
-            url: '/pages/user_detail/user_detail',
+            url: '/pages/user_form/user_form',
         })
     }
 })

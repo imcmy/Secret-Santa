@@ -1,3 +1,7 @@
+import {
+    errorHandler
+} from "./utils/errors"
+
 App({
     data: {
         url: 'https://api.secret-santa.top',
@@ -15,11 +19,22 @@ App({
         },
         user: undefined,
         sessionId: '',
-        sessionExpire: Date.now(),
+        sessionExpire: 0,
         event: undefined
     },
-    onLaunch: function () {
+    onLaunch() {
         this.globalData = this.data
+    },
+    clearAll() {
+        try {
+            wx.clearStorageSync()
+            this.data.user = undefined
+            this.data.sessionId = ''
+            this.data.sessionExpire = 0
+            this.data.event = undefined
+        } catch (e) {
+            errorHandler(e)
+        }
     },
     syncFullAddr() {
         for (let address in this.data.user.addresses) {
@@ -45,14 +60,14 @@ App({
             }
         }
         wx.setBackgroundColor({
-          backgroundColor: colors[theme].bgColor,
+            backgroundColor: colors[theme].bgColor,
         })
         wx.setBackgroundTextStyle({
-          textStyle: colors[theme].bgTextStyle,
+            textStyle: colors[theme].bgTextStyle,
         })
         wx.setNavigationBarColor({
-          backgroundColor: colors[theme].nbBackgroundColor,
-          frontColor: colors[theme].nbFrontColor
+            backgroundColor: colors[theme].nbBackgroundColor,
+            frontColor: colors[theme].nbFrontColor
         })
         this.globalData.theme = theme
     }

@@ -1,0 +1,19 @@
+<view class="main">
+    <view class="emphasis">
+        <view class="icon-slot">
+            <icon type="warn" size="64"></icon>
+        </view>
+        <view class="text-slot">
+            <view class="title">申请注销账户</view>
+            <view class="desc">摘录自《用户服务协议及隐私政策》</view>
+            <view class="extend" style="text-align: left;">
+                <view>3.2 在申请注销后，所收集的信息均不保留（除活动结束后的活动结果中保留的当次昵称和收件人）。</view>
+                <view>3.3 <text style="color: red;">当申请注销账号时，用户应当停止参与任何活动并不再管理任何小组。</text>若用户已参与尚未进行抽签的活动，请于退出该活动后再提出注销申请；若已参与已进行抽签的活动，请等待该活动结束后再提出申请。若用户管理小组，请在转移管理权后再提出注销申请。</view>
+            </view>
+        </view>
+        <view class="btn-slot">
+            <van-button type="danger" size="large" bindtap="unReg">确认注销</van-button>
+            <van-button type="default" size="large" bindtap="back">返回</van-button>
+        </view>
+    </view>
+</view>
