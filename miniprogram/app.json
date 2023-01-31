@@ -47,26 +47,11 @@
     },
     "darkmode": true,
     "style": "v2",
-    "useExtendedLib": {
-        "weui": true
-    },
+    "useExtendedLib": {},
     "requiredPrivateInfos": [
         "chooseAddress"
     ],
     "usingComponents": {
-        "mp-cells": "weui-miniprogram/cells/cells",
-        "mp-cell": "weui-miniprogram/cell/cell",
-        "mp-loading": "weui-miniprogram/loading/loading",
-        "mp-toptips": "weui-miniprogram/toptips/toptips",
-        "mp-icon": "weui-miniprogram/icon/icon",
-        "mp-dialog": "weui-miniprogram/dialog/dialog",
-        "mp-half-screen-dialog": "weui-miniprogram/half-screen-dialog/half-screen-dialog",
-        "mp-slideview": "weui-miniprogram/slideview/slideview",
-        "mp-form": "weui-miniprogram/form/form",
-        "mp-checkbox-group": "weui-miniprogram/checkbox-group/checkbox-group",
-        "mp-checkbox": "weui-miniprogram/checkbox/checkbox",
-        "mp-msg": "weui-miniprogram/msg/msg",
-        "mp-badge": "weui-miniprogram/badge/badge",
         "van-config-provider": "@vant/weapp/config-provider/index"
     },
     "sitemapLocation": "sitemap.json"

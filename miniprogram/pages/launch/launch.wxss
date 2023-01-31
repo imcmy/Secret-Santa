@@ -1,11 +1,5 @@
-/* pages/launch/launch.wxss */
 page {
     background-color: var(--focus-background-color);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .body {
@@ -15,21 +9,4 @@ page {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-.weui-loadmore__tips {
-    color: #969799;
-}
-
-@media (prefers-color-scheme: dark) {
-    .weui-loadmore__tips {
-        color: #FFFFFF;
-    }
-    .weui-footer__text {
-        color: #FFFFFF;
-    }
-}
-
-.weui-footer {
-    padding-bottom: 64rpx;
 }

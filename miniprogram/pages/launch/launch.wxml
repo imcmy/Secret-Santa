@@ -3,9 +3,9 @@
         <image style="width: 450rpx" mode="widthFix" src="/images/logo.png"></image>
     </view>
     <view style="display: flex; flex-direction: row; justify-content: center; margin-top:50rpx; width: 100%;">
-        <mp-loading type="circle" tips="加载中"></mp-loading>
+        <van-loading size="24px" vertical>加载中</van-loading>
     </view>
 </view>
-<view class="weui-footer">
-    <view class="weui-footer__text">Developed by Mingyi Chen</view>
+<view class="footer-text bottom-padding">
+    Developed by Mingyi Chen
 </view>

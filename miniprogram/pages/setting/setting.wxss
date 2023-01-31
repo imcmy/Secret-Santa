@@ -63,7 +63,3 @@ page {
     flex-direction: column;
     justify-content: space-between;
 }
-
-.weui-footer {
-    padding: 32rpx 0;
-}

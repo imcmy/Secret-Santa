@@ -1,5 +1,7 @@
 {
     "navigationStyle": "custom",
     "disableScroll": true,
-    "usingComponents": {}
+    "usingComponents": {
+        "van-loading": "@vant/weapp/loading/index"
+    }
 }

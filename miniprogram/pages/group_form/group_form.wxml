@@ -1,38 +1,43 @@
-<page-meta page-style="{{ show ? 'overflow: hidden;' : '' }}" />
+<page-meta page-style="{{ popup ? 'overflow: hidden;' : '' }}" />
 
-<form class="weui-form" bindsubmit="onCreate">
-    <view class="weui-form__title" style="text-align: center;">组建小组</view>
-    <view class="weui-form__control-area">
-        <van-cell-group title="基本信息" inset>
-            <van-field model:value="{{icon}}" icon="{{icon}}" error="{{errors.icon}}" size="large" label="标识"  placeholder="请选择标识" bindtap="onIconsShow" name="icon" readonly is-link required clearable />
-            <van-field model:value="{{name}}" error="{{errors.name}}" size="large" label="名称" placeholder="请输入小组的名称" name="name" required clearable />
-            <van-field model:value="{{description}}" error="{{errors.description}}" type="textarea" size="large" label="描述" placeholder="请输入小组的描述" name="description" autosize disable-default-padding />
-            <van-field model:value="{{token}}" error="{{errors.token}}" size="large" label="口令" placeholder="请输入独一无二的口令" name="token" required clearable />
-        </van-cell-group>
-        <van-cell-group title="设置" inset>
-            <van-cell size="large" center title="入组需要审核">
-                <switch slot="right-icon" name="audit_join" />
-            </van-cell>
-            <van-cell size="large" center title="允许组员创建活动">
-                <switch slot="right-icon" name="allow_create" />
-            </van-cell>
-            <van-cell size="large" center title="组员发布活动需要审核">
-                <switch slot="right-icon" name="audit_create" />
-            </van-cell>
-        </van-cell-group>
+<view class="main">
+    <view class="form">
+        <form bindsubmit="onCreate">
+            <view class="title">组建小组</view>
+            <view class="field-slot">
+                <van-cell-group title="基本信息" inset>
+                    <van-field model:value="{{icon}}" icon="{{icon}}" error="{{errors.icon}}" size="large" label="标识" placeholder="请选择标识" bindtap="onIconsShow" name="icon" readonly is-link required clearable />
+                    <van-field model:value="{{name}}" error="{{errors.name}}" size="large" label="名称" placeholder="请输入小组的名称" name="name" required clearable />
+                    <van-field model:value="{{description}}" error="{{errors.description}}" type="textarea" size="large" label="描述" placeholder="请输入小组的描述" name="description" autosize disable-default-padding />
+                    <van-field model:value="{{token}}" error="{{errors.token}}" size="large" label="口令" placeholder="请输入独一无二的口令" name="token" required clearable />
+                </van-cell-group>
+                <van-cell-group title="设置" inset>
+                    <van-cell size="large" center title="入组需要审核">
+                        <switch slot="right-icon" name="audit_join" />
+                    </van-cell>
+                    <van-cell size="large" center title="允许组员创建活动">
+                        <switch slot="right-icon" name="allow_create" />
+                    </van-cell>
+                    <van-cell size="large" center title="组员发布活动需要审核">
+                        <switch slot="right-icon" name="audit_create" />
+                    </van-cell>
+                </van-cell-group>
+            </view>
+            <view class="btn-slot">
+                <van-button form-type="submit" type="primary" size="large">组建</van-button>
+                <van-button type="default" size="large" bind:click="onCancel">取消</van-button>
+            </view>
+        </form>
     </view>
-    <view class="weui-form__control-area">
-        <button form-type="submit" type="primary" class="weui-btn">组建</button>
-        <button type="default" class="weui-btn" bindtap="onCancel">取消</button>
-    </view>
-</form>
+</view>
+
 
 <van-popup show="{{popup}}" round bind:close="onIconsHide" custom-style="width: 85%; height: 60%" bind:touchstart catch:touchmove bind:touchend>
-        <view class="list-wrapper">
-            <scroll-view class="list" scroll-y>
-                <van-grid square column-num="5">
-                    <van-grid-item wx:for="{{icons}}" wx:key="iconKey" id="{{item}}" icon="{{item}}" bind:click="onChooseIcon" />
-                </van-grid>
-            </scroll-view>
-        </view>
+    <view class="list-wrapper">
+        <scroll-view class="list" scroll-y>
+            <van-grid square column-num="5">
+                <van-grid-item wx:for="{{icons}}" wx:key="iconKey" id="{{item}}" icon="{{item}}" bind:click="onChooseIcon" />
+            </van-grid>
+        </scroll-view>
+    </view>
 </van-popup>

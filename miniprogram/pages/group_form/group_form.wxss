@@ -1,49 +1,25 @@
-@import '../../style/widget/weui-button/weui-button.wxss';
-@import '../../style/widget/weui-page/weui-form.wxss';
-@import '../../style/widget/weui-tips/weui-half-screen-dialog.wxss';
+page {
+    background-color: var(--focus-background-color);
+}
 
-.weui-form {
+.form {
     padding-top: calc(48rpx + env(safe-area-inset-top)) !important;
 }
 
-.weui-form__title {
-    font-size: 44rpx;
+.form .title {
+    font-size: 17pt;
+    font-weight: 700;
+    margin-bottom: 32rpx;
+    text-align: center;
 }
 
-.weui-form__text-area {
-    padding: 0;
-}
-
-.weui-form__control-area {
+.form .field-slot {
     margin: 48rpx 0;
 }
 
-.weui-label {
-    font-size: 32rpx;
-}
-
-.weui-input {
-    font-size: 32rpx;
-}
-
-.weui-agree__checkbox {
-    position: absolute;
-    left: -9999px;
-}
-
-.weui-agree__checkbox-icon {
-    position: relative;
-    top: 4rpx;
-    display: inline-block;
-    border: 2rpx solid #D1D1D1;
-    background-color: #FFFFFF;
-    border-radius: 6rpx;
-    width: 22rpx;
-    height: 22rpx;
-}
-
-.weui-agree__checkbox-icon-check {
-    position: absolute;
-    top: 1px;
-    left: 1px;
+.form .btn-slot {
+    display: flex;
+    flex-direction: column;
+    gap: 24rpx;
+    align-items: center;
 }

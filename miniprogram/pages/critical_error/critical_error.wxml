@@ -13,7 +13,7 @@
         </view>
         <view class="btn-slot">
             <van-button type="primary" size="large" icon="replay" bindtap="retry">重试</van-button>
-            <van-button plain type="default" size="large" icon="comment-circle" open-type="feedback">报告错误</van-button>
+            <van-button type="default" size="large" icon="comment-circle" open-type="feedback">报告错误</van-button>
         </view>
     </view>
 </view>

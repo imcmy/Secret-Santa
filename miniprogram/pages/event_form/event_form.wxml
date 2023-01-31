@@ -1,24 +1,28 @@
-<page-meta page-style="{{ show ? 'overflow: hidden;' : '' }}" />
+<page-meta page-style="{{ popup ? 'overflow: hidden;' : '' }}" />
 
-<form class="weui-form" bindsubmit="onCreate">
-    <view class="weui-form__title" style="text-align: center;">创建活动</view>
-    <view class="weui-form__control-area">
-        <van-cell-group title="基本信息" inset>
-            <van-field model:value="{{name}}" error="{{errors.name}}" size="large" label="名称" placeholder="请输入活动的名称" name="name" required clearable />
-            <van-field model:value="{{group}}" error="{{errors.group}}" size="large" label="小组" placeholder="请选择归属的小组" bind:tap="onClickGroup" name="group" readonly is-link required clearable />
-            <van-field model:value="{{description}}" error="{{errors.description}}" type="textarea" size="large" label="描述" placeholder="请输入活动的描述" name="description" autosize disable-default-padding />
-        </van-cell-group>
-        <van-cell-group title="时间节点" inset>
-            <van-field model:value="{{startFormatted}}" error="{{errors.start}}" size="large" label="开始时间" placeholder="请选择时间" bind:tap="onClickStart" readonly is-link required clearable />
-            <van-field model:value="{{rollFormatted}}" error="{{errors.roll}}" size="large" label="抽签时间" placeholder="请选择时间" bind:tap="onClickRoll" disabled="{{start === 0}}" readonly is-link required clearable />
-            <van-field model:value="{{endFormatted}}" error="{{errors.end}}" size="large" label="结束时间" placeholder="请选择时间" bind:tap="onClickEnd" disabled="{{roll === 0}}" readonly is-link required clearable />
-        </van-cell-group>
+<view class="main">
+    <view class="form">
+        <form bindsubmit="onCreate">
+            <view class="title">创建活动</view>
+            <view class="field-slot">
+                <van-cell-group title="基本信息" inset>
+                    <van-field model:value="{{name}}" error="{{errors.name}}" size="large" label="名称" placeholder="请输入活动的名称" name="name" required clearable />
+                    <van-field model:value="{{group}}" error="{{errors.group}}" size="large" label="小组" placeholder="请选择归属的小组" bind:tap="onClickGroup" name="group" readonly is-link required clearable />
+                    <van-field model:value="{{description}}" error="{{errors.description}}" type="textarea" size="large" label="描述" placeholder="请输入活动的描述" name="description" autosize disable-default-padding />
+                </van-cell-group>
+                <van-cell-group title="时间节点" inset>
+                    <van-field model:value="{{startFormatted}}" error="{{errors.start}}" size="large" label="开始时间" placeholder="请选择时间" bind:tap="onClickStart" readonly is-link required clearable />
+                    <van-field model:value="{{rollFormatted}}" error="{{errors.roll}}" size="large" label="抽签时间" placeholder="请选择时间" bind:tap="onClickRoll" disabled="{{start === 0}}" readonly is-link required clearable />
+                    <van-field model:value="{{endFormatted}}" error="{{errors.end}}" size="large" label="结束时间" placeholder="请选择时间" bind:tap="onClickEnd" disabled="{{roll === 0}}" readonly is-link required clearable />
+                </van-cell-group>
+            </view>
+            <view class="btn-slot">
+                <van-button form-type="submit" type="primary" size="large">创建</van-button>
+                <van-button type="default" size="large" bind:click="onCancel">取消</van-button>
+            </view>
+        </form>
     </view>
-    <view class="weui-form__control-area">
-        <button form-type="submit" type="primary" class="weui-btn">创建</button>
-        <button type="default" class="weui-btn" bindtap="onCancel">取消</button>
-    </view>
-</form>
+</view>
 
 <van-popup show="{{popup}}" round position="bottom" bind:close="onPopupClose">
     <van-datetime-picker wx:if="{{scene > 0 && scene < 4}}" title="{{ pickerTitle }}" type="datetime" value="{{ pickerValue }}" min-date="{{ pickerMin }}" max-date="{{ pickerMax }}" filter="{{ filter }}" bind:confirm="onConfirmPicker" bind:cancel="onPopupClose" />

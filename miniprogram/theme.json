@@ -9,9 +9,9 @@
         "mePath": "images/me-light.png"
     },
     "dark": {
-        "bgColor": "#000000",
+        "bgColor": "#212322",
         "bgTextStyle": "dark",
-        "nbBackgroundColor": "#000000",
+        "nbBackgroundColor": "#212322",
         "nbTextStyle": "white",
         "tbColor": "#FFFFFF",
         "giftPath": "images/gift-dark.png",

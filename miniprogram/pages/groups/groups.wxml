@@ -87,7 +87,7 @@
             </van-cell-group>
         </view>
     </view>
-    <view wx:else class="weui-flex flex-center">
+    <view wx:else class="flex flex-center">
         <van-empty image="/images/meeting.png" description="还没有加入小组" />
     </view>
 </view>
@@ -108,6 +108,6 @@
     </view>
 </van-popup>
 
-<view class="footer" bindtap="onOpenSheet">
+<view class="footer-block bottom-padding" bindtap="onOpenSheet">
     <text>操作</text>
 </view>

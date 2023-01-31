@@ -1,5 +1,5 @@
-<view data-weui-theme="{{theme}}" style="height: 100%;">
-    <view class="weui-flex">
+<view style="height: 100%;">
+    <view class="flex">
         <view wx:if="{{logged}}" class="top-bar userinfo {{themeBg}}-bg">
             <view class="userinfo-avatar">
                 <image mode="heightFix" src="{{avatarUrl}}" />
@@ -62,7 +62,7 @@
             </van-tab>
         </van-tabs>
     </view>
-    <view wx:if="{{!logged}}" class="weui-flex flex-center">
+    <view wx:if="{{!logged}}" class="flex flex-center">
         <van-empty image="/images/open-box.png" description="注册开启礼物交换" />
     </view>
 </view>

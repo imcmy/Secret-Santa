@@ -82,15 +82,9 @@ Page({
         })
     },
     onAgree(e) {
-        if (e.detail.value[0] === "agree") {
-            this.setData({
-                isAgree: true
-            })
-        } else {
-            this.setData({
-                isAgree: false
-            })
-        }
+        this.setData({
+            isAgree: !this.data.isAgree
+        })
     },
     onUserCancel() {
         wx.navigateBack()
@@ -161,7 +155,7 @@ Page({
                 if (localData.isReg) {
                     storeSession(session)
                     wx.reLaunch({
-                      url: '/pages/launch/launch',
+                        url: '/pages/launch/launch',
                     })
                 } else {
                     app.user.nickname = localData.nickname
@@ -331,9 +325,9 @@ Page({
             for (var addr of this.data.addresses.lists) {
                 if (addr._id === this.data.inputEditorId) {
                     addr.postalCode = this.data.inputEditorPos,
-                    addr.telNumber = this.data.inputEditorTel,
-                    addr.recipient = this.data.inputEditorRecipient,
-                    addr.fullAddr = this.data.inputEditorAddr
+                        addr.telNumber = this.data.inputEditorTel,
+                        addr.recipient = this.data.inputEditorRecipient,
+                        addr.fullAddr = this.data.inputEditorAddr
                     isCurrent = addr.current
                     break
                 }

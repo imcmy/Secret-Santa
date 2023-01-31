@@ -1,5 +1,5 @@
-<view data-weui-theme="{{theme}}">
-    <view class="weui-flex">
+<view>
+    <view class="flex">
         <view wx:if="{{logged}}" class="top-bar userinfo {{themeBg}}-bg">
             <view class="userinfo-avatar">
                 <image mode="heightFix" src="{{avatarUrl}}" />
@@ -34,6 +34,4 @@
     </van-cell-group>
 </view>
 
-<view class="weui-footer">
-    <view class="weui-footer__text">版本号 1.7</view>
-</view>
+<view class="footer-text">版本号 1.7</view>
