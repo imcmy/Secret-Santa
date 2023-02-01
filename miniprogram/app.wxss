@@ -3,6 +3,7 @@ page {
     --main-focus-color: #1aad19;
     --main-background-color: #f1f1f1;
     --focus-background-color: #ffffff;
+    --border-color: #ccc;
 
     --font-color: #323233;
     --sub-font-color: #969799;
@@ -12,8 +13,11 @@ page {
     page {
         --main-focus-color: #2ba245;
         --main-background-color: #212322;
-        --focus-background-color: #212322;
+        --focus-background-color: #1D252D;
+        --border-color: #465059;
+
         --font-color: #ffffff;
+        --sub-font-color: #ffffffcc;
     }
 }
 
@@ -36,21 +40,111 @@ page {
     /* Collapse */
     --collapse-item-content-padding: 0;
 
+    /* Button */
+    --button-primary-background-color: var(--main-focus-color);
+
     /* Tag */
     --tag-success-color: var(--main-focus-color);
-
-    /* Button */
-    /* --button-normal-font-size: 12pt; */
-    --button-primary-background-color: var(--main-focus-color);
 
     /* Tab */
     --tab-active-text-color: var(--font-color);
     --tab-text-color: var(--font-color);
     --tabs-nav-background-color: var(--focus-background-color);
 
-    /* Cell */
-    --cell-background-color: var(--focus-background-color);
-    --cell-text-color: var(--font-color);
+    /* Checkbox */
+    --checkbox-checked-icon-color: var(--main-focus-color);
+}
+
+
+
+@media (prefers-color-scheme: dark) {
+
+    /* Components */
+    page {
+        /* Dropdown */
+        --dropdown-menu-title-active-text-color: var(--main-focus-color);
+        --dropdown-menu-option-active-color: var(--main-focus-color);
+        --dropdown-menu-background-color: var(--focus-background-color);
+        --dropdown-menu-title-text-color: var(--font-color);
+
+        /* Collapse */
+        --collapse-item-content-padding: 0;
+
+        /* Tag */
+        --tag-success-color: var(--main-focus-color);
+
+        /* Button */
+        /* --button-normal-font-size: 12pt; */
+        --button-primary-background-color: var(--main-focus-color);
+        --button-default-background-color: var(--focus-background-color);
+        --button-default-border-color: var(--border-color);
+        --button-default-color: var(--font-color);
+
+        /* Tab */
+        --tab-active-text-color: var(--font-color);
+        --tab-text-color: var(--font-color);
+        --tabs-nav-background-color: var(--focus-background-color);
+
+        /* Cell */
+        --cell-background-color: var(--focus-background-color);
+        --cell-text-color: var(--font-color);
+        --cell-active-color: var(--main-background-color);
+
+        /* Steps */
+        --steps-background-color: var(--focus-background-color);
+        --step-finish-text-color: var(--sub-font-color);
+
+        /* Field */
+        --field-label-color: var(--font-color);
+        --field-input-text-color: var(--sub-font-color);
+
+        /* Popup */
+        --popup-background-color: var(--focus-background-color);
+
+        /* Anchor */
+        --index-anchor-active-background-color: var(--focus-background-color);
+        --index-anchor-text-color: var(--font-color);
+        --index-anchor-active-text-color: var(--main-focus-color);
+
+        /* Actionsheet */
+        --action-sheet-item-background: var(--focus-background-color);
+        --action-sheet-cancel-padding-color: var(--main-background-color);
+
+        /* Grid */
+        --grid-item-content-background-color: var(--focus-background-color);
+
+        /* Picker */
+        --picker-background-color: var(--focus-background-color);
+        --picker-option-selected-text-color: var(--font-color);
+        --picker-option-text-color: var(--sub-font-color);
+
+        /* Checkbox */
+        --checkbox-checked-icon-color: var(--main-focus-color);
+    }
+
+    .van-picker__mask {
+        background-image: var(--focus-background-color) !important;
+    }
+
+    .van-hairline--bottom:after,
+    .van-hairline--left:after,
+    .van-hairline--right:after,
+    .van-hairline--surround:after,
+    .van-hairline--top-bottom:after,
+    .van-hairline--top:after,
+    .van-hairline:after,
+    .van-cell:after {
+        border-color: var(--border-color) !important;
+    }
+
+    .van-step--horizontal .van-step__circle-container {
+        background-color: var(--focus-background-color) !important;
+    }
+
+    .van-action-sheet__cancel--hover,
+    .van-action-sheet__item--hover {
+        background-color: var(--main-background-color) !important;
+    }
 }
 
 /* Flex */
@@ -82,13 +176,13 @@ page {
 
 .footer-block {
     height: 100rpx;
-    background-color: #fff;
-    border-top: 1px solid #ccc;
+    background-color: var(--focus-background-color);
+    border-top: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
+
 }
 
 .footer-text {

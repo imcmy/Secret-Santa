@@ -17,11 +17,12 @@
     </radio-group>
 
     <van-cell-group title="深色模式（测试）">
-        <van-cell center title="启用深色模式">
+        <!-- <van-cell center title="启用深色模式">
             <switch slot="right-icon" checked="{{settings.darkMode.enable}}" bind:change="onDarkModeSwitch" />
-        </van-cell>
+        </van-cell> -->
         <van-cell center title="深色模式跟随系统">
-            <switch slot="right-icon" checked="{{settings.darkMode.followSystem}}" bind:change="onFollowSystemSwitch" />
+            <!-- <switch slot="right-icon" checked="{{settings.darkMode.followSystem}}" bind:change="onFollowSystemSwitch" /> -->
+            <switch slot="right-icon" checked="{{true}}" disabled bind:change="onFollowSystemSwitch" />
         </van-cell>
     </van-cell-group>
 </view>

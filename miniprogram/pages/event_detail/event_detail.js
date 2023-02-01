@@ -48,8 +48,8 @@ Page({
         })
         app.event.event_creator = res.data.event_creator
         app.event.event_start = utils.formattedTime(app.event.event_start)
-        app.event.event_roll = utils.formattedTime(app.event.event_start)
-        app.event.event_end = utils.formattedTime(app.event.event_start)
+        app.event.event_roll = utils.formattedTime(app.event.event_roll)
+        app.event.event_end = utils.formattedTime(app.event.event_end)
         app.event.event_participates = res.data.event_participates
         app.event.event_pairs = res.data.event_pairs
         this.setData({
